@@ -18,6 +18,16 @@ module OmniAuth
       }
       
       uid { raw_info['id'] }
+      
+      info {
+        {
+          'nickname' => raw_info['username'],
+          'email' => raw_info['email'],
+          'first_name' => raw_info['first_name'],
+          'last_name' => raw_info['last_name'],
+          'image' => "http://graph.facebook.com/#{uid}/picture"
+        }
+      }
 
       def build_access_token
         super.tap do |token|

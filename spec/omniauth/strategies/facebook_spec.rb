@@ -45,9 +45,44 @@ describe OmniAuth::Strategies::Facebook do
   end
   
   describe '#uid' do
-    it 'returns the id from raw_info' do
+    before :each do
       subject.stub(:raw_info) { { 'id' => '123' } }
+    end
+    
+    it 'returns the id from raw_info' do
       subject.uid.should eq('123')
+    end
+  end
+  
+  describe '#info' do
+    before :each do
+      @raw_info ||= {}
+      subject.stub(:raw_info) { @raw_info }
+    end
+    
+    it 'returns the username as nickname' do
+      @raw_info['username'] = 'fredsmith'
+      subject.info['nickname'].should eq('fredsmith')
+    end
+    
+    it 'returns the email' do
+      @raw_info['email'] = 'fred@smith.com'
+      subject.info['email'].should eq('fred@smith.com')
+    end
+    
+    it 'returns the first name' do
+      @raw_info['first_name'] = 'Fred'
+      subject.info['first_name'].should eq('Fred')
+    end
+    
+    it 'returns the last name' do
+      @raw_info['last_name'] = 'Smith'
+      subject.info['last_name'].should eq('Smith')
+    end
+    
+    it 'returns the facebook avatar url' do
+      @raw_info['id'] = '321'
+      subject.info['image'].should eq('http://graph.facebook.com/321/picture')
     end
   end
 end
