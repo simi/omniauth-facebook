@@ -1,3 +1,4 @@
+# NOTE it would be useful if this lived in omniauth-oauth2 eventually
 shared_examples 'an oauth2 strategy' do
   describe '#client' do
     it 'should be initialized with symbolized client_options' do
