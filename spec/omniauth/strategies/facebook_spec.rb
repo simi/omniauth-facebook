@@ -43,4 +43,11 @@ describe OmniAuth::Strategies::Facebook do
       subject.access_token_options[:header_format].should eq('OAuth %s')
     end
   end
+  
+  describe '#uid' do
+    it 'returns the id from raw_info' do
+      subject.stub(:raw_info) { { 'id' => '123' } }
+      subject.uid.should eq('123')
+    end
+  end
 end

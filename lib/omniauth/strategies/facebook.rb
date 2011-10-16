@@ -16,6 +16,8 @@ module OmniAuth
         :header_format => 'OAuth %s',
         :param_name => 'access_token'
       }
+      
+      uid { raw_info['id'] }
 
       def build_access_token
         super.tap do |token|
