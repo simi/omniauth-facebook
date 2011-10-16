@@ -4,6 +4,21 @@
 
 This gem contains the Facebook strategy for OmniAuth.
 
+## Supported Flows
+
+Supports the Server-side Flow as described in the the Facebook docs:
+http://developers.facebook.com/docs/authentication
+
+**Pending:** Supports the Client-side Flow via parsing out the verification code from the signed request cookie.
+
+## Ruby
+
+Tested with the following Ruby versions:
+
+- MRI 1.9.2
+- MRI 1.8.7
+- JRuby 1.6.4
+
 ## License
 
 Copyright (c) 2011 by Mark Dodwell
