@@ -3,3 +3,5 @@
 .rspec
 Gemfile.lock
 pkg/*
+.powenv
+tmp
