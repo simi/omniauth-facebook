@@ -28,6 +28,10 @@ module OmniAuth
           'image' => "http://graph.facebook.com/#{uid}/picture"
         }
       end
+      
+      def raw_info
+        @raw_info ||= access_token.get('/me').parsed
+      end
 
       def build_access_token
         super.tap do |token|
