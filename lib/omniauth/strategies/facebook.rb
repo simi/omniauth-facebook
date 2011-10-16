@@ -19,7 +19,7 @@ module OmniAuth
       
       uid { raw_info['id'] }
       
-      info {
+      info do
         {
           'nickname' => raw_info['username'],
           'email' => raw_info['email'],
@@ -27,7 +27,7 @@ module OmniAuth
           'last_name' => raw_info['last_name'],
           'image' => "http://graph.facebook.com/#{uid}/picture"
         }
-      }
+      end
 
       def build_access_token
         super.tap do |token|
