@@ -56,33 +56,99 @@ describe OmniAuth::Strategies::Facebook do
   
   describe '#info' do
     before :each do
-      @raw_info ||= {}
+      @raw_info ||= { 'name' => 'Fred Smith' }
       subject.stub(:raw_info) { @raw_info }
     end
     
-    it 'returns the username as nickname' do
-      @raw_info['username'] = 'fredsmith'
-      subject.info['nickname'].should eq('fredsmith')
+    context 'when optional data is not present in raw info' do
+      it 'has no email key' do
+        subject.info.should_not have_key('email')
+      end
+
+      it 'has no nickname key' do
+        subject.info.should_not have_key('nickname')
+      end
+    
+      it 'has no first name key' do
+        subject.info.should_not have_key('first_name')
+      end
+    
+      it 'has no last name key' do
+        subject.info.should_not have_key('last_name')
+      end
+    
+      it 'has no location key' do
+        subject.info.should_not have_key('location')
+      end
+    
+      it 'has no description key' do
+        subject.info.should_not have_key('description')
+      end
+    
+      it 'has no urls' do
+        subject.info.should_not have_key('urls')
+      end
     end
     
-    it 'returns the email' do
-      @raw_info['email'] = 'fred@smith.com'
-      subject.info['email'].should eq('fred@smith.com')
-    end
+    context 'when data is present in raw info' do
+      it 'returns the name' do
+        subject.info['name'].should eq('Fred Smith')
+      end
     
-    it 'returns the first name' do
-      @raw_info['first_name'] = 'Fred'
-      subject.info['first_name'].should eq('Fred')
-    end
+      it 'returns the email' do
+        @raw_info['email'] = 'fred@smith.com'
+        subject.info['email'].should eq('fred@smith.com')
+      end
+
+      it 'returns the username as nickname' do
+        @raw_info['username'] = 'fredsmith'
+        subject.info['nickname'].should eq('fredsmith')
+      end
     
-    it 'returns the last name' do
-      @raw_info['last_name'] = 'Smith'
-      subject.info['last_name'].should eq('Smith')
-    end
+      it 'returns the first name' do
+        @raw_info['first_name'] = 'Fred'
+        subject.info['first_name'].should eq('Fred')
+      end
     
-    it 'returns the facebook avatar url' do
-      @raw_info['id'] = '321'
-      subject.info['image'].should eq('http://graph.facebook.com/321/picture')
+      it 'returns the last name' do
+        @raw_info['last_name'] = 'Smith'
+        subject.info['last_name'].should eq('Smith')
+      end
+    
+      it 'returns the location name as location' do
+        @raw_info['location'] = { 'id' => '104022926303756', 'name' => 'Palo Alto, California' }
+        subject.info['location'].should eq('Palo Alto, California')
+      end
+    
+      it 'returns bio as description' do
+        @raw_info['bio'] = 'I am great'
+        subject.info['description'].should eq('I am great')
+      end
+    
+      it 'returns the square format facebook avatar url' do
+        @raw_info['id'] = '321'
+        subject.info['image'].should eq('http://graph.facebook.com/321/picture?type=square')
+      end
+    
+      it 'returns the Facebook link as the Facebook url' do
+        @raw_info['link'] = 'http://www.facebook.com/fredsmith'
+        subject.info['urls'].should be_a(Hash)
+        subject.info['urls']['Facebook'].should eq('http://www.facebook.com/fredsmith')
+      end
+    
+      it 'returns website url' do
+        @raw_info['website'] = 'https://my-wonderful-site.com'
+        subject.info['urls'].should be_a(Hash)
+        subject.info['urls']['Website'].should eq('https://my-wonderful-site.com')
+      end
+    
+      it 'return both Facebook link and website urls' do
+        @raw_info['link'] = 'http://www.facebook.com/fredsmith'
+        @raw_info['website'] = 'https://my-wonderful-site.com'
+        subject.info['urls'].should be_a(Hash)
+        subject.info['urls']['Facebook'].should eq('http://www.facebook.com/fredsmith')
+        subject.info['urls']['Website'].should eq('https://my-wonderful-site.com')
+      end
     end
   end
   

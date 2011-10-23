@@ -20,13 +20,20 @@ module OmniAuth
       uid { raw_info['id'] }
       
       info do
-        {
+        prune!({
           'nickname' => raw_info['username'],
           'email' => raw_info['email'],
+          'name' => raw_info['name'],
           'first_name' => raw_info['first_name'],
           'last_name' => raw_info['last_name'],
-          'image' => "http://graph.facebook.com/#{uid}/picture"
-        }
+          'image' => "http://graph.facebook.com/#{uid}/picture?type=square",
+          'description' => raw_info['bio'],
+          'urls' => {
+            'Facebook' => raw_info['link'],
+            'Website' => raw_info['website']
+          },
+          'location' => (raw_info['location'] || {})['name']
+        })
       end
       
       def raw_info
@@ -41,6 +48,15 @@ module OmniAuth
 
       def access_token_options
         options.access_token_options.inject({}) { |h,(k,v)| h[k.to_sym] = v; h }
+      end
+      
+      private
+      
+      def prune!(hash)
+        hash.delete_if do |_, value| 
+          prune!(value) if value.is_a?(Hash)
+          value.nil? || value.empty?
+        end
       end
     end
   end
