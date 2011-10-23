@@ -36,6 +36,19 @@ module OmniAuth
         })
       end
       
+      credentials do
+        prune!({
+          'expires' => access_token.expires?,
+          'expires_at' => access_token.expires_at
+        })
+      end
+      
+      extra do
+        prune!({
+          'raw_info' => raw_info
+        })
+      end
+      
       def raw_info
         @raw_info ||= access_token.get('/me').parsed
       end
@@ -55,7 +68,7 @@ module OmniAuth
       def prune!(hash)
         hash.delete_if do |_, value| 
           prune!(value) if value.is_a?(Hash)
-          value.nil? || value.empty?
+          value.nil? || (value.respond_to?(:empty?) && value.empty?)
         end
       end
     end

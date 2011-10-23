@@ -176,4 +176,71 @@ describe OmniAuth::Strategies::Facebook do
       subject.raw_info['ohai'].should eq('thar')
     end
   end
+
+  describe '#credentials' do
+    before :each do
+      @access_token = double('OAuth2::AccessToken')
+      @access_token.stub(:token)
+      @access_token.stub(:expires?)
+      @access_token.stub(:expires_at)
+      @access_token.stub(:refresh_token)
+      subject.stub(:access_token) { @access_token }
+    end
+    
+    it 'returns a Hash' do
+      subject.credentials.should be_a(Hash)
+    end
+    
+    it 'returns the token' do
+      @access_token.stub(:token) { '123' }
+      subject.credentials['token'].should eq('123')
+    end
+    
+    it 'returns the expiry status' do
+      @access_token.stub(:expires?) { true }
+      subject.credentials['expires'].should eq(true)
+      
+      @access_token.stub(:expires?) { false }
+      subject.credentials['expires'].should eq(false)
+    end
+    
+    it 'returns the refresh token and expiry time when expiring' do
+      ten_mins_from_now = (Time.now + 360).to_i
+      @access_token.stub(:expires?) { true }
+      @access_token.stub(:refresh_token) { '321' }
+      @access_token.stub(:expires_at) { ten_mins_from_now }
+      subject.credentials['refresh_token'].should eq('321')
+      subject.credentials['expires_at'].should eq(ten_mins_from_now)
+    end
+    
+    # FIXME omniauth does not behave like this atm.
+    pending 'does not return the refresh token when it is nil and expiring' do
+      @access_token.stub(:expires?) { true }
+      @access_token.stub(:refresh_token) { nil }
+      subject.credentials['refresh_token'].should be_nil
+      subject.credentials.should_not have_key('refresh_token')
+    end
+    
+    it 'does not return the refresh token when not expiring' do
+      @access_token.stub(:expires?) { false }
+      @access_token.stub(:refresh_token) { 'XXX' }
+      subject.credentials['refresh_token'].should be_nil
+      subject.credentials.should_not have_key('refresh_token')
+    end
+  end
+  
+  describe '#extra' do
+    before :each do
+      @raw_info = { 'name' => 'Fred Smith' }
+      subject.stub(:raw_info) { @raw_info }
+    end
+    
+    it 'returns a Hash' do
+      subject.extra.should be_a(Hash)
+    end
+    
+    it 'contains raw info' do
+      subject.extra.should eq({ 'raw_info' => @raw_info })
+    end
+  end
 end
