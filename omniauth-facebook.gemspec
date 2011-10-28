@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/omniauth/facebook/version', __FILE__)
+$:.push File.expand_path('../lib', __FILE__)
+require 'omniauth/facebook/version'
 
 Gem::Specification.new do |s|
   s.name     = 'omniauth-facebook'
