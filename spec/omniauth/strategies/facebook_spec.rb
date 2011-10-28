@@ -213,8 +213,7 @@ describe OmniAuth::Strategies::Facebook do
       subject.credentials['expires_at'].should eq(ten_mins_from_now)
     end
     
-    # FIXME omniauth does not behave like this atm.
-    pending 'does not return the refresh token when it is nil and expiring' do
+    it 'does not return the refresh token when it is nil and expiring' do
       @access_token.stub(:expires?) { true }
       @access_token.stub(:refresh_token) { nil }
       subject.credentials['refresh_token'].should be_nil
