@@ -62,7 +62,15 @@ module OmniAuth
       def access_token_options
         options.access_token_options.inject({}) { |h,(k,v)| h[k.to_sym] = v; h }
       end
-      
+
+      def request_phase
+        authorize_params = {:redirect_uri => callback_url}.merge(options.authorize_params)
+        if request.params['display']
+          authorize_params[:display] = request.params['display']
+        end
+        redirect client.auth_code.authorize_url(authorize_params)
+      end
+
       private
       
       def prune!(hash)
