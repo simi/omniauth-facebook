@@ -2,8 +2,15 @@ require 'spec_helper'
 require 'omniauth-facebook'
 
 describe OmniAuth::Strategies::Facebook do
+  before :each do
+    @request = double('Request')
+    @request.stub(:params) { {} }
+  end
+  
   subject do
-    OmniAuth::Strategies::Facebook.new(nil, @options || {})
+    OmniAuth::Strategies::Facebook.new(nil, @options || {}).tap do |strategy|
+      strategy.stub(:request) { @request }
+    end
   end
 
   it_should_behave_like 'an oauth2 strategy'
@@ -25,6 +32,12 @@ describe OmniAuth::Strategies::Facebook do
   describe '#authorize_params' do
     it 'is empty by default' do
       subject.authorize_params.should be_empty
+    end
+  
+    it 'includes display parameter from request when present' do
+      @request.stub(:params) { { 'display' => 'touch' } }
+      subject.authorize_params.should be_a(Hash)
+      subject.authorize_params[:display].should eq('touch')
     end
   end
 

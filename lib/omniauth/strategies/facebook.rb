@@ -63,6 +63,12 @@ module OmniAuth
         options.access_token_options.inject({}) { |h,(k,v)| h[k.to_sym] = v; h }
       end
       
+      def authorize_params
+        super.tap do |params|
+          params.merge!(:display => request.params['display']) if request.params['display']
+        end
+      end
+      
       private
       
       def prune!(hash)
