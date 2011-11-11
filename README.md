@@ -1,8 +1,16 @@
 # OmniAuth Facebook &nbsp;[![Build Status](http://travis-ci.org/mkdynamic/omniauth-facebook.png?branch=master)](http://travis-ci.org/mkdynamic/omniauth-facebook)
 
-**Note:** This gem is designed to work with the unreleased OmniAuth 1.0 library. It will not be officially released on RubyGems.org until OmniAuth 1.0 is released.
+This gem contains the Facebook strategy for OmniAuth 1.0.
 
-This gem contains the Facebook strategy for OmniAuth.
+## Installing
+
+Add to your `Gemfile`:
+
+```ruby
+gem 'omniauth-facebook', '~> 1.0.0.rc1'
+```
+
+Then `bundle install`.
 
 ## Supported Flows
 
