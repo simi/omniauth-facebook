@@ -3,6 +3,8 @@ require 'omniauth/strategies/oauth2'
 module OmniAuth
   module Strategies
     class Facebook < OmniAuth::Strategies::OAuth2
+      DEFAULT_SCOPE = 'email,offline_access'
+      
       option :client_options, {
         :site => 'https://graph.facebook.com',
         :token_url => '/oauth/access_token'
@@ -66,6 +68,7 @@ module OmniAuth
       def authorize_params
         super.tap do |params|
           params.merge!(:display => request.params['display']) if request.params['display']
+          params[:scope] ||= DEFAULT_SCOPE
         end
       end
       

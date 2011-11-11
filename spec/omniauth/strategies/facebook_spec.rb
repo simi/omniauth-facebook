@@ -30,8 +30,9 @@ describe OmniAuth::Strategies::Facebook do
   end
 
   describe '#authorize_params' do
-    it 'is empty by default' do
-      subject.authorize_params.should be_empty
+    it 'includes default scope for email and offline access' do
+      subject.authorize_params.should be_a(Hash)
+      subject.authorize_params[:scope].should eq('email,offline_access')
     end
   
     it 'includes display parameter from request when present' do
