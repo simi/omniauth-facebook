@@ -219,7 +219,7 @@ describe OmniAuth::Strategies::Facebook do
     end
     
     it 'returns the refresh token and expiry time when expiring' do
-      ten_mins_from_now = (Time.now + 360).to_i
+      ten_mins_from_now = (Time.now + 600).to_i
       @access_token.stub(:expires?) { true }
       @access_token.stub(:refresh_token) { '321' }
       @access_token.stub(:expires_at) { ten_mins_from_now }
