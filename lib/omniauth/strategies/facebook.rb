@@ -7,7 +7,8 @@ module OmniAuth
       
       option :client_options, {
         :site => 'https://graph.facebook.com',
-        :token_url => '/oauth/access_token'
+        :token_url => '/oauth/access_token',
+        :authorize_url => "https://graph.facebook.com/oauth/authorize?display=popup"
       }
 
       option :token_params, {
