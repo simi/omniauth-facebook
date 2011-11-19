@@ -22,7 +22,7 @@ Here's a quick example, adding the middleware to a Rails app in `config/initiali
 
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'], :scope => 'email', :display => 'popup'
+  provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
 end
 ```
 
@@ -62,8 +62,8 @@ Here's an example *Authentication Hash* available in `request.env['omniauth.auth
     :location => 'Palo Alto, California'
   },
   :credentials => {
-    :token => 'ABCDEF...',
-    :expires_at => 1321747205, # when the access token expires
+    :token => 'ABCDEF...', # OAuth 2.0 access_token, which you may wish to store
+    :expires_at => 1321747205, # when the access token expires (if it expires)
     :expires => true # if you request `offline_access` this will be false
   },
   :extra => {
