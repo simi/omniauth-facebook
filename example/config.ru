@@ -21,7 +21,7 @@ end
 use Rack::Session::Cookie
 
 use OmniAuth::Builder do
-  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'], :scope => 'email,read_stream', :authorize_params => { :display => 'popup' }
+  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'], :scope => 'email,read_stream', :display => 'popup'
 end
 
 run App.new
