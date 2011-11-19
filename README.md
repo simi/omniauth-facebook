@@ -26,7 +26,7 @@ Tested with the following Ruby versions:
 - MRI 1.9.3
 - MRI 1.9.2
 - MRI 1.8.7
-- JRuby 1.6.4
+- JRuby 1.6.5
 
 ## License
 
