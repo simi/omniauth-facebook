@@ -23,6 +23,7 @@ http://developers.facebook.com/docs/authentication
 
 Tested with the following Ruby versions:
 
+- MRI 1.9.3
 - MRI 1.9.2
 - MRI 1.8.7
 - JRuby 1.6.4
