@@ -2,7 +2,7 @@
 
 This gem contains the Facebook strategy for OmniAuth 1.0.
 
-Supports the OAuth 2.0 server-side flow. Read the Facebook docs for more details: http://developers.facebook.com/docs/authentication
+Supports the OAuth 2.0 server-side and client-side flows. Read the Facebook docs for more details: http://developers.facebook.com/docs/authentication
 
 ## Installing
 
@@ -25,6 +25,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
 end
 ```
+
+See a full example of both server and client-side flows in the example Sinatra app in the `example/` folder above.
 
 ## Configuring
 
@@ -87,6 +89,12 @@ Here's an example *Authentication Hash* available in `request.env['omniauth.auth
 ```
 
 The precise information available may depend on the permissions which you request.
+
+## Client-side Flow
+
+The client-side flow supports parsing the authorization code from the signed request which Facebook puts into a cookie. This means you can to use the Facebook Javascript SDK as you would normally, and you just hit the callback endpoint (`/auth/facebook/callback` by default) once the user has authenticated in the `FB.login` success callback.
+
+See the example Sinatra app under `example/` for more details.
 
 ## Supported Rubies
 
