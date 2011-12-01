@@ -97,6 +97,12 @@ Actively tested with the following Ruby versions:
 - MRI 1.8.7
 - JRuby 1.6.5
 
+*NB.* For JRuby, you'll need to install the `jruby-openssl` gem. There's no way to automatically specify this in a Rubygem gemspec, so you need to manually add it your project's own Gemfile:
+
+```ruby
+gem 'jruby-openssl', :platform => :jruby
+```
+
 ## License
 
 Copyright (c) 2011 by Mark Dodwell
