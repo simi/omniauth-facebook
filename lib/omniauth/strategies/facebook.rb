@@ -57,6 +57,14 @@ module OmniAuth
         @raw_info ||= access_token.get('/me').parsed
       end
 
+      def callback_url
+        if options.authorize_options.respond_to? :callback_url
+          options.authorize_options.callback_url
+        else
+          super
+        end
+      end
+
       def build_access_token
         super.tap do |token|
           token.options.merge!(access_token_options)

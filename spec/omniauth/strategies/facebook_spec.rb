@@ -29,6 +29,21 @@ describe OmniAuth::Strategies::Facebook do
     end
   end
 
+  describe '#callback_url' do
+    it "returns value from #authorize_options" do
+      url = 'http://auth.myapp.com/auth/fb/callback'
+      @options = {:authorize_options => { :callback_url => url }}
+      subject.callback_url.should == url
+    end
+
+    it " callback_url from request" do
+      url_base = 'http://auth.request.com'
+      @request.stub(:url){ url_base + "/page/path" }
+      subject.stub(:script_name) { "" } # to not depend from Rack env
+      subject.callback_url.should == url_base + "/auth/facebook/callback"
+    end
+  end
+
   describe '#authorize_params' do
     it 'includes default scope for email and offline access' do
       subject.authorize_params.should be_a(Hash)
