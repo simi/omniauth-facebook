@@ -1,4 +1,6 @@
 require 'omniauth/strategies/oauth2'
+require 'base64'
+require 'openssl'
 
 module OmniAuth
   module Strategies
@@ -57,17 +59,25 @@ module OmniAuth
         @raw_info ||= access_token.get('/me').parsed
       end
 
-      def callback_url
-        if options.authorize_options.respond_to? :callback_url
-          options.authorize_options.callback_url
-        else
-          super
+      def build_access_token
+        with_authorization_code { super }.tap do |token|
+          token.options.merge!(access_token_options)
         end
       end
-
-      def build_access_token
-        super.tap do |token|
-          token.options.merge!(access_token_options)
+      
+      # NOTE if we're using code from the signed request cookie
+      # then FB sets the redirect_uri to '' during the authorize
+      # phase + it must match during the access_token phase:
+      # https://github.com/facebook/php-sdk/blob/master/src/base_facebook.php#L348
+      def callback_url
+        if @authorization_code_from_cookie
+          ''
+        else
+          if options.authorize_options.respond_to?(:callback_url)
+            options.authorize_options.callback_url
+          else
+            super
+          end
         end
       end
 
@@ -81,14 +91,63 @@ module OmniAuth
           params[:scope] ||= DEFAULT_SCOPE
         end
       end
+
+      def signed_request
+        @signed_request ||= begin
+          cookie = request.cookies["fbsr_#{client.id}"] and
+          parse_signed_request(cookie)
+        end
+      end
       
       private
+      
+      # picks the authorization code in order, from:
+      # 1. the request param
+      # 2. a signed cookie
+      def with_authorization_code
+        if request.params.key?('code')
+          yield
+        else code_from_cookie = signed_request && signed_request['code']
+          request.params['code'] = code_from_cookie
+          @authorization_code_from_cookie = true
+          begin
+            yield
+          ensure
+            request.params.delete('code')
+            @authorization_code_from_cookie = false
+          end
+        end
+      end
       
       def prune!(hash)
         hash.delete_if do |_, value| 
           prune!(value) if value.is_a?(Hash)
           value.nil? || (value.respond_to?(:empty?) && value.empty?)
         end
+      end
+      
+      def parse_signed_request(value)
+        signature, encoded_payload = value.split('.')
+
+        decoded_hex_signature = base64_decode_url(signature)#.unpack('H*')
+        decoded_payload = MultiJson.decode(base64_decode_url(encoded_payload))
+
+        unless decoded_payload['algorithm'] == 'HMAC-SHA256'
+          raise NotImplementedError, "unkown algorithm: #{decoded_payload['algorithm']}"
+        end
+
+        if valid_signature?(client.secret, decoded_hex_signature, encoded_payload)
+          decoded_payload
+        end
+      end
+
+      def valid_signature?(secret, signature, payload, algorithm = OpenSSL::Digest::SHA256.new)
+        OpenSSL::HMAC.digest(algorithm, secret, payload) == signature
+      end
+
+      def base64_decode_url(value)
+        value += '=' * (4 - value.size.modulo(4))
+        Base64.decode64(value.tr('-_', '+/'))
       end
     end
   end

@@ -2,7 +2,7 @@
 
 This gem contains the Facebook strategy for OmniAuth 1.0.
 
-Supports the OAuth 2.0 server-side flow. Read the Facebook docs for more details: http://developers.facebook.com/docs/authentication
+Supports the OAuth 2.0 server-side and client-side flows. Read the Facebook docs for more details: http://developers.facebook.com/docs/authentication
 
 ## Installing
 
@@ -25,6 +25,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
 end
 ```
+
+See a full example of both server and client-side flows in the example Sinatra app in the `example/` folder above.
 
 ## Configuring
 
@@ -88,6 +90,12 @@ Here's an example *Authentication Hash* available in `request.env['omniauth.auth
 
 The precise information available may depend on the permissions which you request.
 
+## Client-side Flow
+
+The client-side flow supports parsing the authorization code from the signed request which Facebook puts into a cookie. This means you can to use the Facebook Javascript SDK as you would normally, and you just hit the callback endpoint (`/auth/facebook/callback` by default) once the user has authenticated in the `FB.login` success callback.
+
+See the example Sinatra app under `example/` for more details.
+
 ## Supported Rubies
 
 Actively tested with the following Ruby versions:
@@ -96,6 +104,12 @@ Actively tested with the following Ruby versions:
 - MRI 1.9.2
 - MRI 1.8.7
 - JRuby 1.6.5
+
+*NB.* For JRuby, you'll need to install the `jruby-openssl` gem. There's no way to automatically specify this in a Rubygem gemspec, so you need to manually add it your project's own Gemfile:
+
+```ruby
+gem 'jruby-openssl', :platform => :jruby
+```
 
 ## License
 

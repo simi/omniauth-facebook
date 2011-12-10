@@ -1,14 +1,21 @@
 require 'spec_helper'
 require 'omniauth-facebook'
+require 'openssl'
+require 'base64'
 
 describe OmniAuth::Strategies::Facebook do
   before :each do
     @request = double('Request')
     @request.stub(:params) { {} }
+    @request.stub(:cookies) { {} }
+    
+    @client_id = '123'
+    @client_secret = '53cr3tz'
   end
   
   subject do
-    OmniAuth::Strategies::Facebook.new(nil, @options || {}).tap do |strategy|
+    args = [@client_id, @client_secret, @options].compact
+    OmniAuth::Strategies::Facebook.new(nil, *args).tap do |strategy|
       strategy.stub(:request) { @request }
     end
   end
@@ -32,15 +39,15 @@ describe OmniAuth::Strategies::Facebook do
   describe '#callback_url' do
     it "returns value from #authorize_options" do
       url = 'http://auth.myapp.com/auth/fb/callback'
-      @options = {:authorize_options => { :callback_url => url }}
-      subject.callback_url.should == url
+      @options = { :authorize_options => { :callback_url => url } }
+      subject.callback_url.should eq(url)
     end
 
-    it " callback_url from request" do
+    it "callback_url from request" do
       url_base = 'http://auth.request.com'
-      @request.stub(:url){ url_base + "/page/path" }
+      @request.stub(:url) { "#{url_base}/page/path" }
       subject.stub(:script_name) { "" } # to not depend from Rack env
-      subject.callback_url.should == url_base + "/auth/facebook/callback"
+      subject.callback_url.should eq("#{url_base}/auth/facebook/callback")
     end
   end
 
@@ -270,5 +277,48 @@ describe OmniAuth::Strategies::Facebook do
     it 'contains raw info' do
       subject.extra.should eq({ 'raw_info' => @raw_info })
     end
+  end
+
+  describe '#signed_request' do
+    context 'cookie not present' do
+      it 'is nil' do
+        subject.send(:signed_request).should be_nil
+      end
+    end
+    
+    context 'cookie present' do
+      before :each do
+        @payload = {
+          'algorithm' => 'HMAC-SHA256',
+          'code' => 'm4c0d3z',
+          'issued_at' => Time.now.to_i,
+          'user_id' => '123456'
+        }
+
+        @request.stub(:cookies) do
+          { "fbsr_#{@client_id}" => signed_request(@payload, @client_secret) }
+        end
+      end
+
+      it 'parses the access code out from the cookie' do
+        subject.send(:signed_request).should eq(@payload)
+      end
+    end
+  end
+
+private
+
+  def signed_request(payload, secret)
+    encoded_payload = base64_encode_url(MultiJson.encode(payload))
+    encoded_signature = base64_encode_url(signature(encoded_payload, secret))
+    [encoded_signature, encoded_payload].join('.')
+  end
+
+  def base64_encode_url(value)
+    Base64.encode64(value).tr('+/', '-_').gsub(/\n/, '')
+  end
+
+  def signature(payload, secret, algorithm = OpenSSL::Digest::SHA256.new)	
+    OpenSSL::HMAC.digest(algorithm, secret, payload)
   end
 end
