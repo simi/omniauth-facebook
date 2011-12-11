@@ -22,7 +22,8 @@ module OmniAuth
       }
       
       option :authorize_options, [:scope, :display]
-      
+      option :callback_url
+
       uid { raw_info['id'] }
       
       info do
@@ -73,11 +74,7 @@ module OmniAuth
         if @authorization_code_from_cookie
           ''
         else
-          if options.authorize_options.respond_to?(:callback_url)
-            options.authorize_options.callback_url
-          else
-            super
-          end
+          options.callback_url || super
         end
       end
 
