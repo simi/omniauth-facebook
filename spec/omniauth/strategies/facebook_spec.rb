@@ -39,7 +39,7 @@ describe OmniAuth::Strategies::Facebook do
   describe '#callback_url' do
     it "returns value from #authorize_options" do
       url = 'http://auth.myapp.com/auth/fb/callback'
-      @options = { :authorize_options => { :callback_url => url } }
+      @options = { :callback_url => url }
       subject.callback_url.should eq(url)
     end
 
