@@ -62,6 +62,12 @@ describe OmniAuth::Strategies::Facebook do
       subject.authorize_params.should be_a(Hash)
       subject.authorize_params[:display].should eq('touch')
     end
+
+    it 'includes state parameter from request when present' do
+      @request.stub(:params) { { 'state' => 'some_state' } }
+      subject.authorize_params.should be_a(Hash)
+      subject.authorize_params[:state].should eq('some_state')
+    end
   end
 
   describe '#token_params' do

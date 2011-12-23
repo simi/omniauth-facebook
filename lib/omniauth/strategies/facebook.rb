@@ -88,6 +88,7 @@ module OmniAuth
       def authorize_params
         super.tap do |params|
           params.merge!(:display => request.params['display']) if request.params['display']
+          params.merge!(:state => request.params['state']) if request.params['state']
           params[:scope] ||= DEFAULT_SCOPE
         end
       end
