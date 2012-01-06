@@ -1,4 +1,7 @@
 source :rubygems
 
+# https://github.com/mkdynamic/omniauth-facebook/issues/20
+gem 'rack', '~> 1.3.6'
+
 gem 'sinatra'
 gem 'omniauth-facebook', :path => '../'
