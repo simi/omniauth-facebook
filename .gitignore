@@ -1,7 +1,7 @@
 *.gem
 .bundle
 .rspec
-Gemfile.lock
+/Gemfile.lock
 pkg/*
 .powenv
 tmp
