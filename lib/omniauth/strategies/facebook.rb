@@ -9,7 +9,8 @@ module OmniAuth
       
       option :client_options, {
         :site => 'https://graph.facebook.com',
-        :token_url => '/oauth/access_token'
+        :token_url => '/oauth/access_token',
+        :picture_size => 'square'
       }
 
       option :token_params, {
@@ -32,7 +33,7 @@ module OmniAuth
           'name' => raw_info['name'],
           'first_name' => raw_info['first_name'],
           'last_name' => raw_info['last_name'],
-          'image' => "http://graph.facebook.com/#{uid}/picture?type=square",
+          'image' => "http://graph.facebook.com/#{uid}/picture?type=#{options.client_options[:picture_size]}",
           'description' => raw_info['bio'],
           'urls' => {
             'Facebook' => raw_info['link'],
