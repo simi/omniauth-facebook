@@ -31,6 +31,10 @@ describe OmniAuth::Strategies::Facebook do
       subject.client.options[:authorize_url].should eq('/oauth/authorize')
     end
 
+    it 'has correct picture size' do
+      subject.client.options[:picture_size].should eq('square')
+    end
+
     it 'has correct token url' do
       subject.client.options[:token_url].should eq('/oauth/access_token')
     end
@@ -311,6 +315,28 @@ describe OmniAuth::Strategies::Facebook do
       end
     end
   end
+
+  describe "client options" do
+
+    let(:client_options) { {} }
+
+    before do
+      @options = { :client_options => client_options }
+      subject.stub(:raw_info) { {} }
+    end
+
+    context "when picture size is small" do
+      let(:client_options) { { 'picture_size' => 'small' } }
+
+      it 'returns the small format facebook avatar url' do
+        subject.info['image'].should match /type=small/
+      end
+
+    end
+
+  end
+
+
 
 private
 
