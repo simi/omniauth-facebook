@@ -54,16 +54,25 @@ class App < Sinatra::Base
               
               FB.login(function(response) {
                 if (response.authResponse) {
-                  $.get('/auth/facebook/callback');
+                  $('#connect').html('Connected! Hitting OmniAuth callback (GET /auth/facebook/callback)...');
+                  
+                  // since we have cookies enabled, this request will allow omniauth to parse 
+                  // out the auth code from the signed request in the fbsr_XXX cookie
+                  $.getJSON('/auth/facebook/callback', function(json) {
+                    $('#connect').html('Connected! Callback complete.');
+                    $('#results').html(JSON.stringify(json));
+                  });
                 }
               }, { scope: '#{SCOPE}' });
             });
           });
         </script>
         
-        <p>
+        <p id="connect">
           <a href="#">Connect to FB</a>
         </p>
+        
+        <p id="results" />
       </body>
       </html>
     END
