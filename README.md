@@ -43,7 +43,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 ```
 
-*NB.* If you want to set the `display` format on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup`.
+*NB.* If you want to set the `display` format on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup`. You can also pass through a `state` param which will be passed along to the callback url.
 
 ## Authentication Hash
 

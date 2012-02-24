@@ -85,6 +85,13 @@ module OmniAuth
         options.access_token_options.inject({}) { |h,(k,v)| h[k.to_sym] = v; h }
       end
       
+      ##
+      # You can pass +display+ or +state+ params to the auth request, if
+      # you need to set them dynamically. You can also set these options
+      # in the OmniAuth config :authorize_params option.
+      #
+      # /auth/facebook?display=popup&state=ABC
+      #
       def authorize_params
         super.tap do |params|
           params.merge!(:display => request.params['display']) if request.params['display']
