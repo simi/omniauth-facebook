@@ -37,7 +37,6 @@ class App < Sinatra::Base
               appId  : '#{ENV['APP_ID']}',
               status : true, // check login status
               cookie : true, // enable cookies to allow the server to access the session
-              oauth  : true, // enable OAuth 2.0
               xfbml  : true  // parse XFBML
             });
           };
