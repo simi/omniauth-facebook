@@ -36,7 +36,7 @@ You can configure several options, which you pass in to the `provider` method vi
 * `display`: The display context to show the authentication page. Options are: `page`, `popup`, `iframe`, `touch` and `wap`. Read the Facebook docs for more details: http://developers.facebook.com/docs/reference/dialogs#display. Default: `page`
 
 For example, to request `email`, `offline_access` and `read_stream` permissions and display the authentication page in a popup window:
- 
+
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'], 
