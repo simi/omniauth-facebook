@@ -130,7 +130,7 @@ module OmniAuth
       def parse_signed_request(value)
         signature, encoded_payload = value.split('.')
 
-        decoded_hex_signature = base64_decode_url(signature)#.unpack('H*')
+        decoded_hex_signature = base64_decode_url(signature)
         decoded_payload = MultiJson.decode(base64_decode_url(encoded_payload))
 
         unless decoded_payload['algorithm'] == 'HMAC-SHA256'
