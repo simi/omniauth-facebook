@@ -43,7 +43,15 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 ```
 
-*NB.* If you want to set the `display` format on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup`. You can also pass through a `state` param which will be passed along to the callback url.
+### Per-Request Options
+
+If you want to set the `display` format on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup`.
+
+You can also pass through a `state` param which will be passed along to the callback url.
+
+### Custom Callback URL/Path
+
+You can set a custom `callback_url` or `callback_path` option to override the default value. See [OmniAuth::Strategy#callback_url](https://github.com/intridea/omniauth/blob/master/lib/omniauth/strategy.rb#L387) for more details on the default.
 
 ## Authentication Hash
 

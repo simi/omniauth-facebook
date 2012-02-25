@@ -73,11 +73,7 @@ module OmniAuth
         if @authorization_code_from_cookie
           ''
         else
-          if options.authorize_options.respond_to?(:callback_url)
-            options.authorize_options.callback_url
-          else
-            super
-          end
+          options[:callback_url] || super
         end
       end
 

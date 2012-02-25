@@ -37,17 +37,25 @@ describe OmniAuth::Strategies::Facebook do
   end
 
   describe '#callback_url' do
-    it "returns value from #authorize_options" do
-      url = 'http://auth.myapp.com/auth/fb/callback'
-      @options = { :authorize_options => { :callback_url => url } }
-      subject.callback_url.should eq(url)
+    it "returns the default callback url" do
+      url_base = 'http://auth.request.com'
+      @request.stub(:url) { "#{url_base}/some/page" }
+      subject.stub(:script_name) { '' } # as not to depend on Rack env
+      subject.callback_url.should eq("#{url_base}/auth/facebook/callback")
     end
-
-    it "callback_url from request" do
+    
+    it "returns path from callback_path option" do
+      @options = { :callback_path => "/auth/FB/done"}
       url_base = 'http://auth.request.com'
       @request.stub(:url) { "#{url_base}/page/path" }
-      subject.stub(:script_name) { "" } # to not depend from Rack env
-      subject.callback_url.should eq("#{url_base}/auth/facebook/callback")
+      subject.stub(:script_name) { '' } # as not to depend on Rack env
+      subject.callback_url.should eq("#{url_base}/auth/FB/done")
+    end
+    
+    it "returns url from callback_url option" do
+      url = 'https://auth.myapp.com/auth/fb/callback'
+      @options = { :callback_url => url }
+      subject.callback_url.should eq(url)
     end
   end
 
