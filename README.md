@@ -26,7 +26,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 ```
 
-See a full example of both server and client-side flows in the example Sinatra app in the `example/` folder above.
+[See the example Sinatra app for full examples](https://github.com/mkdynamic/omniauth-facebook/blob/master/example/config.ru) of both the server and client-side flows (including using the Facebook Javascript SDK).
 
 ## Configuring
 
