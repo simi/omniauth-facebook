@@ -76,6 +76,12 @@ describe OmniAuth::Strategies::Facebook do
       subject.authorize_params.should be_a(Hash)
       subject.authorize_params[:state].should eq('some_state')
     end
+
+    it 'overrides default scope with parameter passed from request' do
+      @request.stub(:params) { { 'scope' => 'email' } }
+      subject.authorize_params.should be_a(Hash)
+      subject.authorize_params[:scope].should eq('email')
+    end
   end
 
   describe '#token_params' do
