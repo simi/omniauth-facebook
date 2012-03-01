@@ -82,7 +82,7 @@ module OmniAuth
       end
       
       ##
-      # You can pass +display+ or +state+ params to the auth request, if
+      # You can pass +display+, +state+ or +scope+ params to the auth request, if
       # you need to set them dynamically. You can also set these options
       # in the OmniAuth config :authorize_params option.
       #
@@ -92,6 +92,7 @@ module OmniAuth
         super.tap do |params|
           params.merge!(:display => request.params['display']) if request.params['display']
           params.merge!(:state => request.params['state']) if request.params['state']
+          params.merge!(:scope => request.params['scope']) if request.params['scope']
           params[:scope] ||= DEFAULT_SCOPE
         end
       end
