@@ -55,13 +55,27 @@ module OmniAuth
         })
       end
       
+      def request_phase
+        if request.params['iframe']
+          @options.iframe = true
+          @options.display = "page"
+        end
+        super
+      end
+      
       def raw_info
         @raw_info ||= access_token.get('/me').parsed
       end
 
       def build_access_token
-        with_authorization_code { super }.tap do |token|
-          token.options.merge!(access_token_options)
+        if request.params.key?("signed_request")
+          return ::OAuth2::AccessToken.new(client, with_signed_request.delete('oauth_token'), with_signed_request).tap do |token|
+            token.options.merge!(access_token_options)
+          end
+        else
+          with_authorization_code { super }.tap do |token|
+            token.options.merge!(access_token_options)
+          end
         end
       end
       
@@ -98,9 +112,13 @@ module OmniAuth
       end
 
       def signed_request
-        @signed_request ||= begin
-          cookie = request.cookies["fbsr_#{client.id}"] and
-          parse_signed_request(cookie)
+        if request.params.key?("signed_request")
+          @signed_request ||= parse_signed_request(request.params["signed_request"])
+        else
+          @signed_request ||= begin
+            cookie = request.cookies["fbsr_#{client.id}"] and
+            parse_signed_request(cookie)
+          end
         end
       end
       
@@ -121,6 +139,14 @@ module OmniAuth
             request.params.delete('code')
             @authorization_code_from_cookie = false
           end
+        end
+      end
+      
+      # Handles canvas app signed_request param via facebook POST
+      def with_signed_request
+        if request.params.key?("signed_request") && signed_request_hash = signed_request
+          @authorization_code_from_cookie = true
+          signed_request_hash
         end
       end
       
