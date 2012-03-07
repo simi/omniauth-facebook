@@ -4,6 +4,8 @@ Facebook OAuth2 Strategy for OmniAuth 1.0.
 
 Supports the OAuth 2.0 server-side and client-side flows. Read the Facebook docs for more details: http://developers.facebook.com/docs/authentication
 
+*Edge:* Also supports authentication for [Facebook app pages/canvas](https://developers.facebook.com/docs/guides/canvas/), via parsing the [signed request](https://developers.facebook.com/docs/authentication/signed_request/). Take a look at [the example Sinatra app for how to integrate with a canvas page](https://github.com/mkdynamic/omniauth-facebook/blob/master/example/config.ru).
+
 ## Installing
 
 Add to your `Gemfile`:
