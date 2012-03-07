@@ -39,14 +39,14 @@ For example, to request `email`, `offline_access` and `read_stream` permissions 
 
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'], 
+  provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'],
            :scope => 'email,offline_access,read_stream', :display => 'popup'
 end
 ```
 
 ### Per-Request Options
 
-If you want to set the `display` format on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup`.
+If you want to set the `display` format or `scope` on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup` or `/auth/facebook?scope=email`.
 
 You can also pass through a `state` param which will be passed along to the callback url.
 
