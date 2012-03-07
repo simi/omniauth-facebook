@@ -8,6 +8,7 @@ describe OmniAuth::Strategies::Facebook do
     @request = double('Request')
     @request.stub(:params) { {} }
     @request.stub(:cookies) { {} }
+    @request.stub(:env) { {} }
 
     @client_id = '123'
     @client_secret = '53cr3tz'
