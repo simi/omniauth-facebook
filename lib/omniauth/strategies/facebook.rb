@@ -41,7 +41,8 @@ module OmniAuth
             'Facebook' => raw_info['link'],
             'Website' => raw_info['website']
           },
-          'location' => (raw_info['location'] || {})['name']
+          'location' => (raw_info['location'] || {})['name'],
+          'verified' => raw_info['verified']
         })
       end
 
