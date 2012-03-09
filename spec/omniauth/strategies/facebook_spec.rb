@@ -145,6 +145,10 @@ describe OmniAuth::Strategies::Facebook do
       it 'has no urls' do
         subject.info.should_not have_key('urls')
       end
+
+      it 'has no verified key' do
+        subject.info.should_not have_key('verified')
+      end
     end
 
     context 'when data is present in raw info' do
@@ -205,6 +209,16 @@ describe OmniAuth::Strategies::Facebook do
         subject.info['urls'].should be_a(Hash)
         subject.info['urls']['Facebook'].should eq('http://www.facebook.com/fredsmith')
         subject.info['urls']['Website'].should eq('https://my-wonderful-site.com')
+      end
+
+      it 'returns the positive verified status' do
+        @raw_info['verified'] = true
+        subject.info['verified'].should be_true
+      end
+
+      it 'returns the negative verified status' do
+        @raw_info['verified'] = false
+        subject.info['verified'].should be_false
       end
     end
   end

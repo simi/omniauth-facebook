@@ -72,7 +72,8 @@ Here's an example *Authentication Hash* available in `request.env['omniauth.auth
     :last_name => 'Bloggs',
     :image => 'http://graph.facebook.com/1234567/picture?type=square',
     :urls => { :Facebook => 'http://www.facebook.com/jbloggs' },
-    :location => 'Palo Alto, California'
+    :location => 'Palo Alto, California',
+    :verified => true
   },
   :credentials => {
     :token => 'ABCDEF...', # OAuth 2.0 access_token, which you may wish to store
