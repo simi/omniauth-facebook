@@ -36,6 +36,7 @@ You can configure several options, which you pass in to the `provider` method vi
 
 * `scope`: A comma-separated list of permissions you want to request from the user. See the Facebook docs for a full list of available permissions: http://developers.facebook.com/docs/reference/api/permissions. Default: `email,offline_access`
 * `display`: The display context to show the authentication page. Options are: `page`, `popup`, `iframe`, `touch` and `wap`. Read the Facebook docs for more details: http://developers.facebook.com/docs/reference/dialogs#display. Default: `page`
+* `secure_image_url`: Set to `true` to use https for the avatar image url returned in the authentication hash. Default is `false`.
 
 For example, to request `email`, `offline_access` and `read_stream` permissions and display the authentication page in a popup window:
 

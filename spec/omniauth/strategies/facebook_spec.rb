@@ -112,12 +112,12 @@ describe OmniAuth::Strategies::Facebook do
   end
 
   describe '#info' do
-    before :each do
-      @raw_info ||= { 'name' => 'Fred Smith' }
-      subject.stub(:raw_info) { @raw_info }
-    end
-
     context 'when optional data is not present in raw info' do
+      before :each do
+        @raw_info ||= { 'name' => 'Fred Smith' }
+        subject.stub(:raw_info) { @raw_info }
+      end
+
       it 'has no email key' do
         subject.info.should_not have_key('email')
       end
@@ -151,7 +151,12 @@ describe OmniAuth::Strategies::Facebook do
       end
     end
 
-    context 'when data is present in raw info' do
+    context 'when optional data is present in raw info' do
+      before :each do
+        @raw_info ||= { 'name' => 'Fred Smith' }
+        subject.stub(:raw_info) { @raw_info }
+      end
+
       it 'returns the name' do
         subject.info['name'].should eq('Fred Smith')
       end
@@ -220,6 +225,13 @@ describe OmniAuth::Strategies::Facebook do
         @raw_info['verified'] = false
         subject.info['verified'].should be_false
       end
+    end
+
+    it 'returns the secure facebook avatar url when `secure_image_url` option is specified' do
+      @options = { :secure_image_url => true }
+      raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
+      subject.stub(:raw_info) { raw_info }
+      subject.info['image'].should eq('https://graph.facebook.com/321/picture?type=square')
     end
   end
 

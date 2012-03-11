@@ -35,7 +35,7 @@ module OmniAuth
           'name' => raw_info['name'],
           'first_name' => raw_info['first_name'],
           'last_name' => raw_info['last_name'],
-          'image' => "http://graph.facebook.com/#{uid}/picture?type=square",
+          'image' => "#{options[:secure_image_url] ? 'https' : 'http'}://graph.facebook.com/#{uid}/picture?type=square",
           'description' => raw_info['bio'],
           'urls' => {
             'Facebook' => raw_info['link'],
