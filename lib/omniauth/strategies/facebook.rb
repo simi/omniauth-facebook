@@ -69,7 +69,7 @@ module OmniAuth
           ::OAuth2::AccessToken.new(
             client,
             hash.delete('oauth_token'),
-            hash.merge!(access_token_options)
+            hash.merge!(access_token_options.merge(:expires_at => hash.delete('expires')))
           )
         else
           with_authorization_code! { super }.tap do |token|
