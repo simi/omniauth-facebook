@@ -64,7 +64,7 @@ module OmniAuth
       end
 
       def build_access_token
-        if !options[:always_refresh_access_token] && signed_request_contains_access_token?
+        if signed_request_contains_access_token?
           hash = signed_request.clone
           ::OAuth2::AccessToken.new(
             client,
