@@ -425,7 +425,8 @@ describe OmniAuth::Strategies::Facebook do
       before do
         @payload = {
           'algorithm' => 'HMAC-SHA256',
-          'oauth_token' => 'm4c0d3z'
+          'oauth_token' => 'm4c0d3z',
+          'expires' => Time.now.to_i
         }
         @raw_signed_request = signed_request(@payload, @client_secret)
         @request.stub(:params) do
@@ -439,6 +440,11 @@ describe OmniAuth::Strategies::Facebook do
         result = subject.build_access_token
         result.should be_an_instance_of(::OAuth2::AccessToken)
         result.token.should eq(@payload['oauth_token'])
+      end
+
+      it 'returns an access token with the correct expiry time' do
+        result = subject.build_access_token
+        result.expires_at.should eq(@payload['expires'])
       end
     end
   end
