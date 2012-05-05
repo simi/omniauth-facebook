@@ -5,3 +5,4 @@
 pkg/*
 .powenv
 tmp
+bin
