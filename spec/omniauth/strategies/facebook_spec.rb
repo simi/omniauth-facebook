@@ -265,7 +265,7 @@ describe OmniAuth::Strategies::Facebook do
       subject.raw_info.should be_a(Hash)
       subject.raw_info['ohai'].should eq('thar')
     end
-    
+
     it 'returns an empty hash when the response is false' do
       @access_token.stub(:get).with('/me') do
         response = double('OAuth2::Response')
