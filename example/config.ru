@@ -2,9 +2,6 @@ require 'bundler/setup'
 require 'sinatra/base'
 require 'omniauth-facebook'
 
-# https://github.com/intridea/omniauth-oauth2/pull/9
-require 'timeout'
-
 SCOPE = 'email,read_stream'
 
 class App < Sinatra::Base
