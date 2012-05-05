@@ -58,7 +58,7 @@ You can set a custom `callback_url` or `callback_path` option to override the de
 
 ## Auth Hash
 
-Here's an example *Authentication Hash* available in `request.env['omniauth.auth']`:
+Here's an example *Auth Hash* available in `request.env['omniauth.auth']`:
 
 ```ruby
 {
@@ -108,7 +108,7 @@ You can use the Facebook Javascript SDK with `FB.login`, and just hit the callba
 
 Note that you must enable cookies in the `FB.init` config for this process to work.
 
-See the example Sinatra app under `example/` and read the (Facebook docs on Client-Side Authentication)[https://developers.facebook.com/docs/authentication/client-side/] for more details.
+See the example Sinatra app under `example/` and read the [Facebook docs on Client-Side Authentication](https://developers.facebook.com/docs/authentication/client-side/) for more details.
 
 ### How it Works
 
@@ -120,7 +120,7 @@ When you call `/auth/facebook/callback` in the success callback of `FB.login` th
 2. extract the authorization code contained in it
 3. and hit Facebook and obtain an access token which will get placed in the `request.env['omniauth.auth']['credentials']` hash.
 
-Note that this access token will be the same token obtained and available in the client through the hash (as (detailed in the Facebook docs)[https://developers.facebook.com/docs/authentication/client-side/]).
+Note that this access token will be the same token obtained and available in the client through the hash [as (detailed in the Facebook docs](https://developers.facebook.com/docs/authentication/client-side/)).
 
 ## Canvas Apps
 
@@ -134,7 +134,7 @@ There are then 2 scenarios for what happens next:
 
 Take a look at [the example Sinatra app for one option of how you can integrate with a canvas page](https://github.com/mkdynamic/omniauth-facebook/blob/master/example/config.ru).
 
-Bear in mind you have several options (including (authenticated referrals)[https://developers.facebook.com/docs/opengraph/authentication/#referrals]). Read (the Facebook docs on canvas page  authentication)[https://developers.facebook.com/docs/authentication/canvas/] for more info.
+Bear in mind you have several options (including [authenticated referrals](https://developers.facebook.com/docs/opengraph/authentication/#referrals)). Read [the Facebook docs on canvas page  authentication](https://developers.facebook.com/docs/authentication/canvas/) for more info.
 
 ## Token Expiry
 
@@ -144,13 +144,13 @@ Since Facebook deprecated the `offline_access` permission, this has become more 
 
 If you use the client-side flow, Facebook will give you back a short lived access token (~ 2 hours).
 
-You can exchange this short lived access token for a longer lived version. Read the (Facebook docs about the offline_access  deprecation)[https://developers.facebook.com/roadmap/offline-access-removal/] for more information.
+You can exchange this short lived access token for a longer lived version. Read the [Facebook docs about the offline_access  deprecation](https://developers.facebook.com/roadmap/offline-access-removal/) for more information.
 
 ### Server-Side Flow
 
 If you use the server-side flow, Facebook will give you back a longer loved access token (~ 60 days).
 
-If you're having issue getting a long lived token with the server-side flow, make sure to enable the 'deprecate offline_access setting' in you Facebook app config. Read the (Facebook docs about the offline_access  deprecation)[https://developers.facebook.com/roadmap/offline-access-removal/] for more information.
+If you're having issue getting a long lived token with the server-side flow, make sure to enable the 'deprecate offline_access setting' in you Facebook app config. Read the [Facebook docs about the offline_access  deprecation](https://developers.facebook.com/roadmap/offline-access-removal/) for more information.
 
 ## Supported Rubies
 
