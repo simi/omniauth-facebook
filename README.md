@@ -4,8 +4,6 @@ Facebook OAuth2 Strategy for OmniAuth 1.0.
 
 Supports the OAuth 2.0 server-side and client-side flows. Read the Facebook docs for more details: http://developers.facebook.com/docs/authentication
 
-*Edge:* Also supports authentication for [Facebook app pages/canvas](https://developers.facebook.com/docs/guides/canvas/), via parsing the [signed request](https://developers.facebook.com/docs/authentication/signed_request/). Take a look at [the example Sinatra app for how to integrate with a canvas page](https://github.com/mkdynamic/omniauth-facebook/blob/master/example/config.ru).
-
 ## Installing
 
 Add to your `Gemfile`:
@@ -106,9 +104,53 @@ The precise information available may depend on the permissions which you reques
 
 ## Client-side Flow
 
-The client-side flow supports parsing the authorization code from the signed request which Facebook puts into a cookie. This means you can to use the Facebook Javascript SDK as you would normally, and you just hit the callback endpoint (`/auth/facebook/callback` by default) once the user has authenticated in the `FB.login` success callback.
+You can use the Facebook Javascript SDK with `FB.login`, and just hit the callback endpoint (`/auth/facebook/callback` by default) once the user has authenticated in the success callback.
 
-See the example Sinatra app under `example/` for more details.
+Note that you must enable cookies in the `FB.init` config for this process to work.
+
+See the example Sinatra app under `example/` and read the (Facebook docs on Client-Side Authentication)[https://developers.facebook.com/docs/authentication/client-side/] for more details.
+
+### How it Works
+
+The client-side flow is supported by parsing the authorization code from the signed request which Facebook places in a cookie.
+
+When you call `/auth/facebook/callback` in the success callback of `FB.login` that will pass the cookie back to the server. omniauth-facebook will see this cookie and:
+
+1. parse it,
+2. extract the authorization code contained in it
+3. and hit Facebook and obtain an access token which will get placed in the `request.env['omniauth.auth']['credentials']` hash.
+
+Note that this access token will be the same token obtained and available in the client through the hash (as (detailed in the Facebook docs)[https://developers.facebook.com/docs/authentication/client-side/]).
+
+## Canvas Apps
+
+Canvas apps will send a signed request with the initial POST, therefore you *can* (if it makes sense for your app) pass this to the authorize endpoint (`/auth/facebook` by default) in the querystring.
+
+There are then 2 scenarios for what happens next:
+
+1. A user has already granted access to your app, this will contain an access token. In this case, omniauth-facebook will skip asking the user for authentication and immediately redirect to the callback endpoint (`/auth/facebook/callback` by default) with the access token present in the `request.env['omniauth.auth']['credentials']` hash.
+
+2. A user has not granted access to your app, and the signed request *will not* contain an access token. In this case omniauth-facebook will simply follow the standard auth flow.
+
+Take a look at [the example Sinatra app for one option of how you can integrate with a canvas page](https://github.com/mkdynamic/omniauth-facebook/blob/master/example/config.ru).
+
+Bear in mind you have several options (including (authenticated referrals)[https://developers.facebook.com/docs/opengraph/authentication/#referrals]). Read (the Facebook docs on canvas page  authentication)[https://developers.facebook.com/docs/authentication/canvas/] for more info.
+
+## Token Expiry
+
+Since Facebook deprecated the `offline_access` permission, this has become more complex. The expiration time of the access token you obtain will depend on which flow you are using. See below for more details.
+
+### Client-Side Flow
+
+If you use the client-side flow, Facebook will give you back a short lived access token (~ 2 hours).
+
+You can exchange this short lived access token for a longer lived version. Read the (Facebook docs about the offline_access  deprecation)[https://developers.facebook.com/roadmap/offline-access-removal/] for more information.
+
+### Server-Side Flow
+
+If you use the server-side flow, Facebook will give you back a longer loved access token (~ 60 days).
+
+If you're having issue getting a long lived token with the server-side flow, make sure to enable the 'deprecate offline_access setting' in you Facebook app config. Read the (Facebook docs about the offline_access  deprecation)[https://developers.facebook.com/roadmap/offline-access-removal/] for more information.
 
 ## Supported Rubies
 

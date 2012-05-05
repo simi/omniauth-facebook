@@ -145,6 +145,13 @@ module OmniAuth
         request.cookies["fbsr_#{client.id}"]
       end
 
+      ##
+      # If the signed_request comes from a FB canvas page and the user
+      # has already authorized your application, the JSON object will be
+      # contain the access token.
+      #
+      # https://developers.facebook.com/docs/authentication/canvas/
+      #
       def signed_request_contains_access_token?
         signed_request &&
         signed_request['oauth_token']
