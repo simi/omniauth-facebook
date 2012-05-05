@@ -58,7 +58,7 @@ You can also pass through a `state` param which will be passed along to the call
 
 You can set a custom `callback_url` or `callback_path` option to override the default value. See [OmniAuth::Strategy#callback_url](https://github.com/intridea/omniauth/blob/master/lib/omniauth/strategy.rb#L387) for more details on the default.
 
-## Authentication Hash
+## Auth Hash
 
 Here's an example *Authentication Hash* available in `request.env['omniauth.auth']`:
 
