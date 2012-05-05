@@ -34,16 +34,16 @@ end
 
 You can configure several options, which you pass in to the `provider` method via a `Hash`:
 
-* `scope`: A comma-separated list of permissions you want to request from the user. See the Facebook docs for a full list of available permissions: http://developers.facebook.com/docs/reference/api/permissions. Default: `email,offline_access`
+* `scope`: A comma-separated list of permissions you want to request from the user. See the Facebook docs for a full list of available permissions: http://developers.facebook.com/docs/reference/api/permissions. Default: `email`
 * `display`: The display context to show the authentication page. Options are: `page`, `popup`, `iframe`, `touch` and `wap`. Read the Facebook docs for more details: http://developers.facebook.com/docs/reference/dialogs#display. Default: `page`
 * `secure_image_url`: Set to `true` to use https for the avatar image url returned in the authentication hash. Default is `false`.
 
-For example, to request `email`, `offline_access` and `read_stream` permissions and display the authentication page in a popup window:
+For example, to request `email`, `user_birthday` and `read_stream` permissions and display the authentication page in a popup window:
 
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'],
-           :scope => 'email,offline_access,read_stream', :display => 'popup'
+           :scope => 'email,user_birthday,read_stream', :display => 'popup'
 end
 ```
 
@@ -78,8 +78,8 @@ Here's an example *Authentication Hash* available in `request.env['omniauth.auth
   },
   :credentials => {
     :token => 'ABCDEF...', # OAuth 2.0 access_token, which you may wish to store
-    :expires_at => 1321747205, # when the access token expires (if it expires)
-    :expires => true # if you request `offline_access` this will be false
+    :expires_at => 1321747205, # when the access token expires (it always will)
+    :expires => true # this will always be true
   },
   :extra => {
     :raw_info => {

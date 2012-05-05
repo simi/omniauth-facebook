@@ -8,7 +8,7 @@ module OmniAuth
     class Facebook < OmniAuth::Strategies::OAuth2
       class NoAuthorizationCodeError < StandardError; end
 
-      DEFAULT_SCOPE = 'email,offline_access'
+      DEFAULT_SCOPE = 'email'
 
       option :client_options, {
         :site => 'https://graph.facebook.com',
