@@ -88,14 +88,14 @@ class App < Sinatra::Base
     # not already granted access, or simply moving straight to the
     # callback where they have already granted access.
     #
-    # we pass the state parameter which we detect in our callback
+    # we pass the state parameter which we can detect in our callback
     # to do custom rendering/redirection for the canvas app page
     redirect "/auth/facebook?signed_request=#{request.params['signed_request']}&state=canvas"
   end
 
   get '/auth/:provider/callback' do
     # we can do something special here is +state+ param is canvas
-    # (see notes abovein /canvas/ method for more details)
+    # (see notes above in /canvas/ method for more details)
     content_type 'application/json'
     MultiJson.encode(request.env)
   end
