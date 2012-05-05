@@ -37,6 +37,7 @@ You can configure several options, which you pass in to the `provider` method vi
 * `scope`: A comma-separated list of permissions you want to request from the user. See the Facebook docs for a full list of available permissions: http://developers.facebook.com/docs/reference/api/permissions. Default: `email`
 * `display`: The display context to show the authentication page. Options are: `page`, `popup`, `iframe`, `touch` and `wap`. Read the Facebook docs for more details: http://developers.facebook.com/docs/reference/dialogs#display. Default: `page`
 * `secure_image_url`: Set to `true` to use https for the avatar image url returned in the authentication hash. Default is `false`.
+* `image_size`: Set the size for the returned image url in the auth hash. Valid options are `square` (50x50), `small` (50 pixels wide, variable height), `normal` (100 pixels wide, variable height), or `large` (about 200 pixels wide, variable height). Default is `square` (50x50).
 
 For example, to request `email`, `user_birthday` and `read_stream` permissions and display the authentication page in a popup window:
 

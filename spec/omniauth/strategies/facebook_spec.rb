@@ -233,6 +233,13 @@ describe OmniAuth::Strategies::Facebook do
       subject.stub(:raw_info) { raw_info }
       subject.info['image'].should eq('https://graph.facebook.com/321/picture?type=square')
     end
+
+    it 'returns the image size specified in the `image_size` option' do
+      @options = { :image_size => 'normal' }
+      raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
+      subject.stub(:raw_info) { raw_info }
+      subject.info['image'].should eq('http://graph.facebook.com/321/picture?type=normal')
+    end
   end
 
   describe '#raw_info' do
