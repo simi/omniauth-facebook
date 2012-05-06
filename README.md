@@ -120,7 +120,7 @@ When you call `/auth/facebook/callback` in the success callback of `FB.login` th
 2. extract the authorization code contained in it
 3. and hit Facebook and obtain an access token which will get placed in the `request.env['omniauth.auth']['credentials']` hash.
 
-Note that this access token will be the same token obtained and available in the client through the hash [as (detailed in the Facebook docs](https://developers.facebook.com/docs/authentication/client-side/)).
+Note that this access token will be the same token obtained and available in the client through the hash [as detailed in the Facebook docs](https://developers.facebook.com/docs/authentication/client-side/).
 
 ## Canvas Apps
 
