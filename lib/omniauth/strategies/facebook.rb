@@ -57,18 +57,45 @@ module OmniAuth
       end
 
       def build_access_token
+        authorization_code_was_from_signed_request = false
+
         if signed_request_contains_access_token?
           hash = signed_request.clone
-          ::OAuth2::AccessToken.new(
+          token = ::OAuth2::AccessToken.new(
             client,
             hash.delete('oauth_token'),
             hash.merge!(access_token_options.merge(:expires_at => hash.delete('expires')))
           )
         else
-          with_authorization_code! { super }.tap do |token|
-            token.options.merge!(access_token_options)
+          token = with_authorization_code! do
+            authorization_code_was_from_signed_request = !!@authorization_code_from_signed_request
+            super
           end
+          token.options.merge!(access_token_options)
         end
+
+        # WIP
+        # if auth code came from signed request, it means it is a short
+        # lived token (from the cookie via the client-side flow).
+        2_hours = 60 * 2
+        if authorization_code_was_from_signed_request &&
+          options.auto_exchange_short_lived_tokens &&
+          token.expires_in < 2_hours
+
+          # going by https://developers.facebook.com/roadmap/offline-access-removal/
+          # if you try this with a token that is already long-lived, it will just
+          # return the same token
+          refreshed_token = client.get_token({
+            :client_id => client.id,
+            :client_secret => client.secret,
+            :grant_type => 'fb_exchange_token',
+            :fb_exchange_token => token.token
+          }.merge!(token_params.to_hash(:symbolize_keys => true)))
+          refreshed_token.options = token.options
+          token = refreshed_token
+        end
+
+        token
       end
 
       def request_phase

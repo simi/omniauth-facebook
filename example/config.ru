@@ -109,7 +109,7 @@ end
 use Rack::Session::Cookie
 
 use OmniAuth::Builder do
-  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'], :scope => SCOPE
+  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'], :scope => SCOPE, :auto_exchange_short_lived_tokens => true
 end
 
 run App.new
