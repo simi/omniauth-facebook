@@ -46,13 +46,6 @@ module OmniAuth
         })
       end
 
-      credentials do
-        prune!({
-          'expires' => access_token.expires?,
-          'expires_at' => access_token.expires_at
-        })
-      end
-
       extra do
         prune!({
           'raw_info' => raw_info
