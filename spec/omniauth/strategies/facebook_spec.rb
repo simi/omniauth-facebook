@@ -245,16 +245,17 @@ describe OmniAuth::Strategies::Facebook do
   describe '#raw_info' do
     before :each do
       @access_token = double('OAuth2::AccessToken')
-      subject.stub(:access_token) { @access_token }
     end
 
     it 'performs a GET to https://graph.facebook.com/me' do
+      subject.stub(:access_token) { @access_token }
       @access_token.stub(:get) { double('OAuth2::Response').as_null_object }
       @access_token.should_receive(:get).with('/me')
       subject.raw_info
     end
 
     it 'returns a Hash' do
+      subject.stub(:access_token) { @access_token }
       @access_token.stub(:get).with('/me') do
         raw_response = double('Faraday::Response')
         raw_response.stub(:body) { '{ "ohai": "thar" }' }
@@ -267,12 +268,19 @@ describe OmniAuth::Strategies::Facebook do
     end
 
     it 'returns an empty hash when the response is false' do
+      subject.stub(:access_token) { @access_token }
       @access_token.stub(:get).with('/me') do
         response = double('OAuth2::Response')
         response.stub(:parsed => false)
         response
       end
       subject.raw_info.should be_a(Hash)
+    end
+
+    it 'should not include raw_info in extras hash when skip_info is specified' do
+      @options = { :skip_info => true }
+      subject.stub(:raw_info) { { :foo => 'bar' } }
+      subject.extra.should_not have_key('raw_info')
     end
   end
 
