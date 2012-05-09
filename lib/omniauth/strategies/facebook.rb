@@ -77,10 +77,10 @@ module OmniAuth
         # WIP
         # if auth code came from signed request, it means it is a short
         # lived token (from the cookie via the client-side flow).
-        2_hours = 60 * 2
+        two_hours = 60 * 2
         if authorization_code_was_from_signed_request &&
           options.auto_exchange_short_lived_tokens &&
-          token.expires_in < 2_hours
+          token.expires_in < two_hours
 
           # going by https://developers.facebook.com/roadmap/offline-access-removal/
           # if you try this with a token that is already long-lived, it will just
