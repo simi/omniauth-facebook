@@ -19,6 +19,11 @@ shared_examples 'an oauth2 strategy' do
       subject.authorize_params['scope'].should eq('bar')
       subject.authorize_params['foo'].should eq('baz')
     end
+    
+    it 'should exclude top-level options that are not passed' do
+      @options = { :authorize_options => [:bar] }
+      subject.authorize_params.should_not have_keys(:bar, 'bar')
+    end
   end
 
   describe '#token_params' do
