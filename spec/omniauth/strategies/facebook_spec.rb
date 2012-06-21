@@ -471,6 +471,22 @@ describe OmniAuth::Strategies::Facebook do
         result.expires_at.should eq(@payload['expires'])
       end
     end
+
+    describe 'params contain an access token string' do
+      before do
+        @request.stub(:params) do
+          { 'access_token' => 'm4c0d3z' }
+        end
+
+        subject.stub(:callback_url) { '/' }
+      end
+
+      it 'returns a new access token' do
+        result = subject.build_access_token
+        result.should be_an_instance_of(::OAuth2::AccessToken)
+        result.token.should eq('m4c0d3z')
+      end
+    end
   end
 
 private
