@@ -4,6 +4,7 @@ module OAuth2StrategyTests
     base.class_eval do
       include ClientTests
       include AuthorizeParamsTests
+      include CSRFAuthorizeParamsTests
       include TokenParamsTests
     end
   end
@@ -36,6 +37,33 @@ module OAuth2StrategyTests
       @options = { :authorize_options => [:bar] }
       refute_has_key :bar, strategy.authorize_params
       refute_has_key 'bar', strategy.authorize_params
+    end
+  end
+
+  module CSRFAuthorizeParamsTests
+    extend BlockTestHelper
+
+    test 'should store random state in the session when none is present in authorize or request params' do
+      assert_includes strategy.authorize_params.keys, 'state'
+      refute_empty strategy.authorize_params['state']
+      refute_empty strategy.session['omniauth.state']
+      assert_equal strategy.authorize_params['state'], strategy.session['omniauth.state']
+    end
+
+    test 'should store state in the session when present in authorize params vs. a random one' do
+      @options = { :authorize_params => { :state => 'bar' } }
+      refute_empty strategy.authorize_params['state']
+      assert_equal 'bar', strategy.authorize_params[:state]
+      refute_empty strategy.session['omniauth.state']
+      assert_equal 'bar', strategy.session['omniauth.state']
+    end
+
+    test 'should store state in the session when present in request params vs. a random one' do
+      @request.stubs(:params).returns({ 'state' => 'foo' })
+      refute_empty strategy.authorize_params['state']
+      assert_equal 'foo', strategy.authorize_params[:state]
+      refute_empty strategy.session['omniauth.state']
+      assert_equal 'foo', strategy.session['omniauth.state']
     end
   end
 
