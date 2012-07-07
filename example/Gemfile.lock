@@ -1,7 +1,7 @@
 PATH
   remote: ../
   specs:
-    omniauth-facebook (1.4.0)
+    omniauth-facebook (1.4.1)
       omniauth-oauth2 (~> 1.1.0)
 
 GEM
