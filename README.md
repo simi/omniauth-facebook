@@ -150,7 +150,7 @@ You can exchange this short lived access token for a longer lived version. Read 
 
 ### Server-Side Flow
 
-If you use the server-side flow, Facebook will give you back a longer loved access token (~ 60 days).
+If you use the server-side flow, Facebook will give you back a longer lived access token (~ 60 days).
 
 If you're having issue getting a long lived token with the server-side flow, make sure to enable the 'deprecate offline_access setting' in you Facebook app config. Read the [Facebook docs about the offline_access  deprecation](https://developers.facebook.com/roadmap/offline-access-removal/) for more information.
 
