@@ -62,6 +62,12 @@ class AuthorizeParamsTest < StrategyTestCase
     assert_equal 'some_state', strategy.authorize_params[:state]
   end
 
+  test 'includes auth_type parameter from request when present' do
+    @request.stubs(:params).returns({ 'auth_type' => 'reauthenticate' })
+    assert strategy.authorize_params.is_a?(Hash)
+    assert_equal 'reauthenticate', strategy.authorize_params[:auth_type]
+  end
+
   test 'overrides default scope with parameter passed from request' do
     @request.stubs(:params).returns({ 'scope' => 'email' })
     assert strategy.authorize_params.is_a?(Hash)

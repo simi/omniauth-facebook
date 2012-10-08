@@ -50,7 +50,7 @@ end
 
 ### Per-Request Options
 
-If you want to set the `display` format or `scope` on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup` or `/auth/facebook?scope=email`.
+If you want to set the `display` format, `auth_type`, or `scope` on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup` or `/auth/facebook?scope=email`.
 
 You can also pass through a `state` param which will be passed along to the callback url.
 
