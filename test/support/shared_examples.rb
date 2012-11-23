@@ -51,6 +51,7 @@ module OAuth2StrategyTests
     end
 
     test 'should store state in the session when present in authorize params vs. a random one' do
+      @request.stubs(:params).returns({ 'state' => 'bar' })
       @options = { :authorize_params => { :state => 'bar' } }
       refute_empty strategy.authorize_params['state']
       assert_equal 'bar', strategy.authorize_params[:state]
