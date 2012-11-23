@@ -1,6 +1,6 @@
 require 'bundler/setup'
 require 'minitest/autorun'
-require 'mocha'
+require 'mocha/setup'
 require 'omniauth/strategies/facebook'
 
 OmniAuth.config.test_mode = true
