@@ -107,14 +107,21 @@ class InfoTest < StrategyTestCase
     @options = { :secure_image_url => true }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    assert_equal 'https://graph.facebook.com/321/picture?type=square', strategy.info['image']
+    assert_equal 'https://graph.facebook.com/321/picture', strategy.info['image']
   end
 
-  test 'returns the image size specified in the `image_size` option' do
+  test 'returns the image with size specified in the `image_size` option' do
     @options = { :image_size => 'normal' }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
     assert_equal 'http://graph.facebook.com/321/picture?type=normal', strategy.info['image']
+  end
+
+  test 'returns the image with width and height specified in the `image_size` option' do
+    @options = { :image_size => { width: 123, height: 987 } }
+    raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
+    strategy.stubs(:raw_info).returns(raw_info)
+    assert_equal 'http://graph.facebook.com/321/picture?width=123&height=987', strategy.info['image']
   end
 end
 
@@ -159,9 +166,9 @@ class InfoTestOptionalDataPresent < StrategyTestCase
     assert_equal 'I am great', strategy.info['description']
   end
 
-  test 'returns the square format facebook avatar url' do
+  test 'returns the facebook avatar url' do
     @raw_info['id'] = '321'
-    assert_equal 'http://graph.facebook.com/321/picture?type=square', strategy.info['image']
+    assert_equal 'http://graph.facebook.com/321/picture', strategy.info['image']
   end
 
   test 'returns the Facebook link as the Facebook url' do

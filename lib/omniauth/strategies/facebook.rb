@@ -35,7 +35,7 @@ module OmniAuth
           'name' => raw_info['name'],
           'first_name' => raw_info['first_name'],
           'last_name' => raw_info['last_name'],
-          'image' => "#{options[:secure_image_url] ? 'https' : 'http'}://graph.facebook.com/#{uid}/picture?type=#{options[:image_size] || 'square'}",
+          'image' => image_url(uid, options),
           'description' => raw_info['bio'],
           'urls' => {
             'Facebook' => raw_info['link'],
@@ -215,6 +215,20 @@ module OmniAuth
       def base64_decode_url(value)
         value += '=' * (4 - value.size.modulo(4))
         Base64.decode64(value.tr('-_', '+/'))
+      end
+
+      def image_url uid, options
+        uri_class = options[:secure_image_url] ? URI::HTTPS : URI::HTTP
+        url = uri_class.build({host: 'graph.facebook.com', path: "/#{uid}/picture"})
+
+        query = if options[:image_size].is_a?(String)
+          { type: options[:image_size] }
+        elsif options[:image_size].is_a?(Hash)
+          options[:image_size]
+        end
+        url.query = URI.encode_www_form(query) if query
+
+        url.to_s
       end
     end
   end
