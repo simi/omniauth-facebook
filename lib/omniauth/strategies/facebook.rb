@@ -219,14 +219,14 @@ module OmniAuth
 
       def image_url uid, options
         uri_class = options[:secure_image_url] ? URI::HTTPS : URI::HTTP
-        url = uri_class.build({host: 'graph.facebook.com', path: "/#{uid}/picture"})
+        url = uri_class.build({:host => 'graph.facebook.com', :path => "/#{uid}/picture"})
 
         query = if options[:image_size].is_a?(String)
-          { type: options[:image_size] }
+          { :type => options[:image_size] }
         elsif options[:image_size].is_a?(Hash)
           options[:image_size]
         end
-        url.query = URI.encode_www_form(query) if query
+        url.query = Rack::Utils.build_query(query) if query
 
         url.to_s
       end
