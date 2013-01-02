@@ -56,26 +56,6 @@ module OmniAuth
         @raw_info ||= access_token.get('/me').parsed || {}
       end
 
-      def build_access_token
-        if access_token = request.params["access_token"]
-          ::OAuth2::AccessToken.from_hash(
-            client, 
-            {"access_token" => access_token}.update(access_token_options)
-          )
-        elsif signed_request_contains_access_token?
-          hash = signed_request.clone
-          ::OAuth2::AccessToken.new(
-            client,
-            hash.delete('oauth_token'),
-            hash.merge!(access_token_options.merge(:expires_at => hash.delete('expires')))
-          )
-        else
-          with_authorization_code! { super }.tap do |token|
-            token.options.merge!(access_token_options)
-          end
-        end
-      end
-
       def request_phase
         if signed_request_contains_access_token?
           # if we already have an access token, we can just hit the
@@ -229,6 +209,34 @@ module OmniAuth
         url.query = Rack::Utils.build_query(query) if query
 
         url.to_s
+      end
+
+      protected
+
+      # Builds access_token only if it's necessary
+      # and it hasn't been built already
+      def build_access_token
+        if self.access_token     
+          self.access_token
+        else
+          if access_token = request.params["access_token"]
+            ::OAuth2::AccessToken.from_hash(
+              client, 
+              {"access_token" => access_token}.update(access_token_options)
+            )
+          elsif signed_request_contains_access_token?
+            hash = signed_request.clone
+            ::OAuth2::AccessToken.new(
+              client,
+              hash.delete('oauth_token'),
+              hash.merge!(access_token_options.merge(:expires_at => hash.delete('expires')))
+            )
+          else
+            with_authorization_code! { super }.tap do |token|
+              token.options.merge!(access_token_options)
+            end
+          end
+        end
       end
     end
   end
