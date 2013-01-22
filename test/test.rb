@@ -478,13 +478,13 @@ module BuildAccessTokenTests
     end
 
     test 'returns a new access token from the signed request' do
-      result = strategy.build_access_token
+      result = strategy.send(:build_access_token)
       assert_kind_of ::OAuth2::AccessToken, result
       assert_equal @payload['oauth_token'], result.token
     end
 
     test 'returns an access token with the correct expiry time' do
-      result = strategy.build_access_token
+      result = strategy.send(:build_access_token)
       assert_equal @payload['expires'], result.expires_at
     end
   end
@@ -499,7 +499,7 @@ module BuildAccessTokenTests
     end
 
     test 'returns a new access token' do
-      result = strategy.build_access_token
+      result = strategy.send(:build_access_token)
       assert_kind_of ::OAuth2::AccessToken, result
       assert_equal 'm4c0d3z', result.token
     end
