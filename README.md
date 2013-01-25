@@ -136,7 +136,7 @@ There are then 2 scenarios for what happens next:
 
 Take a look at [the example Sinatra app for one option of how you can integrate with a canvas page](https://github.com/mkdynamic/omniauth-facebook/blob/master/example/config.ru).
 
-Bear in mind you have several options (including [authenticated referrals](https://developers.facebook.com/docs/opengraph/authentication/#referrals)). Read [the Facebook docs on canvas page  authentication](https://developers.facebook.com/docs/authentication/canvas/) for more info.
+Bear in mind you have several [options](https://developers.facebook.com/docs/opengraph/authentication/#referrals). Read [the Facebook docs on canvas page  authentication](https://developers.facebook.com/docs/authentication/canvas/) for more info.
 
 ## Token Expiry
 
