@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   s.email    = ['mark@mkdynamic.co.uk']
   s.summary  = 'Facebook strategy for OmniAuth'
   s.homepage = 'https://github.com/mkdynamic/omniauth-facebook'
+  s.license  = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
