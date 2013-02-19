@@ -13,7 +13,7 @@ class ClientTest < StrategyTestCase
   end
 
   test 'has correct authorize url' do
-    assert_equal '/oauth/authorize', strategy.client.options[:authorize_url]
+    assert_equal 'https://www.facebook.com/dialog/oauth', strategy.client.options[:authorize_url]
   end
 
   test 'has correct token url' do
