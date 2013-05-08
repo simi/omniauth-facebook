@@ -54,7 +54,11 @@ module OmniAuth
       end
 
       def raw_info
-        @raw_info ||= access_token.get('/me').parsed || {}
+        @raw_info ||= access_token.get('/me', info_options).parsed || {}
+      end
+
+      def info_options
+        options[:info_fields] ? {:params => {:fields => options[:info_fields]}} : {}
       end
 
       def build_access_token
