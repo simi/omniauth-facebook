@@ -256,7 +256,7 @@ class RawInfoTest < StrategyTestCase
 
   test 'performs a GET to https://graph.facebook.com/me' do
     strategy.stubs(:access_token).returns(@access_token)
-    @access_token.expects(:get).with('/me').returns(stub_everything('OAuth2::Response'))
+    @access_token.expects(:get).with('/me', {}).returns(stub_everything('OAuth2::Response'))
     strategy.raw_info
   end
 
@@ -267,7 +267,7 @@ class RawInfoTest < StrategyTestCase
     raw_response.stubs(:status).returns(200)
     raw_response.stubs(:headers).returns({'Content-Type' => 'application/json' })
     oauth2_response = OAuth2::Response.new(raw_response)
-    @access_token.stubs(:get).with('/me').returns(oauth2_response)
+    @access_token.stubs(:get).with('/me', {}).returns(oauth2_response)
     assert_kind_of Hash, strategy.raw_info
     assert_equal 'thar', strategy.raw_info['ohai']
   end
@@ -275,7 +275,7 @@ class RawInfoTest < StrategyTestCase
   test 'returns an empty hash when the response is false' do
     strategy.stubs(:access_token).returns(@access_token)
     oauth2_response = stub('OAuth2::Response', :parsed => false)
-    @access_token.stubs(:get).with('/me').returns(oauth2_response)
+    @access_token.stubs(:get).with('/me', {}).returns(oauth2_response)
     assert_kind_of Hash, strategy.raw_info
   end
 
