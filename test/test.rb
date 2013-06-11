@@ -379,13 +379,18 @@ module SignedRequestTests
     test 'is nil' do
       assert_nil strategy.send(:signed_request)
     end
+
+    test 'throws an error on calling build_access_token' do
+      assert_equal 'must pass either a `code` parameter or a signed request (via `signed_request` parameter or a `fbsr_XXX` cookie)',
+                   assert_raises(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError) { strategy.send(:build_access_token) }.message
+    end
   end
 
   class CookiePresentTest < TestCase
-    def setup
-      super
+    def setup(algo = nil)
+      super()
       @payload = {
-        'algorithm' => 'HMAC-SHA256',
+        'algorithm' => algo || 'HMAC-SHA256',
         'code' => 'm4c0d3z',
         'issued_at' => Time.now.to_i,
         'user_id' => '123456'
@@ -397,13 +402,18 @@ module SignedRequestTests
     test 'parses the access code out from the cookie' do
       assert_equal @payload, strategy.send(:signed_request)
     end
+
+    test 'throws an error if the algorithm is unknown' do
+      setup('UNKNOWN-ALGO')
+      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(NotImplementedError) { strategy.send(:signed_request) }.message
+    end
   end
 
   class ParamPresentTest < TestCase
-    def setup
-      super
+    def setup(algo = nil)
+      super()
       @payload = {
-        'algorithm' => 'HMAC-SHA256',
+        'algorithm' => algo || 'HMAC-SHA256',
         'oauth_token' => 'XXX',
         'issued_at' => Time.now.to_i,
         'user_id' => '123456'
@@ -414,6 +424,11 @@ module SignedRequestTests
 
     test 'parses the access code out from the param' do
       assert_equal @payload, strategy.send(:signed_request)
+    end
+
+    test 'throws an error if the algorithm is unknown' do
+      setup('UNKNOWN-ALGO')
+      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(NotImplementedError) { strategy.send(:signed_request) }.message
     end
   end
 
