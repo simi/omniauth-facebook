@@ -200,6 +200,7 @@ module OmniAuth
 
       def parse_signed_request(value)
         signature, encoded_payload = value.split('.')
+        return if signature.nil?
 
         decoded_hex_signature = base64_decode_url(signature)
         decoded_payload = MultiJson.decode(base64_decode_url(encoded_payload))
