@@ -454,6 +454,18 @@ module SignedRequestTests
       assert_equal @payload_from_param, strategy.send(:signed_request)
     end
   end
+
+  class EmptySignedRequestTest < TestCase
+    def setup
+      super
+      @request.stubs(:params).returns({'signed_request' => ''})
+    end
+
+    test 'empty param' do
+      assert_equal nil, strategy.send(:signed_request)
+    end
+  end
+
 end
 
 class RequestPhaseWithSignedRequestTest < StrategyTestCase
