@@ -81,6 +81,18 @@ module OmniAuth
         end
       end
 
+      def callback_phase
+        super
+      rescue NoAuthorizationCodeError => e
+        fail!(:no_authz_code, e)
+      rescue NotImplementedError => e
+        if e.message =~ /unknown algorithm/i
+          fail!(:algo_not_impl, e)
+        else
+          raise e
+        end
+      end
+
       def request_phase
         if signed_request_contains_access_token?
           # if we already have an access token, we can just hit the
@@ -205,7 +217,7 @@ module OmniAuth
         decoded_payload = MultiJson.decode(base64_decode_url(encoded_payload))
 
         unless decoded_payload['algorithm'] == 'HMAC-SHA256'
-          raise NotImplementedError, "unkown algorithm: #{decoded_payload['algorithm']}"
+          raise NotImplementedError, "unknown algorithm: #{decoded_payload['algorithm']}"
         end
 
         if valid_signature?(client.secret, decoded_hex_signature, encoded_payload)
