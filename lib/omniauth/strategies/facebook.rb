@@ -58,7 +58,11 @@ module OmniAuth
       end
 
       def info_options
-        options[:info_fields] ? {:params => {:fields => options[:info_fields]}} : {}
+        params = {}
+        params.merge!({:fields => options[:info_fields]}) if options[:info_fields]
+        params.merge!({:locale => options[:locale]}) if options[:locale]
+
+        params.empty? ? {} : { :params => params }
       end
 
       def build_access_token
