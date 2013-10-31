@@ -25,7 +25,7 @@ module CustomAssertions
   end
 end
 
-class TestCase < MiniTest::Unit::TestCase
+class TestCase < Minitest::Test
   extend BlockTestHelper
   include CustomAssertions
 end
