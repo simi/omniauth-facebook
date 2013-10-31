@@ -260,6 +260,13 @@ class RawInfoTest < StrategyTestCase
     strategy.raw_info
   end
 
+  test 'performs a GET to https://graph.facebook.com/me with locale' do
+    @options = { :locale => 'cs_CZ' }
+    strategy.stubs(:access_token).returns(@access_token)
+    @access_token.expects(:get).with('/me', {:params => {:locale => 'cs_CZ'}}).returns(stub_everything('OAuth2::Response'))
+    strategy.raw_info
+  end
+
   test 'returns a Hash' do
     strategy.stubs(:access_token).returns(@access_token)
     raw_response = stub('Faraday::Response')
