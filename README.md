@@ -39,7 +39,7 @@ Valid values are `https` (checks for the presence of the secure cookie and asks 
 * `secure_image_url`: Set to `true` to use https for the avatar image url returned in the auth hash. Default is `false`.
 * `image_size`: Set the size for the returned image url in the auth hash. Valid options include `square` (50x50), `small` (50 pixels wide, variable height), `normal` (100 pixels wide, variable height), or `large` (about 200 pixels wide, variable height). Additionally, you can request a picture of a specific size by setting this option to a hash with `:width` and `:height` as keys. This will return an available profile picture closest to the requested size and requested aspect ratio. If only `:width` or `:height` is specified, we will return a picture whose width or height is closest to the requested size, respectively.
 * `info_fields`: Specify exactly which fields should be returned when getting the user's info. Value should be a comma-separated string as per https://developers.facebook.com/docs/reference/api/user/.
-* `locale`: Specify locale which should be used when getting the user's info. Info: https://developers.facebook.com/docs/reference/api/locale/
+* `locale`: Specify locale which should be used when getting the user's info. Value should be locale string as per https://developers.facebook.com/docs/reference/api/locale/.
 
 For example, to request `email`, `user_birthday` and `read_stream` permissions and display the authentication page in a popup window:
 
