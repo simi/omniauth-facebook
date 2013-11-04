@@ -160,12 +160,13 @@ If you're having issue getting a long lived token with the server-side flow, mak
 
 Actively tested with the following Ruby versions:
 
+- MRI 2.0.0
 - MRI 1.9.3
 - MRI 1.9.2
 - MRI 1.8.7
-- JRuby 1.6.5
+- JRuby 1.7.4
 
-*NB.* For JRuby, you'll need to install the `jruby-openssl` gem. There's no way to automatically specify this in a Rubygem gemspec, so you need to manually add it your project's own Gemfile:
+*NB.* For JRuby < 1.7, you'll need to install the `jruby-openssl` gem. There's no way to automatically specify this in a Rubygem gemspec, so you need to manually add it your project's own Gemfile:
 
 ```ruby
 gem 'jruby-openssl', :platform => :jruby
