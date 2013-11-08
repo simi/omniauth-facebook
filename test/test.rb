@@ -489,10 +489,11 @@ class RequestPhaseWithSignedRequestTest < StrategyTestCase
     @request.stubs(:params).returns("signed_request" => @raw_signed_request)
 
     strategy.stubs(:callback_url).returns('/')
+    SecureRandom.stubs(:hex).returns("random_csrf_protection_state")
   end
 
   test 'redirects to callback passing along signed request' do
-    strategy.expects(:redirect).with("/?signed_request=#{Rack::Utils.escape(@raw_signed_request)}").once
+    strategy.expects(:redirect).with("/?signed_request=#{Rack::Utils.escape(@raw_signed_request)}&state=random_csrf_protection_state").once
     strategy.request_phase
   end
 end
