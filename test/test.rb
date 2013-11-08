@@ -416,6 +416,17 @@ module SignedRequestTests
     end
   end
 
+  class CookieParamEmptyTest < TestCase
+    def setup
+      super
+      @request.stubs(:cookies).returns({"fbsr_#{@client_id}" => ""})
+    end
+
+    test 'returns false' do
+      assert_equal false, strategy.send(:signed_request)
+    end
+  end
+
   class ParamPresentTest < TestCase
     def setup(algo = nil)
       super()

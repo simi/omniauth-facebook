@@ -161,7 +161,7 @@ module OmniAuth
       # 2. a cookie (client-side flow via JS SDK)
       #
       def signed_request
-        @signed_request ||= raw_signed_request &&
+        @signed_request ||= raw_signed_request && !raw_signed_request.empty? &&
           parse_signed_request(raw_signed_request)
       end
 
