@@ -522,20 +522,4 @@ module BuildAccessTokenTests
       assert_equal @payload['expires'], result.expires_at
     end
   end
-
-  class ParamsContainAccessTokenStringTest < TestCase
-    def setup
-      super
-
-      @request.stubs(:params).returns({'access_token' => 'm4c0d3z'})
-
-      strategy.stubs(:callback_url).returns('/')
-    end
-
-    test 'returns a new access token' do
-      result = strategy.build_access_token
-      assert_kind_of ::OAuth2::AccessToken, result
-      assert_equal 'm4c0d3z', result.token
-    end
-  end
 end
