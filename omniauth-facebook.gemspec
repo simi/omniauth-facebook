@@ -5,8 +5,8 @@ require 'omniauth/facebook/version'
 Gem::Specification.new do |s|
   s.name     = 'omniauth-facebook'
   s.version  = OmniAuth::Facebook::VERSION
-  s.authors  = ['Mark Dodwell']
-  s.email    = ['mark@mkdynamic.co.uk']
+  s.authors  = ['Mark Dodwell', 'Josef Šimánek']
+  s.email    = ['mark@mkdynamic.co.uk', 'retro@ballgag.cz']
   s.summary  = 'Facebook OAuth2 Strategy for OmniAuth'
   s.homepage = 'https://github.com/mkdynamic/omniauth-facebook'
   s.license  = 'MIT'
