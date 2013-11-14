@@ -1,3 +1,7 @@
+**NOTE: If you're running 1.4.1, please upgrade to 1.5.0 to address a CSRF security vulnerbility. [More detail](https://github.com/mkdynamic/omniauth-facebook/wiki/CSRF-vulnerability:-CVE-2013-4562).**
+
+---
+
 # OmniAuth Facebook &nbsp;[![Build Status](https://secure.travis-ci.org/mkdynamic/omniauth-facebook.png?branch=master)](https://travis-ci.org/mkdynamic/omniauth-facebook)
 
 Facebook OAuth2 Strategy for OmniAuth.
