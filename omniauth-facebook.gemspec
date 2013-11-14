@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version  = OmniAuth::Facebook::VERSION
   s.authors  = ['Mark Dodwell']
   s.email    = ['mark@mkdynamic.co.uk']
-  s.summary  = 'Facebook strategy for OmniAuth'
+  s.summary  = 'Facebook OAuth2 Strategy for OmniAuth'
   s.homepage = 'https://github.com/mkdynamic/omniauth-facebook'
   s.license  = 'MIT'
 
