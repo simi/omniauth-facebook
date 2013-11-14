@@ -131,7 +131,7 @@ module OmniAuth
       # you need to set them dynamically. You can also set these options
       # in the OmniAuth config :authorize_params option.
       #
-      # /auth/facebook?display=popup&state=ABC
+      # /auth/facebook?display=popup
       #
       def authorize_params
         super.tap do |params|
