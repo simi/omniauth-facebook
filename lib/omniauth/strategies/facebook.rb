@@ -58,11 +58,11 @@ module OmniAuth
       end
 
       def info_options
-        params = {}
+        params = ({:appsecret_proof => OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), client.secret, access_token.token)})
         params.merge!({:fields => options[:info_fields]}) if options[:info_fields]
         params.merge!({:locale => options[:locale]}) if options[:locale]
 
-        params.empty? ? {} : { :params => params }
+        { :params => params }
       end
 
       def build_access_token
