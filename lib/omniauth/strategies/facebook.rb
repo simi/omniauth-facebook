@@ -65,10 +65,6 @@ module OmniAuth
         { :params => params }
       end
 
-      def appsecret_proof
-        @appsecret_proof ||= OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), client.secret, access_token.token)
-      end
-
       def build_access_token
         if signed_request_contains_access_token?
           hash = signed_request.clone
@@ -246,6 +242,10 @@ module OmniAuth
         url.query = Rack::Utils.build_query(query) if query
 
         url.to_s
+      end
+
+      def appsecret_proof
+        @appsecret_proof ||= OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), client.secret, access_token.token)
       end
     end
   end
