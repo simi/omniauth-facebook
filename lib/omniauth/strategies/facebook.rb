@@ -67,21 +67,6 @@ module OmniAuth
         { :params => params }
       end
 
-      def build_access_token
-        if signed_request_contains_access_token?
-          hash = signed_request.clone
-          ::OAuth2::AccessToken.new(
-            client,
-            hash.delete('oauth_token'),
-            hash.merge!(access_token_options.merge(:expires_at => hash.delete('expires')))
-          )
-        else
-          with_authorization_code! { super }.tap do |token|
-            token.options.merge!(access_token_options)
-          end
-        end
-      end
-
       def callback_phase
         super
       rescue NoAuthorizationCodeError => e
@@ -152,6 +137,23 @@ module OmniAuth
       def signed_request
         @signed_request ||= raw_signed_request &&
           parse_signed_request(raw_signed_request)
+      end
+
+      protected
+
+      def build_access_token
+        if signed_request_contains_access_token?
+          hash = signed_request.clone
+          ::OAuth2::AccessToken.new(
+            client,
+            hash.delete('oauth_token'),
+            hash.merge!(access_token_options.merge(:expires_at => hash.delete('expires')))
+          )
+        else
+          with_authorization_code! { super }.tap do |token|
+            token.options.merge!(access_token_options)
+          end
+        end
       end
 
       private
