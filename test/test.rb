@@ -426,7 +426,7 @@ module SignedRequestTests
 
     test 'throws an error if the algorithm is unknown' do
       setup('UNKNOWN-ALGO')
-      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(NotImplementedError) { strategy.send(:signed_request) }.message
+      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(OmniAuth::Strategies::Facebook::UnknownSignatureAlgorithmError) { strategy.send(:signed_request) }.message
     end
   end
 
@@ -449,7 +449,7 @@ module SignedRequestTests
 
     test 'throws an error if the algorithm is unknown' do
       setup('UNKNOWN-ALGO')
-      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(NotImplementedError) { strategy.send(:signed_request) }.message
+      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(OmniAuth::Strategies::Facebook::UnknownSignatureAlgorithmError) { strategy.send(:signed_request) }.message
     end
   end
 

@@ -7,6 +7,7 @@ module OmniAuth
   module Strategies
     class Facebook < OmniAuth::Strategies::OAuth2
       class NoAuthorizationCodeError < StandardError; end
+      class UnknownSignatureAlgorithmError < NotImplementedError; end
 
       DEFAULT_SCOPE = 'email'
 
@@ -83,13 +84,9 @@ module OmniAuth
       def callback_phase
         super
       rescue NoAuthorizationCodeError => e
-        fail!(:no_authz_code, e)
-      rescue NotImplementedError => e
-        if e.message =~ /unknown algorithm/i
-          fail!(:algo_not_impl, e)
-        else
-          raise e
-        end
+        fail!(:no_authorization_code, e)
+      rescue UnknownSignatureAlgorithmError => e
+        fail!(:unknown_signature_algoruthm, e)
       end
 
       def request_phase
@@ -213,7 +210,7 @@ module OmniAuth
         decoded_payload = MultiJson.decode(base64_decode_url(encoded_payload))
 
         unless decoded_payload['algorithm'] == 'HMAC-SHA256'
-          raise NotImplementedError, "unknown algorithm: #{decoded_payload['algorithm']}"
+          raise UnknownSignatureAlgorithmError, "unknown algorithm: #{decoded_payload['algorithm']}"
         end
 
         if valid_signature?(client.secret, decoded_hex_signature, encoded_payload)
