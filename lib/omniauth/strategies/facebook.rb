@@ -2,6 +2,7 @@ require 'omniauth/strategies/oauth2'
 require 'base64'
 require 'openssl'
 require 'rack/utils'
+require 'uri'
 
 module OmniAuth
   module Strategies
