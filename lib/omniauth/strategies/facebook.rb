@@ -77,8 +77,7 @@ module OmniAuth
 
       def request_phase
         if signed_request_contains_access_token?
-          # if we already have an access token, we can just hit the
-          # callback URL directly and pass the signed request along
+          # If we already have an access token, we can just hit the callback URL directly and pass the signed request.
           params = { :signed_request => raw_signed_request }
           query = Rack::Utils.build_query(params)
 
@@ -93,10 +92,9 @@ module OmniAuth
         end
       end
 
-      # NOTE if we're using code from the signed request
-      # then FB sets the redirect_uri to '' during the authorize
-      # phase + it must match during the access_token phase:
-      # https://github.com/facebook/php-sdk/blob/master/src/base_facebook.php#L348
+      # NOTE If we're using code from the signed request then FB sets the redirect_uri to '' during the authorize
+      #      phase and it must match during the access_token phase:
+      #      https://github.com/facebook/php-sdk/blob/master/src/base_facebook.php#L348
       def callback_url
         if @authorization_code_from_signed_request
           ''
@@ -109,13 +107,10 @@ module OmniAuth
         options.access_token_options.inject({}) { |h,(k,v)| h[k.to_sym] = v; h }
       end
 
-      ##
-      # You can pass +display+, +scope+, or +auth_type+ params to the auth request, if
-      # you need to set them dynamically. You can also set these options
-      # in the OmniAuth config :authorize_params option.
+      # You can pass +display+, +scope+, or +auth_type+ params to the auth request, if you need to set them dynamically.
+      # You can also set these options in the OmniAuth config :authorize_params option.
       #
       # /auth/facebook?display=popup
-      #
       def authorize_params
         super.tap do |params|
           %w[display scope auth_type].each do |v|
@@ -128,12 +123,10 @@ module OmniAuth
         end
       end
 
-      ##
       # Parse signed request in order, from:
       #
-      # 1. the request 'signed_request' param (server-side flow from canvas pages) or
-      # 2. a cookie (client-side flow via JS SDK)
-      #
+      # 1. The request 'signed_request' param (server-side flow from canvas pages) or
+      # 2. A cookie (client-side flow via JS SDK)
       def signed_request
         @signed_request ||= raw_signed_request &&
           parse_signed_request(raw_signed_request)
@@ -163,24 +156,19 @@ module OmniAuth
         request.cookies["fbsr_#{client.id}"]
       end
 
-      ##
-      # If the signed_request comes from a FB canvas page and the user
-      # has already authorized your application, the JSON object will be
-      # contain the access token.
+      # If the signed_request comes from a FB canvas page and the user has already authorized your application, the JSON
+      # object will be contain the access token.
       #
       # https://developers.facebook.com/docs/authentication/canvas/
-      #
       def signed_request_contains_access_token?
         signed_request &&
         signed_request['oauth_token']
       end
 
-      ##
       # Picks the authorization code in order, from:
       #
-      # 1. the request 'code' param (manual callback from standard server-side flow)
-      # 2. a signed request (see #signed_request for more)
-      #
+      # 1. The request 'code' param (manual callback from standard server-side flow)
+      # 2. A signed request (see #signed_request for more)
       def with_authorization_code!
         if request.params.key?('code')
           yield
