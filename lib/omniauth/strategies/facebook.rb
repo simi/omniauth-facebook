@@ -128,8 +128,7 @@ module OmniAuth
       # 1. The request 'signed_request' param (server-side flow from canvas pages) or
       # 2. A cookie (client-side flow via JS SDK)
       def signed_request
-        @signed_request ||= raw_signed_request &&
-          parse_signed_request(raw_signed_request)
+        @signed_request ||= raw_signed_request && parse_signed_request(raw_signed_request)
       end
 
       protected
@@ -152,8 +151,7 @@ module OmniAuth
       private
 
       def raw_signed_request
-        request.params['signed_request'] ||
-        request.cookies["fbsr_#{client.id}"]
+        request.params['signed_request'] || request.cookies["fbsr_#{client.id}"]
       end
 
       # If the signed_request comes from a FB canvas page and the user has already authorized your application, the JSON
@@ -161,8 +159,7 @@ module OmniAuth
       #
       # https://developers.facebook.com/docs/authentication/canvas/
       def signed_request_contains_access_token?
-        signed_request &&
-        signed_request['oauth_token']
+        signed_request && signed_request['oauth_token']
       end
 
       # Picks the authorization code in order, from:
