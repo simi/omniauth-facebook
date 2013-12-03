@@ -11,7 +11,7 @@ Features:
 
 Changes:
 
-  - `NoAuthorizationCodeError` and `NotImplementedError` will now `fail!` (#117, @nchelluri)
+  - `NoAuthorizationCodeError` and `UnknownSignatureAlgorithmError` will now `fail!` (#117, @nchelluri)
   -  don't try to parse the signature if it's nil (#127, @oriolgual)
 
 ## 1.5.1 (2013-11-18)
