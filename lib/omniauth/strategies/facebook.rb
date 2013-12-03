@@ -245,7 +245,7 @@ module OmniAuth
       end
 
       def appsecret_proof
-        @appsecret_proof ||= OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), client.secret, access_token.token)
+        @appsecret_proof ||= OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA256.new, client.secret, access_token.token)
       end
     end
   end
