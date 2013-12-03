@@ -7,6 +7,7 @@ Features:
   - update Facebook authorize URL to fix broken authorization (#103, @dlackty)
   - adds `info_fields` option (#109, @bloudermilk)
   - adds `locale` parameter (#133, @donbobka, @simi)
+  - add automatically `appsecret_proof` (#140, @nlsrchtr, @simi)
 
 Changes:
 
