@@ -60,7 +60,7 @@ module OmniAuth
       end
 
       def info_options
-        params = ({:appsecret_proof => appsecret_proof})
+        params = {:appsecret_proof => appsecret_proof}
         params.merge!({:fields => options[:info_fields]}) if options[:info_fields]
         params.merge!({:locale => options[:locale]}) if options[:locale]
 
