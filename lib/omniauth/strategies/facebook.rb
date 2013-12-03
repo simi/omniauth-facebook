@@ -230,7 +230,7 @@ module OmniAuth
         Base64.decode64(value.tr('-_', '+/'))
       end
 
-      def image_url uid, options
+      def image_url(uid, options)
         uri_class = options[:secure_image_url] ? URI::HTTPS : URI::HTTP
         url = uri_class.build({:host => 'graph.facebook.com', :path => "/#{uid}/picture"})
 
