@@ -55,9 +55,6 @@ Changes:
   - have `raw_info` return an empty hash if the Facebook response returns false (#44, @brianjlandau)
   - prevent oauth2 from interpreting Facebook's expires field as `expires_in`, when it's really `expires_at` (#39, @watsonbox)
   - remove deprecated `offline_access` permission (@mkdynamic)
-
-Changes:
-
   - tidy up the `callback_url` option (@mkdynamic)
 
 ## 1.2.0 (2012-01-06)
