@@ -394,12 +394,11 @@ module SignedRequestTests
 
   class CookieAndParamNotPresentTest < TestCase
     test 'is nil' do
-      assert_nil strategy.send(:signed_request)
+      assert_nil strategy.send(:signed_request_from_cookie)
     end
 
     test 'throws an error on calling build_access_token' do
-      assert_equal 'must pass either a `code` parameter or a signed request (via `signed_request` parameter or a `fbsr_XXX` cookie)',
-                   assert_raises(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError) { strategy.send(:build_access_token) }.message
+      assert_raises(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError) { strategy.send(:with_authorization_code!) {} }
     end
   end
 
@@ -417,58 +416,12 @@ module SignedRequestTests
     end
 
     test 'parses the access code out from the cookie' do
-      assert_equal @payload, strategy.send(:signed_request)
+      assert_equal @payload, strategy.send(:signed_request_from_cookie)
     end
 
     test 'throws an error if the algorithm is unknown' do
       setup('UNKNOWN-ALGO')
-      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(OmniAuth::Strategies::Facebook::UnknownSignatureAlgorithmError) { strategy.send(:signed_request) }.message
-    end
-  end
-
-  class ParamPresentTest < TestCase
-    def setup(algo = nil)
-      super()
-      @payload = {
-        'algorithm' => algo || 'HMAC-SHA256',
-        'oauth_token' => 'XXX',
-        'issued_at' => Time.now.to_i,
-        'user_id' => '123456'
-      }
-
-      @request.stubs(:params).returns({'signed_request' => signed_request(@payload, @client_secret)})
-    end
-
-    test 'parses the access code out from the param' do
-      assert_equal @payload, strategy.send(:signed_request)
-    end
-
-    test 'throws an error if the algorithm is unknown' do
-      setup('UNKNOWN-ALGO')
-      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(OmniAuth::Strategies::Facebook::UnknownSignatureAlgorithmError) { strategy.send(:signed_request) }.message
-    end
-  end
-
-  class CookieAndParamPresentTest < TestCase
-    def setup
-      super
-      @payload_from_cookie = {
-        'algorithm' => 'HMAC-SHA256',
-        'from' => 'cookie'
-      }
-
-      @request.stubs(:cookies).returns({"fbsr_#{@client_id}" => signed_request(@payload_from_cookie, @client_secret)})
-
-      @payload_from_param = {
-        'algorithm' => 'HMAC-SHA256',
-        'from' => 'param'
-      }
-
-      @request.stubs(:params).returns({'signed_request' => signed_request(@payload_from_param, @client_secret)})
-    end
-
-    test 'picks param over cookie' do
-      assert_equal @payload_from_param, strategy.send(:signed_request)
+      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(OmniAuth::Strategies::Facebook::UnknownSignatureAlgorithmError) { strategy.send(:signed_request_from_cookie) }.message
     end
   end
 
@@ -479,63 +432,7 @@ module SignedRequestTests
     end
 
     test 'empty param' do
-      assert_equal nil, strategy.send(:signed_request)
-    end
-  end
-
-end
-
-class RequestPhaseWithSignedRequestTest < StrategyTestCase
-  include SignedRequestHelpers
-
-  def setup
-    super
-
-    payload = {
-      'algorithm' => 'HMAC-SHA256',
-      'oauth_token' => 'm4c0d3z'
-    }
-    @raw_signed_request = signed_request(payload, @client_secret)
-    @request.stubs(:params).returns("signed_request" => @raw_signed_request)
-
-    strategy.stubs(:callback_url).returns('/')
-  end
-
-  test 'redirects to callback passing along signed request' do
-    strategy.expects(:redirect).with("/?signed_request=#{Rack::Utils.escape(@raw_signed_request)}").once
-    strategy.request_phase
-  end
-end
-
-module BuildAccessTokenTests
-  class TestCase < StrategyTestCase
-    include SignedRequestHelpers
-  end
-
-  class ParamsContainSignedRequestWithAccessTokenTest < TestCase
-    def setup
-      super
-
-      @payload = {
-        'algorithm' => 'HMAC-SHA256',
-        'oauth_token' => 'm4c0d3z',
-        'expires' => Time.now.to_i
-      }
-      @raw_signed_request = signed_request(@payload, @client_secret)
-      @request.stubs(:params).returns({"signed_request" => @raw_signed_request})
-
-      strategy.stubs(:callback_url).returns('/')
-    end
-
-    test 'returns a new access token from the signed request' do
-      result = strategy.send(:build_access_token)
-      assert_kind_of ::OAuth2::AccessToken, result
-      assert_equal @payload['oauth_token'], result.token
-    end
-
-    test 'returns an access token with the correct expiry time' do
-      result = strategy.send(:build_access_token)
-      assert_equal @payload['expires'], result.expires_at
+      assert_equal nil, strategy.send(:signed_request_from_cookie)
     end
   end
 end
