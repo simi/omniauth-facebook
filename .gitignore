@@ -6,3 +6,4 @@ pkg/*
 .powenv
 tmp
 bin
+example/app.log
