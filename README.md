@@ -47,6 +47,7 @@ Valid values are `https` (checks for the presence of the secure cookie and asks 
 * `image_size`: Set the size for the returned image url in the auth hash. Valid options include `square` (50x50), `small` (50 pixels wide, variable height), `normal` (100 pixels wide, variable height), or `large` (about 200 pixels wide, variable height). Additionally, you can request a picture of a specific size by setting this option to a hash with `:width` and `:height` as keys. This will return an available profile picture closest to the requested size and requested aspect ratio. If only `:width` or `:height` is specified, we will return a picture whose width or height is closest to the requested size, respectively.
 * `info_fields`: Specify exactly which fields should be returned when getting the user's info. Value should be a comma-separated string as per https://developers.facebook.com/docs/reference/api/user/ (only /me endpoint).
 * `locale`: Specify locale which should be used when getting the user's info. Value should be locale string as per https://developers.facebook.com/docs/reference/api/locale/.
+* `callback_url` or `callback_path`: Override the default callback URL used during the server-side flow. Note this must be allowed by your app configuration on Facebook (see 'Valid OAuth redirect URIs:' under 'Advanced' settings in the configuration for your Facebook app for more details).
 
 For example, to request `email`, `user_birthday` and `read_stream` permissions and display the authentication page in a popup window:
 
@@ -60,10 +61,6 @@ end
 ### Per-Request Options
 
 If you want to set the `display` format, `auth_type`, or `scope` on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup` or `/auth/facebook?scope=email`.
-
-### Custom Callback URL/Path
-
-You can set a custom `callback_url` or `callback_path` option to override the default value. See [OmniAuth::Strategy#callback_url](https://github.com/intridea/omniauth/blob/master/lib/omniauth/strategy.rb#L411) for more details on the default.
 
 ## Auth Hash
 
@@ -111,13 +108,13 @@ Here's an example *Auth Hash* available in `request.env['omniauth.auth']`:
 
 The precise information available may depend on the permissions which you request.
 
-## Client-side Flow
+## Client-side Flow with Facebook Javascript SDK
 
 You can use the Facebook Javascript SDK with `FB.login`, and just hit the callback endpoint (`/auth/facebook/callback` by default) once the user has authenticated in the success callback.
 
-Note that you must enable cookies in the `FB.init` config for this process to work.
+**Note that you must enable cookies in the `FB.init` config for this process to work.**
 
-See the example Sinatra app under `example/` and read the [Facebook docs on Client-Side Authentication](https://developers.facebook.com/docs/authentication/client-side/) for more details.
+See the example Sinatra app under `example/` and read the [Facebook docs on Login for JavaScript](https://developers.facebook.com/docs/facebook-login/login-flow-for-web/) for more details.
 
 ### How it Works
 
@@ -129,37 +126,19 @@ When you call `/auth/facebook/callback` in the success callback of `FB.login` th
 2. extract the authorization code contained in it
 3. and hit Facebook and obtain an access token which will get placed in the `request.env['omniauth.auth']['credentials']` hash.
 
-Note that this access token will be the same token obtained and available in the client through the hash [as detailed in the Facebook docs](https://developers.facebook.com/docs/authentication/client-side/).
-
-## Canvas Apps
-
-Canvas apps will send a signed request with the initial POST, therefore you *can* (if it makes sense for your app) pass this to the authorize endpoint (`/auth/facebook` by default) in the querystring.
-
-There are then 2 scenarios for what happens next:
-
-1. A user has already granted access to your app, this will contain an access token. In this case, omniauth-facebook will skip asking the user for authentication and immediately redirect to the callback endpoint (`/auth/facebook/callback` by default) with the access token present in the `request.env['omniauth.auth']['credentials']` hash.
-
-2. A user has not granted access to your app, and the signed request *will not* contain an access token. In this case omniauth-facebook will simply follow the standard auth flow.
-
-Take a look at [the example Sinatra app for one option of how you can integrate with a canvas page](https://github.com/mkdynamic/omniauth-facebook/blob/master/example/config.ru).
-
-Bear in mind you have several [options](https://developers.facebook.com/docs/opengraph/authentication). Read [the Facebook docs on canvas page  authentication](https://developers.facebook.com/docs/authentication/canvas/) for more info.
-
 ## Token Expiry
 
-Since Facebook deprecated the `offline_access` permission, this has become more complex. The expiration time of the access token you obtain will depend on which flow you are using. See below for more details.
+The expiration time of the access token you obtain will depend on which flow you are using.
 
 ### Client-Side Flow
 
 If you use the client-side flow, Facebook will give you back a short lived access token (~ 2 hours).
 
-You can exchange this short lived access token for a longer lived version. Read the [Facebook docs about the offline_access  deprecation](https://developers.facebook.com/roadmap/offline-access-removal/) for more information.
+You can exchange this short lived access token for a longer lived version. Read the [Facebook docs](https://developers.facebook.com/docs/facebook-login/access-tokens/) for more information on exchanging a short lived token for a long lived token.
 
 ### Server-Side Flow
 
 If you use the server-side flow, Facebook will give you back a longer lived access token (~ 60 days).
-
-If you're having issue getting a long lived token with the server-side flow, make sure to enable the 'deprecate offline_access setting' in you Facebook app config. Read the [Facebook docs about the offline_access  deprecation](https://developers.facebook.com/roadmap/offline-access-removal/) for more information.
 
 ## Supported Rubies
 
