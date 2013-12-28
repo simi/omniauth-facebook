@@ -115,13 +115,7 @@ class InfoTest < StrategyTestCase
     @options = { :image_size => { :width => 123, :height => 987 } }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    image_url = strategy.info['image']
-    path, query = image_url.split("?")
-    query_params = Hash[*query.split("&").map {|pair| pair.split("=") }.flatten]
-
-    assert_equal 'http://graph.facebook.com/321/picture', path
-    assert_equal '123', query_params['width']
-    assert_equal '987', query_params['height']
+    assert_equal 'http://graph.facebook.com/321/picture?width=123&height=987', strategy.info['image']
   end
 end
 
