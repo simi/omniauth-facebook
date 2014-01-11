@@ -28,11 +28,14 @@
         </ul>
       </header>
       <section>
-        <h1>
-<a name="omniauth-facebook-" class="anchor" href="#omniauth-facebook-"><span class="octicon octicon-link"></span></a>OmniAuth Facebook  <a href="http://travis-ci.org/mkdynamic/omniauth-facebook"><img src="http://travis-ci.org/mkdynamic/omniauth-facebook.png?branch=master" alt="Build Status"></a>
+        <p><strong>NOTE: If you're running &lt; 1.5.1, please upgrade to address 2 security vulnerabilities.
+More details <a href="https://github.com/mkdynamic/omniauth-facebook/wiki/CSRF-vulnerability:-CVE-2013-4562">here</a> and <a href="https://github.com/mkdynamic/omniauth-facebook/wiki/Access-token-vulnerability:-CVE-2013-4593">here</a>.</strong></p>
+
+<hr><h1>
+<a name="omniauth-facebook-" class="anchor" href="#omniauth-facebook-"><span class="octicon octicon-link"></span></a>OmniAuth Facebook  <a href="https://travis-ci.org/mkdynamic/omniauth-facebook"><img src="https://secure.travis-ci.org/mkdynamic/omniauth-facebook.png?branch=master" alt="Build Status"></a>
 </h1>
 
-<p>Facebook OAuth2 Strategy for OmniAuth 1.0.</p>
+<p>Facebook OAuth2 Strategy for OmniAuth.</p>
 
 <p>Supports the OAuth 2.0 server-side and client-side flows. Read the Facebook docs for more details: <a href="http://developers.facebook.com/docs/authentication">http://developers.facebook.com/docs/authentication</a></p>
 
@@ -49,7 +52,7 @@
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p><code>OmniAuth::Strategies::Facebook</code> is simply a Rack middleware. Read the OmniAuth 1.0 docs for detailed instructions: <a href="https://github.com/intridea/omniauth">https://github.com/intridea/omniauth</a>.</p>
+<p><code>OmniAuth::Strategies::Facebook</code> is simply a Rack middleware. Read the OmniAuth docs for detailed instructions: <a href="https://github.com/intridea/omniauth">https://github.com/intridea/omniauth</a>.</p>
 
 <p>Here's a quick example, adding the middleware to a Rails app in <code>config/initializers/omniauth.rb</code>:</p>
 
@@ -73,9 +76,16 @@
 <code>display</code>: The display context to show the authentication page. Options are: <code>page</code>, <code>popup</code> and <code>touch</code>. Read the Facebook docs for more details: <a href="https://developers.facebook.com/docs/reference/dialogs/oauth/">https://developers.facebook.com/docs/reference/dialogs/oauth/</a>. Default: <code>page</code>
 </li>
 <li>
+<code>auth_type</code>: Optionally specifies the requested authentication features as a comma-separated list, as per <a href="https://developers.facebook.com/docs/authentication/reauthentication/">https://developers.facebook.com/docs/authentication/reauthentication/</a>.
+Valid values are <code>https</code> (checks for the presence of the secure cookie and asks for re-authentication if it is not present), and <code>reauthenticate</code> (asks the user to re-authenticate unconditionally). Default is <code>nil</code>.</li>
+<li>
 <code>secure_image_url</code>: Set to <code>true</code> to use https for the avatar image url returned in the auth hash. Default is <code>false</code>.</li>
 <li>
-<code>image_size</code>: Set the size for the returned image url in the auth hash. Valid options are <code>square</code> (50x50), <code>small</code> (50 pixels wide, variable height), <code>normal</code> (100 pixels wide, variable height), or <code>large</code> (about 200 pixels wide, variable height). Default is <code>square</code> (50x50).</li>
+<code>image_size</code>: Set the size for the returned image url in the auth hash. Valid options include <code>square</code> (50x50), <code>small</code> (50 pixels wide, variable height), <code>normal</code> (100 pixels wide, variable height), or <code>large</code> (about 200 pixels wide, variable height). Additionally, you can request a picture of a specific size by setting this option to a hash with <code>:width</code> and <code>:height</code> as keys. This will return an available profile picture closest to the requested size and requested aspect ratio. If only <code>:width</code> or <code>:height</code> is specified, we will return a picture whose width or height is closest to the requested size, respectively.</li>
+<li>
+<code>info_fields</code>: Specify exactly which fields should be returned when getting the user's info. Value should be a comma-separated string as per <a href="https://developers.facebook.com/docs/reference/api/user/">https://developers.facebook.com/docs/reference/api/user/</a> (only /me endpoint).</li>
+<li>
+<code>locale</code>: Specify locale which should be used when getting the user's info. Value should be locale string as per <a href="https://developers.facebook.com/docs/reference/api/locale/">https://developers.facebook.com/docs/reference/api/locale/</a>.</li>
 </ul><p>For example, to request <code>email</code>, <code>user_birthday</code> and <code>read_stream</code> permissions and display the authentication page in a popup window:</p>
 
 <div class="highlight highlight-ruby"><pre><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="no">OmniAuth</span><span class="o">::</span><span class="no">Builder</span> <span class="k">do</span>
@@ -87,14 +97,12 @@
 <h3>
 <a name="per-request-options" class="anchor" href="#per-request-options"><span class="octicon octicon-link"></span></a>Per-Request Options</h3>
 
-<p>If you want to set the <code>display</code> format or <code>scope</code> on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: <code>/auth/facebook?display=popup</code> or <code>/auth/facebook?scope=email</code>.</p>
-
-<p>You can also pass through a <code>state</code> param which will be passed along to the callback url.</p>
+<p>If you want to set the <code>display</code> format, <code>auth_type</code>, or <code>scope</code> on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: <code>/auth/facebook?display=popup</code> or <code>/auth/facebook?scope=email</code>.</p>
 
 <h3>
 <a name="custom-callback-urlpath" class="anchor" href="#custom-callback-urlpath"><span class="octicon octicon-link"></span></a>Custom Callback URL/Path</h3>
 
-<p>You can set a custom <code>callback_url</code> or <code>callback_path</code> option to override the default value. See <a href="https://github.com/intridea/omniauth/blob/master/lib/omniauth/strategy.rb#L387">OmniAuth::Strategy#callback_url</a> for more details on the default.</p>
+<p>You can set a custom <code>callback_url</code> or <code>callback_path</code> option to override the default value. See <a href="https://github.com/intridea/omniauth/blob/master/lib/omniauth/strategy.rb#L411">OmniAuth::Strategy#callback_url</a> for more details on the default.</p>
 
 <h2>
 <a name="auth-hash" class="anchor" href="#auth-hash"><span class="octicon octicon-link"></span></a>Auth Hash</h2>
@@ -176,7 +184,7 @@
 <li><p>A user has not granted access to your app, and the signed request <em>will not</em> contain an access token. In this case omniauth-facebook will simply follow the standard auth flow.</p></li>
 </ol><p>Take a look at <a href="https://github.com/mkdynamic/omniauth-facebook/blob/master/example/config.ru">the example Sinatra app for one option of how you can integrate with a canvas page</a>.</p>
 
-<p>Bear in mind you have several options (including <a href="https://developers.facebook.com/docs/opengraph/authentication/#referrals">authenticated referrals</a>). Read <a href="https://developers.facebook.com/docs/authentication/canvas/">the Facebook docs on canvas page  authentication</a> for more info.</p>
+<p>Bear in mind you have several <a href="https://developers.facebook.com/docs/opengraph/authentication">options</a>. Read <a href="https://developers.facebook.com/docs/authentication/canvas/">the Facebook docs on canvas page  authentication</a> for more info.</p>
 
 <h2>
 <a name="token-expiry" class="anchor" href="#token-expiry"><span class="octicon octicon-link"></span></a>Token Expiry</h2>
@@ -193,7 +201,7 @@
 <h3>
 <a name="server-side-flow" class="anchor" href="#server-side-flow"><span class="octicon octicon-link"></span></a>Server-Side Flow</h3>
 
-<p>If you use the server-side flow, Facebook will give you back a longer loved access token (~ 60 days).</p>
+<p>If you use the server-side flow, Facebook will give you back a longer lived access token (~ 60 days).</p>
 
 <p>If you're having issue getting a long lived token with the server-side flow, make sure to enable the 'deprecate offline_access setting' in you Facebook app config. Read the <a href="https://developers.facebook.com/roadmap/offline-access-removal/">Facebook docs about the offline_access  deprecation</a> for more information.</p>
 
@@ -203,11 +211,12 @@
 <p>Actively tested with the following Ruby versions:</p>
 
 <ul>
+<li>MRI 2.0.0</li>
 <li>MRI 1.9.3</li>
 <li>MRI 1.9.2</li>
 <li>MRI 1.8.7</li>
-<li>JRuby 1.6.5</li>
-</ul><p><em>NB.</em> For JRuby, you'll need to install the <code>jruby-openssl</code> gem. There's no way to automatically specify this in a Rubygem gemspec, so you need to manually add it your project's own Gemfile:</p>
+<li>JRuby 1.7.4</li>
+</ul><p><em>NB.</em> For JRuby &lt; 1.7, you'll need to install the <code>jruby-openssl</code> gem. There's no way to automatically specify this in a Rubygem gemspec, so you need to manually add it your project's own Gemfile:</p>
 
 <div class="highlight highlight-ruby"><pre><span class="n">gem</span> <span class="s1">'jruby-openssl'</span><span class="p">,</span> <span class="ss">:platform</span> <span class="o">=&gt;</span> <span class="ss">:jruby</span>
 </pre></div>
