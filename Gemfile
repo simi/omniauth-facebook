@@ -2,4 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'jruby-openssl', :platform => :jruby
+platforms :rbx do
+  gem 'rubysl', '~> 2.0'
+end
