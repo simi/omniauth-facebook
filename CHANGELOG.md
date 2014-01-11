@@ -1,4 +1,4 @@
-## 1.6.0.rc1 (Unreleased)
+## 1.6.0 (2014-01-13)
 
 Features:
 
