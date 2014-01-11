@@ -7,9 +7,7 @@
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -19,7 +17,10 @@
       <header>
         <h1>OmniAuth Facebook</h1>
         <p>Facebook OAuth2 Strategy for OmniAuth 1.0</p>
+
         <p class="view"><a href="https://github.com/mkdynamic/omniauth-facebook">View the Project on GitHub <small>mkdynamic/omniauth-facebook</small></a></p>
+
+
         <ul>
           <li><a href="https://github.com/mkdynamic/omniauth-facebook/zipball/master">Download <strong>ZIP File</strong></a></li>
           <li><a href="https://github.com/mkdynamic/omniauth-facebook/tarball/master">Download <strong>TAR Ball</strong></a></li>
@@ -27,42 +28,40 @@
         </ul>
       </header>
       <section>
-        <h1>OmniAuth Facebook  <a href="http://travis-ci.org/mkdynamic/omniauth-facebook"><img src="http://travis-ci.org/mkdynamic/omniauth-facebook.png?branch=master" alt="Build Status"></a>
+        <h1>
+<a name="omniauth-facebook-" class="anchor" href="#omniauth-facebook-"><span class="octicon octicon-link"></span></a>OmniAuth Facebook  <a href="http://travis-ci.org/mkdynamic/omniauth-facebook"><img src="http://travis-ci.org/mkdynamic/omniauth-facebook.png?branch=master" alt="Build Status"></a>
 </h1>
 
 <p>Facebook OAuth2 Strategy for OmniAuth 1.0.</p>
 
 <p>Supports the OAuth 2.0 server-side and client-side flows. Read the Facebook docs for more details: <a href="http://developers.facebook.com/docs/authentication">http://developers.facebook.com/docs/authentication</a></p>
 
-<h2>Installing</h2>
+<h2>
+<a name="installing" class="anchor" href="#installing"><span class="octicon octicon-link"></span></a>Installing</h2>
 
 <p>Add to your <code>Gemfile</code>:</p>
 
-<div class="highlight">
-<pre><span class="n">gem</span> <span class="s1">'omniauth-facebook'</span>
-</pre>
-</div>
-
+<div class="highlight highlight-ruby"><pre><span class="n">gem</span> <span class="s1">'omniauth-facebook'</span>
+</pre></div>
 
 <p>Then <code>bundle install</code>.</p>
 
-<h2>Usage</h2>
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
 <p><code>OmniAuth::Strategies::Facebook</code> is simply a Rack middleware. Read the OmniAuth 1.0 docs for detailed instructions: <a href="https://github.com/intridea/omniauth">https://github.com/intridea/omniauth</a>.</p>
 
 <p>Here's a quick example, adding the middleware to a Rails app in <code>config/initializers/omniauth.rb</code>:</p>
 
-<div class="highlight">
-<pre><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="no">OmniAuth</span><span class="o">::</span><span class="no">Builder</span> <span class="k">do</span>
+<div class="highlight highlight-ruby"><pre><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="no">OmniAuth</span><span class="o">::</span><span class="no">Builder</span> <span class="k">do</span>
   <span class="n">provider</span> <span class="ss">:facebook</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'FACEBOOK_KEY'</span><span class="o">]</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'FACEBOOK_SECRET'</span><span class="o">]</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <p><a href="https://github.com/mkdynamic/omniauth-facebook/blob/master/example/config.ru">See the example Sinatra app for full examples</a> of both the server and client-side flows (including using the Facebook Javascript SDK).</p>
 
-<h2>Configuring</h2>
+<h2>
+<a name="configuring" class="anchor" href="#configuring"><span class="octicon octicon-link"></span></a>Configuring</h2>
 
 <p>You can configure several options, which you pass in to the <code>provider</code> method via a <code>Hash</code>:</p>
 
@@ -79,31 +78,30 @@
 <code>image_size</code>: Set the size for the returned image url in the auth hash. Valid options are <code>square</code> (50x50), <code>small</code> (50 pixels wide, variable height), <code>normal</code> (100 pixels wide, variable height), or <code>large</code> (about 200 pixels wide, variable height). Default is <code>square</code> (50x50).</li>
 </ul><p>For example, to request <code>email</code>, <code>user_birthday</code> and <code>read_stream</code> permissions and display the authentication page in a popup window:</p>
 
-<div class="highlight">
-<pre><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="no">OmniAuth</span><span class="o">::</span><span class="no">Builder</span> <span class="k">do</span>
+<div class="highlight highlight-ruby"><pre><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="no">OmniAuth</span><span class="o">::</span><span class="no">Builder</span> <span class="k">do</span>
   <span class="n">provider</span> <span class="ss">:facebook</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'FACEBOOK_KEY'</span><span class="o">]</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">'FACEBOOK_SECRET'</span><span class="o">]</span><span class="p">,</span>
            <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'email,user_birthday,read_stream'</span><span class="p">,</span> <span class="ss">:display</span> <span class="o">=&gt;</span> <span class="s1">'popup'</span>
 <span class="k">end</span>
-</pre>
-</div>
+</pre></div>
 
-
-<h3>Per-Request Options</h3>
+<h3>
+<a name="per-request-options" class="anchor" href="#per-request-options"><span class="octicon octicon-link"></span></a>Per-Request Options</h3>
 
 <p>If you want to set the <code>display</code> format or <code>scope</code> on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: <code>/auth/facebook?display=popup</code> or <code>/auth/facebook?scope=email</code>.</p>
 
 <p>You can also pass through a <code>state</code> param which will be passed along to the callback url.</p>
 
-<h3>Custom Callback URL/Path</h3>
+<h3>
+<a name="custom-callback-urlpath" class="anchor" href="#custom-callback-urlpath"><span class="octicon octicon-link"></span></a>Custom Callback URL/Path</h3>
 
 <p>You can set a custom <code>callback_url</code> or <code>callback_path</code> option to override the default value. See <a href="https://github.com/intridea/omniauth/blob/master/lib/omniauth/strategy.rb#L387">OmniAuth::Strategy#callback_url</a> for more details on the default.</p>
 
-<h2>Auth Hash</h2>
+<h2>
+<a name="auth-hash" class="anchor" href="#auth-hash"><span class="octicon octicon-link"></span></a>Auth Hash</h2>
 
 <p>Here's an example <em>Auth Hash</em> available in <code>request.env['omniauth.auth']</code>:</p>
 
-<div class="highlight">
-<pre><span class="p">{</span>
+<div class="highlight highlight-ruby"><pre><span class="p">{</span>
   <span class="ss">:provider</span> <span class="o">=&gt;</span> <span class="s1">'facebook'</span><span class="p">,</span>
   <span class="ss">:uid</span> <span class="o">=&gt;</span> <span class="s1">'1234567'</span><span class="p">,</span>
   <span class="ss">:info</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -140,13 +138,12 @@
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</pre>
-</div>
-
+</pre></div>
 
 <p>The precise information available may depend on the permissions which you request.</p>
 
-<h2>Client-side Flow</h2>
+<h2>
+<a name="client-side-flow" class="anchor" href="#client-side-flow"><span class="octicon octicon-link"></span></a>Client-side Flow</h2>
 
 <p>You can use the Facebook Javascript SDK with <code>FB.login</code>, and just hit the callback endpoint (<code>/auth/facebook/callback</code> by default) once the user has authenticated in the success callback.</p>
 
@@ -154,7 +151,8 @@
 
 <p>See the example Sinatra app under <code>example/</code> and read the <a href="https://developers.facebook.com/docs/authentication/client-side/">Facebook docs on Client-Side Authentication</a> for more details.</p>
 
-<h3>How it Works</h3>
+<h3>
+<a name="how-it-works" class="anchor" href="#how-it-works"><span class="octicon octicon-link"></span></a>How it Works</h3>
 
 <p>The client-side flow is supported by parsing the authorization code from the signed request which Facebook places in a cookie.</p>
 
@@ -166,7 +164,8 @@
 <li>and hit Facebook and obtain an access token which will get placed in the <code>request.env['omniauth.auth']['credentials']</code> hash.</li>
 </ol><p>Note that this access token will be the same token obtained and available in the client through the hash <a href="https://developers.facebook.com/docs/authentication/client-side/">as detailed in the Facebook docs</a>.</p>
 
-<h2>Canvas Apps</h2>
+<h2>
+<a name="canvas-apps" class="anchor" href="#canvas-apps"><span class="octicon octicon-link"></span></a>Canvas Apps</h2>
 
 <p>Canvas apps will send a signed request with the initial POST, therefore you <em>can</em> (if it makes sense for your app) pass this to the authorize endpoint (<code>/auth/facebook</code> by default) in the querystring.</p>
 
@@ -179,23 +178,27 @@
 
 <p>Bear in mind you have several options (including <a href="https://developers.facebook.com/docs/opengraph/authentication/#referrals">authenticated referrals</a>). Read <a href="https://developers.facebook.com/docs/authentication/canvas/">the Facebook docs on canvas page  authentication</a> for more info.</p>
 
-<h2>Token Expiry</h2>
+<h2>
+<a name="token-expiry" class="anchor" href="#token-expiry"><span class="octicon octicon-link"></span></a>Token Expiry</h2>
 
 <p>Since Facebook deprecated the <code>offline_access</code> permission, this has become more complex. The expiration time of the access token you obtain will depend on which flow you are using. See below for more details.</p>
 
-<h3>Client-Side Flow</h3>
+<h3>
+<a name="client-side-flow-1" class="anchor" href="#client-side-flow-1"><span class="octicon octicon-link"></span></a>Client-Side Flow</h3>
 
 <p>If you use the client-side flow, Facebook will give you back a short lived access token (~ 2 hours).</p>
 
 <p>You can exchange this short lived access token for a longer lived version. Read the <a href="https://developers.facebook.com/roadmap/offline-access-removal/">Facebook docs about the offline_access  deprecation</a> for more information.</p>
 
-<h3>Server-Side Flow</h3>
+<h3>
+<a name="server-side-flow" class="anchor" href="#server-side-flow"><span class="octicon octicon-link"></span></a>Server-Side Flow</h3>
 
 <p>If you use the server-side flow, Facebook will give you back a longer loved access token (~ 60 days).</p>
 
 <p>If you're having issue getting a long lived token with the server-side flow, make sure to enable the 'deprecate offline_access setting' in you Facebook app config. Read the <a href="https://developers.facebook.com/roadmap/offline-access-removal/">Facebook docs about the offline_access  deprecation</a> for more information.</p>
 
-<h2>Supported Rubies</h2>
+<h2>
+<a name="supported-rubies" class="anchor" href="#supported-rubies"><span class="octicon octicon-link"></span></a>Supported Rubies</h2>
 
 <p>Actively tested with the following Ruby versions:</p>
 
@@ -206,13 +209,11 @@
 <li>JRuby 1.6.5</li>
 </ul><p><em>NB.</em> For JRuby, you'll need to install the <code>jruby-openssl</code> gem. There's no way to automatically specify this in a Rubygem gemspec, so you need to manually add it your project's own Gemfile:</p>
 
-<div class="highlight">
-<pre><span class="n">gem</span> <span class="s1">'jruby-openssl'</span><span class="p">,</span> <span class="ss">:platform</span> <span class="o">=&gt;</span> <span class="ss">:jruby</span>
-</pre>
-</div>
+<div class="highlight highlight-ruby"><pre><span class="n">gem</span> <span class="s1">'jruby-openssl'</span><span class="p">,</span> <span class="ss">:platform</span> <span class="o">=&gt;</span> <span class="ss">:jruby</span>
+</pre></div>
 
-
-<h2>License</h2>
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>Copyright (c) 2012 by Mark Dodwell</p>
 
@@ -222,12 +223,12 @@
 
 <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
       </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/mkdynamic">mkdynamic</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/mkdynamic">mkdynamic</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    <script src="javascripts/scale.fix.js"></script>
     
   </body>
 </html>
