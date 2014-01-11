@@ -3,8 +3,7 @@ before_install:
   - bundle --version
   - gem update --system 2.1.11
   - gem --version
-
- rvm:
+rvm:
   - 1.8.7
   - 1.9.2
   - 1.9.3
