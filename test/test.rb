@@ -115,7 +115,9 @@ class InfoTest < StrategyTestCase
     @options = { :image_size => { :width => 123, :height => 987 } }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    assert_equal 'http://graph.facebook.com/321/picture?width=123&height=987', strategy.info['image']
+    assert_match 'width=123', strategy.info['image']
+    assert_match 'height=987', strategy.info['image']
+    assert_match 'http://graph.facebook.com/321/picture?', strategy.info['image']
   end
 end
 
