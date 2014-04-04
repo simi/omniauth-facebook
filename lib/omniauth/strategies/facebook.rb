@@ -138,7 +138,7 @@ module OmniAuth
         elsif code_from_signed_request = signed_request_from_cookie && signed_request_from_cookie['code']
           request.params['code'] = code_from_signed_request
           @authorization_code_from_signed_request_in_cookie = true
-          # NOTE The code from the signed fbsr_XXX cookie is set by the FB JS SDK will confirm that the identity of the]
+          # NOTE The code from the signed fbsr_XXX cookie is set by the FB JS SDK will confirm that the identity of the
           #      user contained in the signed request matches the user loading the app.
           original_provider_ignores_state = options.provider_ignores_state
           options.provider_ignores_state = true
