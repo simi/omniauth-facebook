@@ -69,14 +69,12 @@ module OmniAuth
 
       def callback_phase
         with_authorization_code! do
-          begin
-            super
-          rescue NoAuthorizationCodeError => e
-            fail!(:no_authorization_code, e)
-          rescue UnknownSignatureAlgorithmError => e
-            fail!(:unknown_signature_algoruthm, e)
-          end
+          super
         end
+      rescue NoAuthorizationCodeError => e
+        fail!(:no_authorization_code, e)
+      rescue UnknownSignatureAlgorithmError => e
+        fail!(:unknown_signature_algoruthm, e)
       end
 
       # NOTE If we're using code from the signed request then FB sets the redirect_uri to '' during the authorize
