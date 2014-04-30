@@ -435,4 +435,35 @@ module SignedRequestTests
       assert_equal nil, strategy.send(:signed_request_from_cookie)
     end
   end
+
+  class MissingCodeInParamsRequestTest < TestCase
+    def setup
+      super
+      @request.stubs(:params).returns({})
+    end
+
+    test 'calls fail! when a code is not included in the params' do
+      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(Exception))
+      strategy.callback_phase
+    end
+  end
+
+  class MissingCodeInCookieRequestTest < TestCase
+    def setup(algo = nil)
+      super()
+      @payload = {
+        'algorithm' => algo || 'HMAC-SHA256',
+        'code' => nil,
+        'issued_at' => Time.now.to_i,
+        'user_id' => '123456'
+      }
+
+      @request.stubs(:cookies).returns({"fbsr_#{@client_id}" => signed_request(@payload, @client_secret)})
+    end
+
+    test 'calls fail! when a code is not included in the cookie' do
+      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(Exception))
+      strategy.callback_phase
+    end
+  end
 end
