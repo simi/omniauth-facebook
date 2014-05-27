@@ -33,7 +33,6 @@ module OmniAuth
 
       info do
         prune!({
-          'nickname' => raw_info['username'],
           'email' => raw_info['email'],
           'name' => raw_info['name'],
           'first_name' => raw_info['first_name'],
