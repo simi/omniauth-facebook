@@ -137,11 +137,6 @@ class InfoTestOptionalDataPresent < StrategyTestCase
     assert_equal 'fred@smith.com', strategy.info['email']
   end
 
-  test 'returns the username as nickname' do
-    @raw_info['username'] = 'fredsmith'
-    assert_equal 'fredsmith', strategy.info['nickname']
-  end
-
   test 'returns the first name' do
     @raw_info['first_name'] = 'Fred'
     assert_equal 'Fred', strategy.info['first_name']
