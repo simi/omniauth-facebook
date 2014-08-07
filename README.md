@@ -1,5 +1,5 @@
-**IMPORTANT: If you're running < 1.5.1, please upgrade to address 2 security vulnerabilities.
-More details [here](https://github.com/mkdynamic/omniauth-facebook/wiki/CSRF-vulnerability:-CVE-2013-4562) and [here](https://github.com/mkdynamic/omniauth-facebook/wiki/Access-token-vulnerability:-CVE-2013-4593).**
+**IMPORTANT: If you're running < 1.5.1, please upgrade to the latest version to address 3 security vulnerabilities.
+More details [here](https://github.com/mkdynamic/omniauth-facebook/wiki/CSRF-vulnerability:-CVE-2013-4562), [here](https://github.com/mkdynamic/omniauth-facebook/wiki/Access-token-vulnerability:-CVE-2013-4593) and [here](http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2012-6134).**
 
 ---
 
