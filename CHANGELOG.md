@@ -1,3 +1,9 @@
+## 2.0.0 (2014-08-07)
+
+Bugfixes:
+
+ - bump omniauth-oauth2 dependency which addresses CVE-2012-6134 (#162, @linedotstar)
+
 ## 1.6.0 (2014-01-13)
 
 Features:
