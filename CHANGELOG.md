@@ -1,8 +1,13 @@
 ## 2.0.0 (2014-08-07)
 
+Changes:
+
+ - remove support for canvas app flow (765ed9, @mkdynamic)
+
 Bugfixes:
 
  - bump omniauth-oauth2 dependency which addresses CVE-2012-6134 (#162, @linedotstar)
+ - rescue `NoAuthorizationCodeError` in callback_phase (a0036b, @tomoya55)
 
 ## 1.6.0 (2014-01-13)
 
