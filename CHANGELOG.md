@@ -8,6 +8,7 @@ Bugfixes:
 
  - bump omniauth-oauth2 dependency which addresses CVE-2012-6134 (#162, @linedotstar)
  - rescue `NoAuthorizationCodeError` in callback_phase (a0036b, @tomoya55)
+ - fix CSRF exception when using FB JS SDK and parsing signed request (765ed9, @mkdynamic)
 
 ## 1.6.0 (2014-01-13)
 
