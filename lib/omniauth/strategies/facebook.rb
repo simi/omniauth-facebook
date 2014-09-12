@@ -118,22 +118,28 @@ module OmniAuth
 
       private
 
-      def signed_request_from_cookie
-        @signed_request_from_cookie ||= raw_signed_request_from_cookie && parse_signed_request(raw_signed_request_from_cookie)
+      def signed_request
+        @signed_request ||= raw_signed_request_from_cookie && parse_signed_request(raw_signed_request_from_cookie)
+        @signed_request ||= raw_signed_request_from_request && parse_signed_request(raw_signed_request_from_request)
       end
 
       def raw_signed_request_from_cookie
         request.cookies["fbsr_#{client.id}"]
       end
 
+      def raw_signed_request_from_request
+        request.params['signed_request']
+      end
+
       # Picks the authorization code in order, from:
       #
       # 1. The request 'code' param (manual callback from standard server-side flow)
       # 2. A signed request from cookie (passed from the client during the client-side flow)
+      # 3. A signed request from request params (passed as a url parameter)
       def with_authorization_code!
         if request.params.key?('code')
           yield
-        elsif code_from_signed_request = signed_request_from_cookie && signed_request_from_cookie['code']
+        elsif code_from_signed_request = signed_request && signed_request['code']
           request.params['code'] = code_from_signed_request
           @authorization_code_from_signed_request_in_cookie = true
           # NOTE The code from the signed fbsr_XXX cookie is set by the FB JS SDK will confirm that the identity of the
