@@ -393,15 +393,15 @@ module SignedRequestTests
   end
 
   class CookieAndParamNotPresentTest < TestCase
-    test 'is nil' do
+    test 'signed_request is nil' do
       assert_nil strategy.send(:signed_request)
     end
 
-    test 'is nil' do
+    test 'signed_request_from_params is nil' do
       assert_nil strategy.send(:signed_request_from_params)
     end
 
-    test 'is nil' do
+    test 'signed_request_from_cookie is nil' do
       assert_nil strategy.send(:signed_request_from_cookie)
     end
 
@@ -488,7 +488,7 @@ module SignedRequestTests
       @request.stubs(:params).returns({"signed_request}" => signed_request(@payload, @client_secret)})
     end
 
-    test 'calls fail! when a code is not included in the cookie' do
+    test 'calls fail! when a code is not included in the signed_request param' do
       strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(Exception))
       strategy.callback_phase
     end
