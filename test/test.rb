@@ -393,7 +393,15 @@ module SignedRequestTests
   end
 
   class CookieAndParamNotPresentTest < TestCase
-    test 'is nil' do
+    test 'signed_request is nil' do
+      assert_nil strategy.send(:signed_request)
+    end
+
+    test 'signed_request_from_params is nil' do
+      assert_nil strategy.send(:signed_request_from_params)
+    end
+
+    test 'signed_request_from_cookie is nil' do
       assert_nil strategy.send(:signed_request_from_cookie)
     end
 
@@ -436,13 +444,13 @@ module SignedRequestTests
     end
   end
 
-  class MissingCodeInParamsRequestTest < TestCase
+  class MissingCodeAndSignedRequestInParamsRequestTest < TestCase
     def setup
       super
       @request.stubs(:params).returns({})
     end
 
-    test 'calls fail! when a code is not included in the params' do
+    test 'calls fail! when neither a code or a signed_request is included in the params' do
       strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(Exception))
       strategy.callback_phase
     end
@@ -462,6 +470,25 @@ module SignedRequestTests
     end
 
     test 'calls fail! when a code is not included in the cookie' do
+      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(Exception))
+      strategy.callback_phase
+    end
+  end
+
+  class MissingCodeInSignedRequestRequestTest < TestCase
+    def setup(algo = nil)
+      super()
+      @payload = {
+        'algorithm' => algo || 'HMAC-SHA256',
+        'code' => nil,
+        'issued_at' => Time.now.to_i,
+        'user_id' => '123456'
+      }
+
+      @request.stubs(:params).returns({"signed_request}" => signed_request(@payload, @client_secret)})
+    end
+
+    test 'calls fail! when a code is not included in the signed_request param' do
       strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(Exception))
       strategy.callback_phase
     end
