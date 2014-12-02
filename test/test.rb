@@ -443,7 +443,7 @@ module SignedRequestTests
     end
 
     test 'calls fail! when a code is not included in the params' do
-      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(Exception))
+      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError))
       strategy.callback_phase
     end
   end
@@ -462,7 +462,26 @@ module SignedRequestTests
     end
 
     test 'calls fail! when a code is not included in the cookie' do
-      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(Exception))
+      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError))
+      strategy.callback_phase
+    end
+  end
+
+  class UnknownAlgorithmInCookieRequestTest < TestCase
+    def setup
+      super()
+      @payload = {
+        'algorithm' => 'UNKNOWN-ALGO',
+        'code' => nil,
+        'issued_at' => Time.now.to_i,
+        'user_id' => '123456'
+      }
+
+      @request.stubs(:cookies).returns({"fbsr_#{@client_id}" => signed_request(@payload, @client_secret)})
+    end
+
+    test 'calls fail! when an algorithm is unknown' do
+      strategy.expects(:fail!).times(1).with(:unknown_signature_algorithm, kind_of(OmniAuth::Strategies::Facebook::UnknownSignatureAlgorithmError))
       strategy.callback_phase
     end
   end
