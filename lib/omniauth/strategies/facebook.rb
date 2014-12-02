@@ -74,7 +74,7 @@ module OmniAuth
       rescue NoAuthorizationCodeError => e
         fail!(:no_authorization_code, e)
       rescue UnknownSignatureAlgorithmError => e
-        fail!(:unknown_signature_algoruthm, e)
+        fail!(:unknown_signature_algorithm, e)
       end
 
       # NOTE If we're using code from the signed request then FB sets the redirect_uri to '' during the authorize
