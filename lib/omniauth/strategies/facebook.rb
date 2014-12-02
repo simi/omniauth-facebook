@@ -11,6 +11,7 @@ module OmniAuth
       class UnknownSignatureAlgorithmError < NotImplementedError; end
 
       DEFAULT_SCOPE = 'email'
+      SUPPORTED_ALGORITHM = 'HMAC-SHA256'
 
       option :client_options, {
         :site => 'https://graph.facebook.com',
@@ -166,7 +167,7 @@ module OmniAuth
         decoded_hex_signature = base64_decode_url(signature)
         decoded_payload = MultiJson.decode(base64_decode_url(encoded_payload))
 
-        unless decoded_payload['algorithm'] == 'HMAC-SHA256'
+        unless decoded_payload['algorithm'] == SUPPORTED_ALGORITHM
           raise UnknownSignatureAlgorithmError, "unknown algorithm: #{decoded_payload['algorithm']}"
         end
 
