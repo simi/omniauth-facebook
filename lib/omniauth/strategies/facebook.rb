@@ -11,6 +11,7 @@ module OmniAuth
       class UnknownSignatureAlgorithmError < NotImplementedError; end
 
       DEFAULT_SCOPE = 'email'
+      SUPPORTED_ALGORITHM = 'HMAC-SHA256'
 
       option :client_options, {
         :site => 'https://graph.facebook.com',
@@ -74,7 +75,7 @@ module OmniAuth
       rescue NoAuthorizationCodeError => e
         fail!(:no_authorization_code, e)
       rescue UnknownSignatureAlgorithmError => e
-        fail!(:unknown_signature_algoruthm, e)
+        fail!(:unknown_signature_algorithm, e)
       end
 
       # NOTE If we're using code from the signed request then FB sets the redirect_uri to '' during the authorize
@@ -166,7 +167,7 @@ module OmniAuth
         decoded_hex_signature = base64_decode_url(signature)
         decoded_payload = MultiJson.decode(base64_decode_url(encoded_payload))
 
-        unless decoded_payload['algorithm'] == 'HMAC-SHA256'
+        unless decoded_payload['algorithm'] == SUPPORTED_ALGORITHM
           raise UnknownSignatureAlgorithmError, "unknown algorithm: #{decoded_payload['algorithm']}"
         end
 
