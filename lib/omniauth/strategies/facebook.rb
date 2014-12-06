@@ -63,8 +63,13 @@ module OmniAuth
       end
 
       def callback_phase
-        with_authorization_code! do
+        if access_token = request.params["access_token"]
+          options.provider_ignores_state = true
           super
+        else
+          with_authorization_code! do
+            super
+          end
         end
       rescue NoAuthorizationCodeError => e
         fail!(:no_authorization_code, e)
@@ -107,12 +112,34 @@ module OmniAuth
       protected
 
       def build_access_token
-        super.tap do |token|
-          token.options.merge!(access_token_options)
+        if request.params["access_token"]
+          build_access_token_from_request(request.params["access_token"])
+        else
+          super.tap do |token|
+            token.options.merge!(access_token_options)
+          end
         end
       end
 
       private
+
+      def build_access_token_from_request(access_token_param)
+        token_hash = { :access_token => access_token_param }
+        access_token = ::OAuth2::AccessToken.from_hash(client, token_hash.update(access_token_options))
+        verify_access_token!(access_token)
+        return access_token
+      end
+
+      def app_access_token
+        "%s|%s" % [client.id, client.secret]
+      end
+
+      def verify_access_token!(access_token)
+        token_info = access_token.get('/debug_token', :params => { :input_token => access_token.token, :access_token => app_access_token })
+        # verify all needed scopes are allowed
+        missing_scopes = authorize_params.scope.split(',') - token_info.parsed.fetch("data", {}).fetch("scopes", [])
+        raise "missing scopes #{missing_scopes.join(', ')}" if missing_scopes.any?
+      end
 
       def signed_request_from_cookie
         @signed_request_from_cookie ||= raw_signed_request_from_cookie && OmniAuth::Facebook::SignedRequest.parse(raw_signed_request_from_cookie, client.secret)
