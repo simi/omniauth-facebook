@@ -59,6 +59,19 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 ```
 
+### API Version
+
+OmniAuth Facebook uses unversioned API endpoints by default. You can configure custom endpoints via `client_options` hash passed to `provider`.
+
+```ruby
+use OmniAuth::Builder do
+  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'],
+    :client_options => {
+      :site => 'https://graph.facebook.com/v2.0',
+      :authorize_url => "https://www.facebook.com/v2.0/dialog/oauth"
+    }
+end
+```
 ### Per-Request Options
 
 If you want to set the `display` format, `auth_type`, or `scope` on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup` or `/auth/facebook?scope=email`.
