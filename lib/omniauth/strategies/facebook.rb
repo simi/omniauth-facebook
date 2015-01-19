@@ -5,13 +5,42 @@ require 'rack/utils'
 require 'uri'
 
 module OmniAuth
+  module Utils
+    class UnknownSignatureAlgorithmError < NotImplementedError; end
+    
+    SUPPORTED_ALGORITHM = 'HMAC-SHA256'
+    
+    def Utils.parse_signed_request(value, secret)
+      signature, encoded_payload = value.split('.')
+      return if signature.nil?
+
+      decoded_hex_signature = base64_decode_url(signature)
+      decoded_payload = MultiJson.decode(base64_decode_url(encoded_payload))
+
+      unless decoded_payload['algorithm'] == SUPPORTED_ALGORITHM
+        raise UnknownSignatureAlgorithmError, "unknown algorithm: #{decoded_payload['algorithm']}"
+      end
+
+      if valid_signature?(secret, decoded_hex_signature, encoded_payload)
+        decoded_payload
+      end
+    end
+    
+    def Utils.valid_signature?(secret, signature, payload, algorithm = OpenSSL::Digest::SHA256.new)
+      OpenSSL::HMAC.digest(algorithm, secret, payload) == signature
+    end
+
+    def Utils.base64_decode_url(value)
+      value += '=' * (4 - value.size.modulo(4))
+      Base64.decode64(value.tr('-_', '+/'))
+    end
+  end
+
   module Strategies
     class Facebook < OmniAuth::Strategies::OAuth2
       class NoAuthorizationCodeError < StandardError; end
-      class UnknownSignatureAlgorithmError < NotImplementedError; end
-
+      
       DEFAULT_SCOPE = 'email'
-      SUPPORTED_ALGORITHM = 'HMAC-SHA256'
 
       option :client_options, {
         :site => 'https://graph.facebook.com',
@@ -74,7 +103,7 @@ module OmniAuth
         end
       rescue NoAuthorizationCodeError => e
         fail!(:no_authorization_code, e)
-      rescue UnknownSignatureAlgorithmError => e
+      rescue Utils::UnknownSignatureAlgorithmError => e
         fail!(:unknown_signature_algorithm, e)
       end
 
@@ -120,7 +149,7 @@ module OmniAuth
       private
 
       def signed_request_from_cookie
-        @signed_request_from_cookie ||= raw_signed_request_from_cookie && parse_signed_request(raw_signed_request_from_cookie)
+        @signed_request_from_cookie ||= raw_signed_request_from_cookie && Utils.parse_signed_request(raw_signed_request_from_cookie, client.secret)
       end
 
       def raw_signed_request_from_cookie
@@ -158,31 +187,6 @@ module OmniAuth
           prune!(value) if value.is_a?(Hash)
           value.nil? || (value.respond_to?(:empty?) && value.empty?)
         end
-      end
-
-      def parse_signed_request(value)
-        signature, encoded_payload = value.split('.')
-        return if signature.nil?
-
-        decoded_hex_signature = base64_decode_url(signature)
-        decoded_payload = MultiJson.decode(base64_decode_url(encoded_payload))
-
-        unless decoded_payload['algorithm'] == SUPPORTED_ALGORITHM
-          raise UnknownSignatureAlgorithmError, "unknown algorithm: #{decoded_payload['algorithm']}"
-        end
-
-        if valid_signature?(client.secret, decoded_hex_signature, encoded_payload)
-          decoded_payload
-        end
-      end
-
-      def valid_signature?(secret, signature, payload, algorithm = OpenSSL::Digest::SHA256.new)
-        OpenSSL::HMAC.digest(algorithm, secret, payload) == signature
-      end
-
-      def base64_decode_url(value)
-        value += '=' * (4 - value.size.modulo(4))
-        Base64.decode64(value.tr('-_', '+/'))
       end
 
       def image_url(uid, options)
