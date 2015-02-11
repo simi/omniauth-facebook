@@ -17,7 +17,7 @@ class ClientTest < StrategyTestCase
   end
 
   test 'has correct token url' do
-    assert_equal '/oauth/access_token', strategy.client.options[:token_url]
+    assert_equal 'oauth/access_token', strategy.client.options[:token_url]
   end
 end
 
