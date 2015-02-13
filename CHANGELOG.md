@@ -1,3 +1,9 @@
+## Unreleased
+
+Bugfixes:
+
+ - Allow versioning by not forcing absolute path for graph requests (#180, @frausto)
+
 ## 2.0.0 (2014-08-07)
 
 Changes:
