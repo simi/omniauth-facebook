@@ -16,8 +16,10 @@ class ClientTest < StrategyTestCase
     assert_equal 'https://www.facebook.com/dialog/oauth', strategy.client.options[:authorize_url]
   end
 
-  test 'has correct token url' do
+  test 'has correct token url with versioning' do
+    @options = {:client_options => {:site => 'https://graph.facebook.net/v2.2'}}
     assert_equal 'oauth/access_token', strategy.client.options[:token_url]
+    assert_equal 'https://graph.facebook.net/v2.2/oauth/access_token', strategy.client.token_url
   end
 end
 
