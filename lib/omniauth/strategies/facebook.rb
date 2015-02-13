@@ -187,7 +187,8 @@ module OmniAuth
 
       def image_url(uid, options)
         uri_class = options[:secure_image_url] ? URI::HTTPS : URI::HTTP
-        url = uri_class.build({:host => 'graph.facebook.com', :path => "/#{uid}/picture"})
+        site_uri = URI.parse(client.site)
+        url = uri_class.build({:host => site_uri.host, :path => "#{site_uri.path}/#{uid}/picture"})
 
         query = if options[:image_size].is_a?(String)
           { :type => options[:image_size] }
