@@ -104,6 +104,13 @@ class InfoTest < StrategyTestCase
     assert_equal 'https://graph.facebook.com/321/picture', strategy.info['image']
   end
 
+  test 'returns the image_url based of the client site' do
+    @options = { :secure_image_url => true, :client_options => {:site => "https://blah.facebook.com/v2.2"}}
+    raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
+    strategy.stubs(:raw_info).returns(raw_info)
+    assert_equal 'https://blah.facebook.com/v2.2/321/picture', strategy.info['image']
+  end
+
   test 'returns the image with size specified in the `image_size` option' do
     @options = { :image_size => 'normal' }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
