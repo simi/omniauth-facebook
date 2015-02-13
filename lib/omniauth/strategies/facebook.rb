@@ -16,7 +16,7 @@ module OmniAuth
       option :client_options, {
         :site => 'https://graph.facebook.com',
         :authorize_url => "https://www.facebook.com/dialog/oauth",
-        :token_url => '/oauth/access_token'
+        :token_url => 'oauth/access_token'
       }
 
       option :token_params, {
@@ -57,7 +57,7 @@ module OmniAuth
       end
 
       def raw_info
-        @raw_info ||= access_token.get('/me', info_options).parsed || {}
+        @raw_info ||= access_token.get('me', info_options).parsed || {}
       end
 
       def info_options
@@ -187,7 +187,8 @@ module OmniAuth
 
       def image_url(uid, options)
         uri_class = options[:secure_image_url] ? URI::HTTPS : URI::HTTP
-        url = uri_class.build({:host => 'graph.facebook.com', :path => "/#{uid}/picture"})
+        site_uri = URI.parse(client.site)
+        url = uri_class.build({:host => site_uri.host, :path => "#{site_uri.path}/#{uid}/picture"})
 
         query = if options[:image_size].is_a?(String)
           { :type => options[:image_size] }

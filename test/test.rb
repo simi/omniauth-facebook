@@ -16,8 +16,10 @@ class ClientTest < StrategyTestCase
     assert_equal 'https://www.facebook.com/dialog/oauth', strategy.client.options[:authorize_url]
   end
 
-  test 'has correct token url' do
-    assert_equal '/oauth/access_token', strategy.client.options[:token_url]
+  test 'has correct token url with versioning' do
+    @options = {:client_options => {:site => 'https://graph.facebook.net/v2.2'}}
+    assert_equal 'oauth/access_token', strategy.client.options[:token_url]
+    assert_equal 'https://graph.facebook.net/v2.2/oauth/access_token', strategy.client.token_url
   end
 end
 
@@ -102,6 +104,13 @@ class InfoTest < StrategyTestCase
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
     assert_equal 'https://graph.facebook.com/321/picture', strategy.info['image']
+  end
+
+  test 'returns the image_url based of the client site' do
+    @options = { :secure_image_url => true, :client_options => {:site => "https://blah.facebook.com/v2.2"}}
+    raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
+    strategy.stubs(:raw_info).returns(raw_info)
+    assert_equal 'https://blah.facebook.com/v2.2/321/picture', strategy.info['image']
   end
 
   test 'returns the image with size specified in the `image_size` option' do
@@ -250,7 +259,7 @@ class RawInfoTest < StrategyTestCase
     strategy.stubs(:appsecret_proof).returns(@appsecret_proof)
     strategy.stubs(:access_token).returns(@access_token)
     params = {:params => @options}
-    @access_token.expects(:get).with('/me', params).returns(stub_everything('OAuth2::Response'))
+    @access_token.expects(:get).with('me', params).returns(stub_everything('OAuth2::Response'))
     strategy.raw_info
   end
 
@@ -259,7 +268,7 @@ class RawInfoTest < StrategyTestCase
     strategy.stubs(:access_token).returns(@access_token)
     strategy.stubs(:appsecret_proof).returns(@appsecret_proof)
     params = {:params => @options}
-    @access_token.expects(:get).with('/me', params).returns(stub_everything('OAuth2::Response'))
+    @access_token.expects(:get).with('me', params).returns(stub_everything('OAuth2::Response'))
     strategy.raw_info
   end
 
@@ -268,7 +277,7 @@ class RawInfoTest < StrategyTestCase
     strategy.stubs(:access_token).returns(@access_token)
     strategy.stubs(:appsecret_proof).returns(@appsecret_proof)
     params = {:params => {:appsecret_proof => @appsecret_proof, :fields => 'about'}}
-    @access_token.expects(:get).with('/me', params).returns(stub_everything('OAuth2::Response'))
+    @access_token.expects(:get).with('me', params).returns(stub_everything('OAuth2::Response'))
     strategy.raw_info
   end
 
@@ -281,7 +290,7 @@ class RawInfoTest < StrategyTestCase
     raw_response.stubs(:headers).returns({'Content-Type' => 'application/json' })
     oauth2_response = OAuth2::Response.new(raw_response)
     params = {:params => @options}
-    @access_token.stubs(:get).with('/me', params).returns(oauth2_response)
+    @access_token.stubs(:get).with('me', params).returns(oauth2_response)
     assert_kind_of Hash, strategy.raw_info
     assert_equal 'thar', strategy.raw_info['ohai']
   end
@@ -291,7 +300,7 @@ class RawInfoTest < StrategyTestCase
     strategy.stubs(:appsecret_proof).returns(@appsecret_proof)
     oauth2_response = stub('OAuth2::Response', :parsed => false)
     params = {:params => @options}
-    @access_token.stubs(:get).with('/me', params).returns(oauth2_response)
+    @access_token.stubs(:get).with('me', params).returns(oauth2_response)
     assert_kind_of Hash, strategy.raw_info
     assert_equal({}, strategy.raw_info)
   end
