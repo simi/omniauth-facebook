@@ -190,7 +190,7 @@ module OmniAuth
         site_uri = URI.parse(client.site)
         url = uri_class.build({:host => site_uri.host, :path => "#{site_uri.path}/#{uid}/picture"})
 
-        query = if options[:image_size].is_a?(String)
+        query = if options[:image_size].is_a?(String) || options[:image_size].is_a?(Symbol)
           { :type => options[:image_size] }
         elsif options[:image_size].is_a?(Hash)
           options[:image_size]
