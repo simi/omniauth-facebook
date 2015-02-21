@@ -3,6 +3,7 @@
 Bugfixes:
 
  - Allow versioning by not forcing absolute path for graph requests (#180, @frausto)
+ - Allow the image_size option to be set as a symbol. (#182, @jgrau)
 
 ## 2.0.0 (2014-08-07)
 
