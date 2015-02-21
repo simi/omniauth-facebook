@@ -118,7 +118,7 @@ module OmniAuth
       private
 
       def signed_request_from_cookie
-        @signed_request_from_cookie ||= raw_signed_request_from_cookie && OmniAuth::Facebook::SignedRequest.parse_signed_request(raw_signed_request_from_cookie, client.secret)
+        @signed_request_from_cookie ||= raw_signed_request_from_cookie && OmniAuth::Facebook::SignedRequest.parse(raw_signed_request_from_cookie, client.secret)
       end
 
       def raw_signed_request_from_cookie
