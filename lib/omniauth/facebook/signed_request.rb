@@ -1,14 +1,29 @@
-require 'base64'
 require 'openssl'
 
 module OmniAuth
   module Facebook
     class SignedRequest
       class UnknownSignatureAlgorithmError < NotImplementedError; end
-
       SUPPORTED_ALGORITHM = 'HMAC-SHA256'
 
-      def self.parse_signed_request(value, secret)
+      attr_reader :value, :secret
+
+      def self.parse(value, secret)
+        new(value, secret).payload
+      end
+
+      def initialize(value, secret)
+        @value = value
+        @secret = secret
+      end
+
+      def payload
+        @payload ||= parse_signed_request
+      end
+
+      private
+
+      def parse_signed_request
         signature, encoded_payload = value.split('.')
         return if signature.nil?
 
@@ -19,16 +34,16 @@ module OmniAuth
           raise UnknownSignatureAlgorithmError, "unknown algorithm: #{decoded_payload['algorithm']}"
         end
 
-        if valid_signature?(secret, decoded_hex_signature, encoded_payload)
+        if valid_signature?(decoded_hex_signature, encoded_payload)
           decoded_payload
         end
       end
 
-      def self.valid_signature?(secret, signature, payload, algorithm = OpenSSL::Digest::SHA256.new)
+      def valid_signature?(signature, payload, algorithm = OpenSSL::Digest::SHA256.new)
         OpenSSL::HMAC.digest(algorithm, secret, payload) == signature
       end
 
-      def self.base64_decode_url(value)
+      def base64_decode_url(value)
         value += '=' * (4 - value.size.modulo(4))
         Base64.decode64(value.tr('-_', '+/'))
       end
