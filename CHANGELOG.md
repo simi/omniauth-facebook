@@ -1,3 +1,7 @@
+## 2.1.0 (unreleased)
+
+ - Signed request parsing extracted to `OmniAuth::Facebook::SignedRequest` class. (#183, @simi, @Vrael)
+
 ## 2.0.1 (2015-02-21)
 
 Bugfixes:
