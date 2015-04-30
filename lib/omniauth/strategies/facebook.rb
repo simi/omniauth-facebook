@@ -12,8 +12,8 @@ module OmniAuth
       DEFAULT_SCOPE = 'email'
 
       option :client_options, {
-        :site => 'https://graph.facebook.com/v2.3/',
-        :authorize_url => "https://www.facebook.com/v2.3/dialog/oauth",
+        :site => 'https://graph.facebook.com/',
+        :authorize_url => "https://www.facebook.com/dialog/oauth",
         :token_url => 'oauth/access_token'
       }
 
@@ -110,6 +110,10 @@ module OmniAuth
       protected
 
       def build_access_token
+        if request.params.key?('access_token')
+          return ::OAuth2::AccessToken.new(client, request.params['access_token'])
+        end
+
         super.tap do |token|
           token.options.merge!(access_token_options)
         end
@@ -131,6 +135,8 @@ module OmniAuth
       # 2. A signed request from cookie (passed from the client during the client-side flow)
       def with_authorization_code!
         if request.params.key?('code')
+          yield
+        elsif request.params.key?('access_token')
           yield
         elsif code_from_signed_request = signed_request_from_cookie && signed_request_from_cookie['code']
           request.params['code'] = code_from_signed_request
