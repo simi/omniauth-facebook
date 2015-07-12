@@ -259,7 +259,7 @@ class RawInfoTest < StrategyTestCase
     super
     @access_token = stub('OAuth2::AccessToken')
     @appsecret_proof = 'appsecret_proof'
-    @options = {:appsecret_proof => @appsecret_proof}
+    @options = {:appsecret_proof => @appsecret_proof, :fields => 'name,email'}
   end
 
   test 'performs a GET to https://graph.facebook.com/me' do
@@ -284,6 +284,14 @@ class RawInfoTest < StrategyTestCase
     strategy.stubs(:access_token).returns(@access_token)
     strategy.stubs(:appsecret_proof).returns(@appsecret_proof)
     params = {:params => {:appsecret_proof => @appsecret_proof, :fields => 'about'}}
+    @access_token.expects(:get).with('me', params).returns(stub_everything('OAuth2::Response'))
+    strategy.raw_info
+  end
+
+  test 'performs a GET to https://graph.facebook.com/me with default info_fields' do
+    strategy.stubs(:access_token).returns(@access_token)
+    strategy.stubs(:appsecret_proof).returns(@appsecret_proof)
+    params = {:params => {:appsecret_proof => @appsecret_proof, :fields => 'name,email'}}
     @access_token.expects(:get).with('me', params).returns(stub_everything('OAuth2::Response'))
     strategy.raw_info
   end
