@@ -1,6 +1,7 @@
 ## 2.1.0 (unreleased)
 
  - Signed request parsing extracted to `OmniAuth::Facebook::SignedRequest` class. (#183, @simi, @Vrael)
+ - Change default value of `info_fields` to `name,email` for the [graph-api-v2.4](https://developers.facebook.com/blog/post/2015/07/08/graph-api-v2.4/). ([#209](https://github.com/mkdynamic/omniauth-facebook/pull/209))
 
 ## 2.0.1 (2015-02-21)
 
