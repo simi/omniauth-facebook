@@ -3,7 +3,7 @@ More details [here](https://github.com/mkdynamic/omniauth-facebook/wiki/CSRF-vul
 
 ---
 
-# OmniAuth Facebook &nbsp;[![Build Status](https://secure.travis-ci.org/mkdynamic/omniauth-facebook.svg?branch=master)](https://travis-ci.org/mkdynamic/omniauth-facebook) [![Gem Version](https://img.shields.io/gem/v/omniauth-facebook.svg)](https://rubygems.org/gems/omniauth-facebook) 
+# OmniAuth Facebook &nbsp;[![Build Status](https://secure.travis-ci.org/mkdynamic/omniauth-facebook.svg?branch=master)](https://travis-ci.org/mkdynamic/omniauth-facebook) [![Gem Version](https://img.shields.io/gem/v/omniauth-facebook.svg)](https://rubygems.org/gems/omniauth-facebook)
 
 
 **These notes are based on master, please see tags for README pertaining to specific releases.**
@@ -45,7 +45,7 @@ Option name | Default | Explanation
 `scope` | `email` | A comma-separated list of permissions you want to request from the user. See the Facebook docs for a full list of available permissions: https://developers.facebook.com/docs/reference/login/
 `display` | `page` | The display context to show the authentication page. Options are: `page`, `popup` and `touch`. Read the Facebook docs for more details: https://developers.facebook.com/docs/reference/dialogs/oauth/
 `image_size` | `square` | Set the size for the returned image url in the auth hash. Valid options include `square` (50x50), `small` (50 pixels wide, variable height), `normal` (100 pixels wide, variable height), or `large` (about 200 pixels wide, variable height). Additionally, you can request a picture of a specific size by setting this option to a hash with `:width` and `:height` as keys. This will return an available profile picture closest to the requested size and requested aspect ratio. If only `:width` or `:height` is specified, we will return a picture whose width or height is closest to the requested size, respectively.
-`info_fields` |  | Specify exactly which fields should be returned when getting the user's info. Value should be a comma-separated string as per https://developers.facebook.com/docs/graph-api/reference/user/ (only `/me` endpoint).
+`info_fields` | 'name,email' | Specify exactly which fields should be returned when getting the user's info. Value should be a comma-separated string as per https://developers.facebook.com/docs/graph-api/reference/user/ (only `/me` endpoint).
 `locale` |  | Specify locale which should be used when getting the user's info. Value should be locale string as per https://developers.facebook.com/docs/reference/api/locale/.
 `auth_type` | | Optionally specifies the requested authentication features as a comma-separated list, as per https://developers.facebook.com/docs/facebook-login/reauthentication/. Valid values are `https` (checks for the presence of the secure cookie and asks for re-authentication if it is not present), and `reauthenticate` (asks the user to re-authenticate unconditionally). Use 'rerequest' when you want to request premissions. Default is `nil`.
 `secure_image_url` | `false` | Set to `true` to use https for the avatar image url returned in the auth hash.
@@ -179,4 +179,3 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/mkdynamic/omniauth-facebook/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
