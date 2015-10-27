@@ -1,5 +1,8 @@
-## 2.1.0 (unreleased)
+## 3.0.0 (2015-10-26)
 
+Changes:
+
+ - Remove query string from redirect_uri on callback by default (#221, @gioblu)
  - Signed request parsing extracted to `OmniAuth::Facebook::SignedRequest` class. (#183, @simi, @Vrael)
  - Change default value of `info_fields` to `name,email` for the [graph-api-v2.4](https://developers.facebook.com/blog/post/2015/07/08/graph-api-v2.4/). ([#209](https://github.com/mkdynamic/omniauth-facebook/pull/209))
 
