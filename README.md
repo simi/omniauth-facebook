@@ -86,7 +86,6 @@ Here's an example *Auth Hash* available in `request.env['omniauth.auth']`:
   :provider => 'facebook',
   :uid => '1234567',
   :info => {
-    :nickname => 'jbloggs',
     :email => 'joe@bloggs.com',
     :name => 'Joe Bloggs',
     :first_name => 'Joe',
