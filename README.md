@@ -158,8 +158,8 @@ If you use the server-side flow, Facebook will give you back a longer lived acce
 
 Actively tested with the following Ruby versions:
 
-- MRI 2.2.0
-- MRI 2.1.0
+- MRI 2.2
+- MRI 2.1
 - MRI 2.0.0
 - MRI 1.9.3
 - MRI 1.9.2
