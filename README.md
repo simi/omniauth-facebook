@@ -73,6 +73,19 @@ use OmniAuth::Builder do
     }
 end
 ```
+
+In API version 2.3 Facebook changed OAuth response format which is different from current Devise default.  
+If you intend to use this or newer version (which might be a minimum allowed for your app!) you need to provide additional argument to `provider` as shown below.
+
+```ruby
+use OmniAuth::Builder do
+  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'],
+    :client_options => {
+      ...
+    },
+    token_params: { parse: :json }
+end
+```
 ### Per-Request Options
 
 If you want to set the `display` format, `auth_type`, or `scope` on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup` or `/auth/facebook?scope=email`.
