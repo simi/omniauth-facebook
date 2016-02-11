@@ -74,7 +74,7 @@ use OmniAuth::Builder do
 end
 ```
 
-In API version 2.3 Facebook changed OAuth response format which is different from current Devise default.  
+In API version 2.3 Facebook changed OAuth response format which is different from current omniauth-facebook default.  
 If you intend to use this or newer version (which might be a minimum allowed for your app!) you need to provide additional argument to `provider` as shown below.
 
 ```ruby
