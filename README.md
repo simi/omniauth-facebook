@@ -163,7 +163,7 @@ Actively tested with the following Ruby versions:
 - MRI 2.0.0
 - MRI 1.9.3
 - MRI 1.9.2
-- MRI 1.8.7
+- MRI 1.8.7 (use hashie ~> 2.0.5 in your Gemfile)
 - JRuby 1.7.9
 - Rubinius (latest stable)
 
