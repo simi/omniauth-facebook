@@ -49,7 +49,8 @@ module OmniAuth
           'gender' => raw_info['gender'],
           'timezone' => raw_info['timezone'],
           'locale' => raw_info['locale'],
-          'birthday' => raw_info['birthday']
+          'birthday' => raw_info['birthday'],
+          'picture' => raw_info['picture']
         })
       end
 
