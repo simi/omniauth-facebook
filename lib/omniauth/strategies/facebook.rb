@@ -98,7 +98,7 @@ module OmniAuth
       # For example: /auth/facebook?display=popup
       def authorize_params
         super.tap do |params|
-          %w[display scope auth_type].each do |v|
+          options[:authorize_options].each do |v|
             if request.params[v]
               params[v.to_sym] = request.params[v]
             end
