@@ -99,8 +99,8 @@ module OmniAuth
       def authorize_params
         super.tap do |params|
           options[:authorize_options].each do |v|
-            if request.params[v]
-              params[v.to_sym] = request.params[v]
+            if request.params[v.to_s]
+              params[v] = request.params[v.to_s]
             end
           end
 
