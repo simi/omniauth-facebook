@@ -41,6 +41,7 @@ class StrategyTestCase < TestCase
 
     @client_id = '123'
     @client_secret = '53cr3tz'
+    @options[:authorize_options] = [:scope, :display, :auth_type]
   end
 
   def strategy
