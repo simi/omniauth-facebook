@@ -50,23 +50,27 @@ end
 
 class AuthorizeParamsTest < StrategyTestCase
   test 'includes default scope for email' do
+    @options = { :authorize_options => [:scope, :display, :auth_type] }
     assert strategy.authorize_params.is_a?(Hash)
     assert_equal 'email', strategy.authorize_params[:scope]
   end
 
   test 'includes display parameter from request when present' do
+    @options = { :authorize_options => [:scope, :display, :auth_type] }
     @request.stubs(:params).returns({ 'display' => 'touch' })
     assert strategy.authorize_params.is_a?(Hash)
     assert_equal 'touch', strategy.authorize_params[:display]
   end
 
   test 'includes auth_type parameter from request when present' do
+    @options = { :authorize_options => [:scope, :display, :auth_type] }
     @request.stubs(:params).returns({ 'auth_type' => 'reauthenticate' })
     assert strategy.authorize_params.is_a?(Hash)
     assert_equal 'reauthenticate', strategy.authorize_params[:auth_type]
   end
 
   test 'overrides default scope with parameter passed from request' do
+    @options = { :authorize_options => [:scope, :display, :auth_type] }
     @request.stubs(:params).returns({ 'scope' => 'email' })
     assert strategy.authorize_params.is_a?(Hash)
     assert_equal 'email', strategy.authorize_params[:scope]
