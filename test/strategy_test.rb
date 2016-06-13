@@ -60,6 +60,13 @@ class AuthorizeParamsTest < StrategyTestCase
     assert_equal 'touch', strategy.authorize_params[:display]
   end
 
+  test 'includes redirect_uri parameter from request when present' do
+    redirect_uri = 'https://auth.myapp.com/auth/fb/another_callback'
+    @request.stubs(:params).returns({ 'redirect_uri' => redirect_uri })
+    assert strategy.authorize_params.is_a?(Hash)
+    assert_equal redirect_uri, strategy.authorize_params[:redirect_uri]
+  end
+
   test 'includes auth_type parameter from request when present' do
     @request.stubs(:params).returns({ 'auth_type' => 'reauthenticate' })
     assert strategy.authorize_params.is_a?(Hash)
