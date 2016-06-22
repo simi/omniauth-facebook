@@ -9,16 +9,13 @@ module OmniAuth
     class Facebook < OmniAuth::Strategies::OAuth2
       class NoAuthorizationCodeError < StandardError; end
 
-      DEFAULT_SCOPE = 'email'
+      DEFAULT_SCOPE = 'email'.freeze
+      API_VERSION = 'v2.6'.freeze
 
       option :client_options, {
-        :site => 'https://graph.facebook.com',
-        :authorize_url => "https://www.facebook.com/dialog/oauth",
+        :site => "https://graph.facebook.com/#{API_VERSION}",
+        :authorize_url => "https://www.facebook.com/#{API_VERSION}/dialog/oauth",
         :token_url => 'oauth/access_token'
-      }
-
-      option :token_params, {
-        :parse => :query
       }
 
       option :access_token_options, {

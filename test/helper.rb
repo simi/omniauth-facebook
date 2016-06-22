@@ -51,6 +51,10 @@ class StrategyTestCase < TestCase
       end
     end
   end
+
+  def http_site
+    strategy.client.site.sub(/^https?/, 'http')
+  end
 end
 
 Dir[File.expand_path('../support/**/*', __FILE__)].each &method(:require)
