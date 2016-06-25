@@ -9,11 +9,11 @@ end
 
 class ClientTest < StrategyTestCase
   test 'has correct Facebook site' do
-    assert_equal 'https://graph.facebook.com', strategy.client.site
+    assert_equal 'https://graph.facebook.com/v2.6', strategy.client.site
   end
 
   test 'has correct authorize url' do
-    assert_equal 'https://www.facebook.com/dialog/oauth', strategy.client.options[:authorize_url]
+    assert_equal 'https://www.facebook.com/v2.6/dialog/oauth', strategy.client.options[:authorize_url]
   end
 
   test 'has correct token url with versioning' do
@@ -73,12 +73,6 @@ class AuthorizeParamsTest < StrategyTestCase
   end
 end
 
-class TokeParamsTest < StrategyTestCase
-  test 'has correct parse strategy' do
-    assert_equal :query, strategy.token_params[:parse]
-  end
-end
-
 class AccessTokenOptionsTest < StrategyTestCase
   test 'has correct param name by default' do
     assert_equal 'access_token', strategy.access_token_options[:param_name]
@@ -105,7 +99,7 @@ class InfoTest < StrategyTestCase
     @options = { :secure_image_url => true }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    assert_equal 'https://graph.facebook.com/321/picture', strategy.info['image']
+    assert_equal "#{strategy.client.site}/321/picture", strategy.info['image']
   end
 
   test 'returns the image_url based of the client site' do
@@ -119,14 +113,14 @@ class InfoTest < StrategyTestCase
     @options = { :image_size => 'normal' }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    assert_equal 'http://graph.facebook.com/321/picture?type=normal', strategy.info['image']
+    assert_equal "#{http_site}/321/picture?type=normal", strategy.info['image']
   end
 
   test 'returns the image with size specified as a symbol in the `image_size` option' do
     @options = { :image_size => :normal }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    assert_equal 'http://graph.facebook.com/321/picture?type=normal', strategy.info['image']
+    assert_equal "#{http_site}/321/picture?type=normal", strategy.info['image']
   end
 
   test 'returns the image with width and height specified in the `image_size` option' do
@@ -135,7 +129,7 @@ class InfoTest < StrategyTestCase
     strategy.stubs(:raw_info).returns(raw_info)
     assert_match 'width=123', strategy.info['image']
     assert_match 'height=987', strategy.info['image']
-    assert_match 'http://graph.facebook.com/321/picture?', strategy.info['image']
+    assert_match "#{http_site}/321/picture?", strategy.info['image']
   end
 end
 
@@ -182,7 +176,7 @@ class InfoTestOptionalDataPresent < StrategyTestCase
 
   test 'returns the facebook avatar url' do
     @raw_info['id'] = '321'
-    assert_equal 'http://graph.facebook.com/321/picture', strategy.info['image']
+    assert_equal "#{http_site}/321/picture", strategy.info['image']
   end
 
   test 'returns the Facebook link as the Facebook url' do
