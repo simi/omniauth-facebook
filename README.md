@@ -62,14 +62,14 @@ end
 
 ### API Version
 
-OmniAuth Facebook uses unversioned API endpoints by default. You can configure custom endpoints via `client_options` hash passed to `provider`.
+OmniAuth Facebook uses versioned API endpoints by default (current v2.6). You can configure a different version via `client_options` hash passed to `provider`. For example:
 
 ```ruby
 use OmniAuth::Builder do
   provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'],
     :client_options => {
-      :site => 'https://graph.facebook.com/v2.0',
-      :authorize_url => "https://www.facebook.com/v2.0/dialog/oauth"
+      :site => 'https://graph.facebook.com/v2.6',
+      :authorize_url => "https://www.facebook.com/v2.6/dialog/oauth"
     }
 end
 ```
