@@ -151,7 +151,7 @@ If you use the server-side flow, Facebook will give you back a longer lived acce
 
 ## Supported Rubies
 
-- Ruby MRI (1.9.2+)
+- Ruby MRI (1.9.3+)
 - JRuby (1.9 mode)
 - RBX (2.1.1+)
 
