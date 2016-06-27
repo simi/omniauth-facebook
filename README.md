@@ -56,7 +56,7 @@ For example, to request `email`, `user_birthday` and `read_stream` permissions a
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'],
-           :scope => 'email,user_birthday,read_stream', :display => 'popup'
+           scope: 'email,user_birthday,read_stream', display: 'popup'
 end
 ```
 
@@ -67,9 +67,9 @@ OmniAuth Facebook uses versioned API endpoints by default (current v2.6). You ca
 ```ruby
 use OmniAuth::Builder do
   provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'],
-    :client_options => {
-      :site => 'https://graph.facebook.com/v2.6',
-      :authorize_url => "https://www.facebook.com/v2.6/dialog/oauth"
+    client_options: {
+      site: 'https://graph.facebook.com/v2.6',
+      authorize_url: "https://www.facebook.com/v2.6/dialog/oauth"
     }
 end
 ```
@@ -84,38 +84,38 @@ Here's an example *Auth Hash* available in `request.env['omniauth.auth']`:
 
 ```ruby
 {
-  :provider => 'facebook',
-  :uid => '1234567',
-  :info => {
-    :email => 'joe@bloggs.com',
-    :name => 'Joe Bloggs',
-    :first_name => 'Joe',
-    :last_name => 'Bloggs',
-    :image => 'http://graph.facebook.com/1234567/picture?type=square',
-    :urls => { :Facebook => 'http://www.facebook.com/jbloggs' },
-    :location => 'Palo Alto, California',
-    :verified => true
+  provider: 'facebook',
+  uid: '1234567',
+  info: {
+    email: 'joe@bloggs.com',
+    name: 'Joe Bloggs',
+    first_name: 'Joe',
+    last_name: 'Bloggs',
+    image: 'http://graph.facebook.com/1234567/picture?type=square',
+    urls: { Facebook: 'http://www.facebook.com/jbloggs' },
+    location: 'Palo Alto, California',
+    verified: true
   },
-  :credentials => {
-    :token => 'ABCDEF...', # OAuth 2.0 access_token, which you may wish to store
-    :expires_at => 1321747205, # when the access token expires (it always will)
-    :expires => true # this will always be true
+  credentials: {
+    token: 'ABCDEF...', # OAuth 2.0 access_token, which you may wish to store
+    expires_at: 1321747205, # when the access token expires (it always will)
+    expires: true # this will always be true
   },
-  :extra => {
-    :raw_info => {
-      :id => '1234567',
-      :name => 'Joe Bloggs',
-      :first_name => 'Joe',
-      :last_name => 'Bloggs',
-      :link => 'http://www.facebook.com/jbloggs',
-      :username => 'jbloggs',
-      :location => { :id => '123456789', :name => 'Palo Alto, California' },
-      :gender => 'male',
-      :email => 'joe@bloggs.com',
-      :timezone => -8,
-      :locale => 'en_US',
-      :verified => true,
-      :updated_time => '2011-11-11T06:21:03+0000'
+  extra: {
+    raw_info: {
+      id: '1234567',
+      name: 'Joe Bloggs',
+      first_name: 'Joe',
+      last_name: 'Bloggs',
+      link: 'http://www.facebook.com/jbloggs',
+      username: 'jbloggs',
+      location: { id: '123456789', name: 'Palo Alto, California' },
+      gender: 'male',
+      email: 'joe@bloggs.com',
+      timezone: -8,
+      locale: 'en_US',
+      verified: true,
+      updated_time: '2011-11-11T06:21:03+0000'
     }
   }
 }
@@ -157,16 +157,9 @@ If you use the server-side flow, Facebook will give you back a longer lived acce
 
 ## Supported Rubies
 
-Actively tested with the following Ruby versions:
-
-- MRI 2.2
-- MRI 2.1
-- MRI 2.0.0
-- MRI 1.9.3
-- MRI 1.9.2
-- MRI 1.8.7 (use hashie ~> 2.0.5 in your Gemfile)
-- JRuby 1.7.9
-- Rubinius (latest stable)
+- Ruby MRI (1.9.2+)
+- JRuby (1.9 mode)
+- RBX (2.1.1+)
 
 ## License
 
