@@ -4,7 +4,7 @@
 
 Facebook OAuth2 Strategy for OmniAuth.
 
-Supports the OAuth 2.0 server-side and client-side flows. Read the Facebook docs for more details: http://developers.facebook.com/docs/authentication
+Supports OAuth 2.0 server-side and client-side flows. Read the Facebook docs for more details: http://developers.facebook.com/docs/authentication
 
 ## Installing
 
@@ -49,21 +49,21 @@ For example, to request `email`, `user_birthday` and `read_stream` permissions a
 
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'],
-           scope: 'email,user_birthday,read_stream', display: 'popup'
+  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'],
+    scope: 'email,user_birthday,read_stream', display: 'popup'
 end
 ```
 
 ### API Version
 
-OmniAuth Facebook uses versioned API endpoints by default (current v2.6). You can configure a different version via `client_options` hash passed to `provider`. For example:
+OmniAuth Facebook uses versioned API endpoints by default (current v2.6). You can configure a different version via `client_options` hash passed to `provider`, specifically you should change the version in the `site` and `authorize_url` parameters. For example, to change to v3.0 (assuming that exists):
 
 ```ruby
 use OmniAuth::Builder do
   provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'],
     client_options: {
-      site: 'https://graph.facebook.com/v2.6',
-      authorize_url: "https://www.facebook.com/v2.6/dialog/oauth"
+      site: 'https://graph.facebook.com/v3.0',
+      authorize_url: "https://www.facebook.com/v3.0/dialog/oauth"
     }
 end
 ```
@@ -109,7 +109,8 @@ Here's an example *Auth Hash* available in `request.env['omniauth.auth']`:
       timezone: -8,
       locale: 'en_US',
       verified: true,
-      updated_time: '2011-11-11T06:21:03+0000'
+      updated_time: '2011-11-11T06:21:03+0000',
+      # ...
     }
   }
 }
