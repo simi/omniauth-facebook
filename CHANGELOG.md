@@ -5,7 +5,7 @@ Changes:
   - drop support for Ruby 1.8 (@mkdynamic)
   - switch to versioned FB APIs, currently using v2.6 (#245, @printercu, @mkdynamic)
   - remove deprecated :nickname field from README example (#223, @abelorian)
-  - add Ruby 2.2 and 2.3 to CI (#225, @tricknotes, @mkdynamic)
+  - add Ruby 2.2 to CI (#225, @tricknotes, @mkdynamic)
   - update example app (@mkynamic)
 
 ## 3.0.0 (2015-10-26)
