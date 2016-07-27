@@ -83,11 +83,7 @@ Here's an example *Auth Hash* available in `request.env['omniauth.auth']`:
   info: {
     email: 'joe@bloggs.com',
     name: 'Joe Bloggs',
-    first_name: 'Joe',
-    last_name: 'Bloggs',
     image: 'http://graph.facebook.com/1234567/picture?type=square',
-    urls: { Facebook: 'http://www.facebook.com/jbloggs' },
-    location: 'Palo Alto, California',
     verified: true
   },
   credentials: {
