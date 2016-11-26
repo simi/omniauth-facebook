@@ -45,12 +45,12 @@ Option name | Default | Explanation
 `secure_image_url` | `false` | Set to `true` to use https for the avatar image url returned in the auth hash.
 `callback_url` / `callback_path` | | Specify a custom callback URL used during the server-side flow. Note this must be allowed by your app configuration on Facebook (see 'Valid OAuth redirect URIs' under the 'Advanced' settings section in the configuration for your Facebook app for more details).
 
-For example, to request `email`, `user_birthday` and `read_stream` permissions and display the authentication page in a popup window:
+For example, to request `email` and `user_birthday` permissions and display the authentication page in a popup window:
 
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'],
-    scope: 'email,user_birthday,read_stream', display: 'popup'
+    scope: 'email,user_birthday', display: 'popup'
 end
 ```
 
