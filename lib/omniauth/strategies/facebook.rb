@@ -40,7 +40,13 @@ module OmniAuth
             'Website' => raw_info['website']
           },
           'location' => (raw_info['location'] || {})['name'],
-          'verified' => raw_info['verified']
+          'verified' => raw_info['verified'],
+          'age_range' => raw_info['age_range'],
+          'gender' => raw_info['gender'],
+          'timezone' => raw_info['timezone'],
+          'locale' => raw_info['locale'],
+          'birthday' => raw_info['birthday'],
+          'picture' => raw_info['picture']
         })
       end
 
