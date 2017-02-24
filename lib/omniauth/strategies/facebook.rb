@@ -80,7 +80,7 @@ module OmniAuth
           ''
         else
           # Fixes regression in omniauth-oauth2 v1.4.0 by https://github.com/intridea/omniauth-oauth2/commit/85fdbe117c2a4400d001a6368cc359d88f40abc7
-          options[:callback_url] || (full_host + script_name + callback_path)
+          options[:callback_url] || super
         end
       end
 
@@ -172,6 +172,11 @@ module OmniAuth
 
       def appsecret_proof
         @appsecret_proof ||= OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA256.new, client.secret, access_token.token)
+      end
+
+      def query_string
+        return '' if request.query_string.empty?
+        "?#{Rack::Utils.parse_nested_query(request.query_string).except('code', 'state').to_param}"
       end
     end
   end

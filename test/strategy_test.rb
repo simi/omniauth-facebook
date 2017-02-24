@@ -24,21 +24,21 @@ class ClientTest < StrategyTestCase
 end
 
 class CallbackUrlTest < StrategyTestCase
-  test "returns the default callback url (omitting querystring)" do
+  test "returns the default callback url" do
     url_base = 'http://auth.request.com'
     @request.stubs(:url).returns("#{url_base}/some/page")
     strategy.stubs(:script_name).returns('') # as not to depend on Rack env
     strategy.stubs(:query_string).returns('?foo=bar')
-    assert_equal "#{url_base}/auth/facebook/callback", strategy.callback_url
+    assert_equal "#{url_base}/auth/facebook/callback?foo=bar", strategy.callback_url
   end
 
-  test "returns path from callback_path option (omitting querystring)" do
+  test "returns path from callback_path option" do
     @options = { callback_path: "/auth/FB/done"}
     url_base = 'http://auth.request.com'
     @request.stubs(:url).returns("#{url_base}/page/path")
     strategy.stubs(:script_name).returns('') # as not to depend on Rack env
     strategy.stubs(:query_string).returns('?foo=bar')
-    assert_equal "#{url_base}/auth/FB/done", strategy.callback_url
+    assert_equal "#{url_base}/auth/FB/done?foo=bar", strategy.callback_url
   end
 
   test "returns url from callback_url option" do
