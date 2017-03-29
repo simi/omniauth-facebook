@@ -16,7 +16,7 @@ module OmniAuth
       }
 
       option :token_params, {
-        :parse => :query
+        :parse => :json
       }
 
       option :access_token_options, {
