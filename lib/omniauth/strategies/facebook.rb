@@ -175,8 +175,9 @@ module OmniAuth
       end
 
       def query_string
-        return '' if request.query_string.empty?
-        "?#{Rack::Utils.parse_nested_query(request.query_string).except('code', 'state').to_param}"
+        params = Rack::Utils.parse_nested_query(request.query_string).except('code', 'state')
+        return '' if params.empty?
+        "?#{params.to_param}"
       end
     end
   end
