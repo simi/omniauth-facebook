@@ -22,7 +22,7 @@ module OmniAuth
         param_name: 'access_token'
       }
 
-      option :authorize_options, [:scope, :display, :auth_type]
+      option :authorize_options, [:scope, :display, :auth_type, :locale]
 
       uid { raw_info['id'] }
 
@@ -88,13 +88,13 @@ module OmniAuth
         options.access_token_options.inject({}) { |h,(k,v)| h[k.to_sym] = v; h }
       end
 
-      # You can pass +display+, +scope+, or +auth_type+ params to the auth request, if you need to set them dynamically.
+      # You can pass +display+, +scope+, +auth_type+ or +locale+ params to the auth request, if you need to set them dynamically.
       # You can also set these options in the OmniAuth config :authorize_params option.
       #
       # For example: /auth/facebook?display=popup
       def authorize_params
         super.tap do |params|
-          %w[display scope auth_type].each do |v|
+          %w[display scope auth_type locale].each do |v|
             if request.params[v]
               params[v.to_sym] = request.params[v]
             end

@@ -66,6 +66,12 @@ class AuthorizeParamsTest < StrategyTestCase
     assert_equal 'reauthenticate', strategy.authorize_params[:auth_type]
   end
 
+  test 'includes locale parameter from request when present' do
+    @request.stubs(:params).returns({ 'locale' => 'en' })
+    assert strategy.authorize_params.is_a?(Hash)
+    assert_equal 'en', strategy.authorize_params[:locale]
+  end
+
   test 'overrides default scope with parameter passed from request' do
     @request.stubs(:params).returns({ 'scope' => 'email' })
     assert strategy.authorize_params.is_a?(Hash)
