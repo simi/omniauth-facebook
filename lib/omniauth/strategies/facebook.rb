@@ -76,6 +76,7 @@ module OmniAuth
       #      phase and it must match during the access_token phase:
       #      https://github.com/facebook/facebook-php-sdk/blob/master/src/base_facebook.php#L477
       def callback_url
+        @authorization_code_from_signed_request_in_cookie ||= nil
         if @authorization_code_from_signed_request_in_cookie
           ''
         else
