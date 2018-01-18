@@ -9,7 +9,7 @@ module OmniAuth
     class Facebook < OmniAuth::Strategies::OAuth2
       class NoAuthorizationCodeError < StandardError; end
 
-      DEFAULT_SCOPE = 'email'
+      DEFAULT_SCOPE = 'email'.freeze
 
       option :client_options, {
         site: 'https://graph.facebook.com/v2.6',

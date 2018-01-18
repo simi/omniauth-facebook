@@ -8,8 +8,10 @@ module OmniAuth
 
       attr_reader :value, :secret
 
-      def self.parse(value, secret)
-        new(value, secret).payload
+      class << self
+        def parse(value, secret)
+          new(value, secret).payload
+        end
       end
 
       def initialize(value, secret)
@@ -34,9 +36,7 @@ module OmniAuth
           raise UnknownSignatureAlgorithmError, "unknown algorithm: #{decoded_payload['algorithm']}"
         end
 
-        if valid_signature?(decoded_hex_signature, encoded_payload)
-          decoded_payload
-        end
+        decoded_payload if valid_signature?(decoded_hex_signature, encoded_payload)
       end
 
       def valid_signature?(signature, payload, algorithm = OpenSSL::Digest::SHA256.new)
