@@ -14,6 +14,7 @@ module OmniAuth
       option :client_options, {
         site: 'https://graph.facebook.com/v2.10',
         authorize_url: "https://www.facebook.com/v2.10/dialog/oauth",
+        auth_scheme: "request_body",
         token_url: 'oauth/access_token'
       }
 
