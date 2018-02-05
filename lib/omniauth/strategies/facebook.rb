@@ -24,6 +24,8 @@ module OmniAuth
 
       option :authorize_options, [:scope, :display, :auth_type]
 
+      option :disable_request_phase_get, false
+
       uid { raw_info['id'] }
 
       info do
@@ -110,6 +112,11 @@ module OmniAuth
         super.tap do |token|
           token.options.merge!(access_token_options)
         end
+      end
+
+      def request_phase
+        call_app! if request.request_method == "GET" && options.disable_request_phase_get
+        super
       end
 
       private
