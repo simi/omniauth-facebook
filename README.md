@@ -1,10 +1,6 @@
-# OmniAuth Facebook &nbsp;[![Build Status](https://secure.travis-ci.org/mkdynamic/omniauth-facebook.svg?branch=master)](https://travis-ci.org/mkdynamic/omniauth-facebook) [![Gem Version](https://img.shields.io/gem/v/omniauth-facebook.svg)](https://rubygems.org/gems/omniauth-facebook)
+# OmniAuth Instagram Business
 
-📣 **NOTICE** We’re looking for maintainers to help keep this project up-to-date. If you are interested in helping please open an Issue expressing your interest. Thanks! 📣
-
-**These notes are based on master, please see tags for README pertaining to specific releases.**
-
-Facebook OAuth2 Strategy for OmniAuth.
+Instagram Business OAuth2 Strategy for OmniAuth.
 
 Supports OAuth 2.0 server-side and client-side flows. Read the Facebook docs for more details: http://developers.facebook.com/docs/authentication
 
@@ -13,20 +9,20 @@ Supports OAuth 2.0 server-side and client-side flows. Read the Facebook docs for
 Add to your `Gemfile`:
 
 ```ruby
-gem 'omniauth-facebook'
+gem 'omniauth-instagram_business', github: 'paladinsoftware/omniauth-instagram_business'
 ```
 
 Then `bundle install`.
 
 ## Usage
 
-`OmniAuth::Strategies::Facebook` is simply a Rack middleware. Read the OmniAuth docs for detailed instructions: https://github.com/intridea/omniauth.
+`OmniAuth::Strategies::InstagramBusiness` is simply a Rack middleware. Read the OmniAuth docs for detailed instructions: https://github.com/intridea/omniauth.
 
 Here's a quick example, adding the middleware to a Rails app in `config/initializers/omniauth.rb`:
 
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
+  provider :instagram_business, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
 end
 ```
 
@@ -51,7 +47,7 @@ For example, to request `email`, `user_birthday` and `read_stream` permissions a
 
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'],
+  provider :instagram_business, ENV['APP_ID'], ENV['APP_SECRET'],
     scope: 'email,user_birthday,read_stream', display: 'popup'
 end
 ```
@@ -62,7 +58,7 @@ OmniAuth Facebook uses versioned API endpoints by default (current v2.6). You ca
 
 ```ruby
 use OmniAuth::Builder do
-  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET'],
+  provider :instagram_business, ENV['APP_ID'], ENV['APP_SECRET'],
     client_options: {
       site: 'https://graph.facebook.com/v3.0',
       authorize_url: "https://www.facebook.com/v3.0/dialog/oauth"
@@ -72,7 +68,7 @@ end
 
 ### Per-Request Options
 
-If you want to set the `display` format, `auth_type`, or `scope` on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup` or `/auth/facebook?scope=email`.
+If you want to set the `display` format, `auth_type`, or `scope` on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/instagram_business?display=popup` or `/auth/instagram_business?scope=email`.
 
 ## Auth Hash
 
@@ -80,7 +76,7 @@ Here's an example *Auth Hash* available in `request.env['omniauth.auth']`:
 
 ```ruby
 {
-  provider: 'facebook',
+  provider: 'instagram_business',
   uid: '1234567',
   info: {
     email: 'joe@bloggs.com',
@@ -120,7 +116,7 @@ The precise information available may depend on the permissions which you reques
 
 ## Client-side Flow with Facebook Javascript SDK
 
-You can use the Facebook Javascript SDK with `FB.login`, and just hit the callback endpoint (`/auth/facebook/callback` by default) once the user has authenticated in the success callback.
+You can use the Facebook Javascript SDK with `FB.login`, and just hit the callback endpoint (`/auth/instagram_/callback` by default) once the user has authenticated in the success callback.
 
 **Note that you must enable cookies in the `FB.init` config for this process to work.**
 
@@ -130,7 +126,7 @@ See the example Sinatra app under `example/` and read the [Facebook docs on Logi
 
 The client-side flow is supported by parsing the authorization code from the signed request which Facebook places in a cookie.
 
-When you call `/auth/facebook/callback` in the success callback of `FB.login` that will pass the cookie back to the server. omniauth-facebook will see this cookie and:
+When you call `/auth/instagram_business/callback` in the success callback of `FB.login` that will pass the cookie back to the server. omniauth-instagram_business will see this cookie and:
 
 1. parse it,
 2. extract the authorization code contained in it

@@ -1,19 +1,21 @@
 require 'omniauth/strategies/oauth2'
-require 'omniauth/facebook/signed_request'
+require 'omniauth/instagram_business/signed_request'
 require 'openssl'
 require 'rack/utils'
 require 'uri'
 
 module OmniAuth
   module Strategies
-    class Facebook < OmniAuth::Strategies::OAuth2
+    class InstagramBusiness < OmniAuth::Strategies::OAuth2
       class NoAuthorizationCodeError < StandardError; end
 
-      DEFAULT_SCOPE = 'email'
+      DEFAULT_SCOPE = 'email'.freeze
+
+      option :name, 'instagram_business'
 
       option :client_options, {
         site: 'https://graph.facebook.com/v2.6',
-        authorize_url: "https://www.facebook.com/v2.6/dialog/oauth",
+        authorize_url: 'https://www.facebook.com/v2.6/dialog/oauth',
         token_url: 'oauth/access_token'
       }
 
@@ -68,7 +70,7 @@ module OmniAuth
         end
       rescue NoAuthorizationCodeError => e
         fail!(:no_authorization_code, e)
-      rescue OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError => e
+      rescue OmniAuth::InstagramBusiness::SignedRequest::UnknownSignatureAlgorithmError => e
         fail!(:unknown_signature_algorithm, e)
       end
 
@@ -115,7 +117,7 @@ module OmniAuth
       private
 
       def signed_request_from_cookie
-        @signed_request_from_cookie ||= raw_signed_request_from_cookie && OmniAuth::Facebook::SignedRequest.parse(raw_signed_request_from_cookie, client.secret)
+        @signed_request_from_cookie ||= raw_signed_request_from_cookie && OmniAuth::InstagramBusiness::SignedRequest.parse(raw_signed_request_from_cookie, client.secret)
       end
 
       def raw_signed_request_from_cookie

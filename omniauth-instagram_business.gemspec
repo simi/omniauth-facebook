@@ -1,14 +1,14 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path('../lib', __FILE__)
-require 'omniauth/facebook/version'
+require 'omniauth/instagram_business/version'
 
 Gem::Specification.new do |s|
-  s.name     = 'omniauth-facebook'
-  s.version  = OmniAuth::Facebook::VERSION
-  s.authors  = ['Mark Dodwell', 'Josef Šimánek']
-  s.email    = ['mark@madeofcode.com', 'retro@ballgag.cz']
-  s.summary  = 'Facebook OAuth2 Strategy for OmniAuth'
-  s.homepage = 'https://github.com/mkdynamic/omniauth-facebook'
+  s.name     = 'omniauth-instagram_business'
+  s.version  = OmniAuth::InstagramBusiness::VERSION
+  s.authors  = ['Piotr Jaworski']
+  s.email    = ['piotrek.jaw@gmail.com']
+  s.summary  = 'Instagram Business OAuth2 Strategy for OmniAuth'
+  s.homepage = 'https://github.com/paladinsoftware/omniauth-instagram_business'
   s.license  = 'MIT'
 
   s.files         = `git ls-files`.split("\n")

@@ -1,7 +1,7 @@
 require 'bundler/setup'
 require 'minitest/autorun'
 require 'mocha/setup'
-require 'omniauth/strategies/facebook'
+require 'omniauth/strategies/instagram_business'
 
 OmniAuth.config.test_mode = true
 
@@ -46,7 +46,7 @@ class StrategyTestCase < TestCase
   def strategy
     @strategy ||= begin
       args = [@client_id, @client_secret, @options].compact
-      OmniAuth::Strategies::Facebook.new(nil, *args).tap do |strategy|
+      OmniAuth::Strategies::InstagramBusiness.new(nil, *args).tap do |strategy|
         strategy.stubs(:request).returns(@request)
       end
     end
