@@ -1,6 +1,6 @@
 # OmniAuth Instagram Business
 
-Instagram Business OAuth2 Strategy for OmniAuth.
+Instagram Business OAuth2 Strategy for OmniAuth - basically it's Facebook OAuth2 Strategy (it just uses a different name :))
 
 Supports OAuth 2.0 server-side and client-side flows. Read the Facebook docs for more details: http://developers.facebook.com/docs/authentication
 
@@ -111,53 +111,3 @@ Here's an example *Auth Hash* available in `request.env['omniauth.auth']`:
   }
 }
 ```
-
-The precise information available may depend on the permissions which you request.
-
-## Client-side Flow with Facebook Javascript SDK
-
-You can use the Facebook Javascript SDK with `FB.login`, and just hit the callback endpoint (`/auth/instagram_/callback` by default) once the user has authenticated in the success callback.
-
-**Note that you must enable cookies in the `FB.init` config for this process to work.**
-
-See the example Sinatra app under `example/` and read the [Facebook docs on Login for JavaScript](https://developers.facebook.com/docs/facebook-login/login-flow-for-web/) for more details.
-
-### How it Works
-
-The client-side flow is supported by parsing the authorization code from the signed request which Facebook places in a cookie.
-
-When you call `/auth/instagram_business/callback` in the success callback of `FB.login` that will pass the cookie back to the server. omniauth-instagram_business will see this cookie and:
-
-1. parse it,
-2. extract the authorization code contained in it
-3. and hit Facebook and obtain an access token which will get placed in the `request.env['omniauth.auth']['credentials']` hash.
-
-## Token Expiry
-
-The expiration time of the access token you obtain will depend on which flow you are using.
-
-### Client-Side Flow
-
-If you use the client-side flow, Facebook will give you back a short lived access token (~ 2 hours).
-
-You can exchange this short lived access token for a longer lived version. Read the [Facebook docs](https://developers.facebook.com/docs/facebook-login/access-tokens/) for more information on exchanging a short lived token for a long lived token.
-
-### Server-Side Flow
-
-If you use the server-side flow, Facebook will give you back a longer lived access token (~ 60 days).
-
-## Supported Rubies
-
-- Ruby MRI (1.9.3+)
-- JRuby (1.9 mode)
-- RBX (2.1.1+)
-
-## License
-
-Copyright (c) 2012 by Mark Dodwell
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
