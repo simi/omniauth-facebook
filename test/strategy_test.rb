@@ -17,7 +17,7 @@ class ClientTest < StrategyTestCase
   end
 
   test 'has correct auth_scheme' do
-    assert_equal 'request_body', strategy.client.options[:auth_scheme]
+    assert_equal :request_body, strategy.client.options[:auth_scheme]
   end
 
   test 'has correct token url with versioning' do
