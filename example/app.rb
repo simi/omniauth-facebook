@@ -28,7 +28,7 @@ get '/client-side' do
         window.fbAsyncInit = function() {
           FB.init({
             appId: '#{ENV['APP_ID']}',
-            version: 'v2.6',
+            version: 'v2.10',
             cookie: true // IMPORTANT must enable cookies to allow the server to access the session
           });
           console.log("fb init");
