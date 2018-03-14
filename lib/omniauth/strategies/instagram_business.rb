@@ -14,8 +14,8 @@ module OmniAuth
       option :name, 'instagram_business'
 
       option :client_options, {
-        site: 'https://graph.facebook.com/v2.6',
-        authorize_url: 'https://www.facebook.com/v2.6/dialog/oauth',
+        site: 'https://graph.facebook.com/v2.10',
+        authorize_url: 'https://www.facebook.com/v2.10/dialog/oauth',
         token_url: 'oauth/access_token'
       }
 
