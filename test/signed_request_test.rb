@@ -1,5 +1,5 @@
 require 'helper'
-require 'omniauth/facebook/signed_request'
+require 'omniauth/instagram_business/signed_request'
 
 class SignedRequestTest < Minitest::Test
   def setup
@@ -9,12 +9,12 @@ class SignedRequestTest < Minitest::Test
   end
 
   def test_signed_request_payload
-    signed_request = OmniAuth::Facebook::SignedRequest.new(@value, @secret)
+    signed_request = OmniAuth::InstagramBusiness::SignedRequest.new(@value, @secret)
     assert_equal @expected_payload, signed_request.payload
   end
 
   def test_signed_request_parse
-    payload = OmniAuth::Facebook::SignedRequest.parse(@value, @secret)
+    payload = OmniAuth::InstagramBusiness::SignedRequest.parse(@value, @secret)
     assert_equal @expected_payload, payload
   end
 

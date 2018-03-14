@@ -1,5 +1,5 @@
 require 'helper'
-require 'omniauth-facebook'
+require 'omniauth-instagram_business'
 require 'openssl'
 require 'base64'
 
@@ -29,7 +29,7 @@ class CallbackUrlTest < StrategyTestCase
     @request.stubs(:url).returns("#{url_base}/some/page")
     strategy.stubs(:script_name).returns('') # as not to depend on Rack env
     strategy.stubs(:query_string).returns('?foo=bar')
-    assert_equal "#{url_base}/auth/facebook/callback", strategy.callback_url
+    assert_equal "#{url_base}/auth/instagram_business/callback", strategy.callback_url
   end
 
   test "returns path from callback_path option (omitting querystring)" do
@@ -418,7 +418,7 @@ module SignedRequestTests
     end
 
     test 'throws an error on calling build_access_token' do
-      assert_raises(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError) { strategy.send(:with_authorization_code!) {} }
+      assert_raises(OmniAuth::Strategies::InstagramBusiness::NoAuthorizationCodeError) { strategy.send(:with_authorization_code!) {} }
     end
   end
 
@@ -441,7 +441,7 @@ module SignedRequestTests
 
     test 'throws an error if the algorithm is unknown' do
       setup('UNKNOWN-ALGO')
-      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError) { strategy.send(:signed_request_from_cookie) }.message
+      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(OmniAuth::InstagramBusiness::SignedRequest::UnknownSignatureAlgorithmError) { strategy.send(:signed_request_from_cookie) }.message
     end
   end
 
@@ -463,7 +463,7 @@ module SignedRequestTests
     end
 
     test 'calls fail! when a code is not included in the params' do
-      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError))
+      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::InstagramBusiness::NoAuthorizationCodeError))
       strategy.callback_phase
     end
   end
@@ -482,7 +482,7 @@ module SignedRequestTests
     end
 
     test 'calls fail! when a code is not included in the cookie' do
-      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError))
+      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::InstagramBusiness::NoAuthorizationCodeError))
       strategy.callback_phase
     end
   end
@@ -501,7 +501,7 @@ module SignedRequestTests
     end
 
     test 'calls fail! when an algorithm is unknown' do
-      strategy.expects(:fail!).times(1).with(:unknown_signature_algorithm, kind_of(OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError))
+      strategy.expects(:fail!).times(1).with(:unknown_signature_algorithm, kind_of(OmniAuth::InstagramBusiness::SignedRequest::UnknownSignatureAlgorithmError))
       strategy.callback_phase
     end
   end
