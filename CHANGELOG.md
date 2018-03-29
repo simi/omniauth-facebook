@@ -2,7 +2,8 @@
 
 Changes:
 
-  - bumped version of FB Graph API to v2.10
+  - bumped version of FB Graph API to v2.10 (#297, @piotrjaworski)
+  - use only CRuby 2.0+ on CI (#298, @simi)
 
 ## 4.0.0 (2016-07-26)
 
