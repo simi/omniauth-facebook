@@ -439,6 +439,18 @@ module SignedRequestTests
       assert_equal @payload, strategy.send(:signed_request_from_cookie)
     end
 
+    test 'requests the access token with an empty redirect_uri' do
+      @access_token = stub_everything('OAuth2::AccessToken')
+      @access_token.stubs(:options).returns({})
+
+      strategy.stubs(:env).returns({})
+      strategy.stubs(:raw_info).returns({})
+      strategy.instance_variable_set("@app", Rack::Builder.new { run lambda { |*args| } }.to_app)
+
+      strategy.client.class.any_instance.expects(:get_token).with(has_entries(redirect_uri: ''), any_parameters).returns(@access_token)
+      strategy.callback_phase
+    end
+
     test 'throws an error if the algorithm is unknown' do
       setup('UNKNOWN-ALGO')
       assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError) { strategy.send(:signed_request_from_cookie) }.message
