@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.summary  = 'Facebook OAuth2 Strategy for OmniAuth'
   s.homepage = 'https://github.com/mkdynamic/omniauth-facebook'
   s.license  = 'MIT'
+  s.required_ruby_version = '>= 2.0.0'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

@@ -1,3 +1,9 @@
+## Unreleased
+
+Changes:
+
+  - Specify required Ruby version >= 2.0 to gemspec (#307, @koic)
+
 ## 5.0.0 (2018-03-29)
 
 Changes:
