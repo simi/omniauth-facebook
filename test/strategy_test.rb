@@ -41,6 +41,12 @@ class CallbackUrlTest < StrategyTestCase
     assert_equal "#{url_base}/auth/FB/done", strategy.callback_url
   end
 
+  test "returns url from redirect_uri params" do
+    redirect_uri = 'http://redirect.com'
+    @request.stubs(:params).returns({ 'redirect_uri' => redirect_uri })
+    assert_equal redirect_uri, strategy.callback_url
+  end
+
   test "returns url from callback_url option" do
     url = 'https://auth.myapp.com/auth/fb/callback'
     @options = { callback_url: url }
