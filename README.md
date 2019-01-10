@@ -88,7 +88,6 @@ Here's an example *Auth Hash* available in `request.env['omniauth.auth']`:
     first_name: 'Joe',
     last_name: 'Bloggs',
     image: 'http://graph.facebook.com/1234567/picture?type=square',
-    verified: true
   },
   credentials: {
     token: 'ABCDEF...', # OAuth 2.0 access_token, which you may wish to store
@@ -106,10 +105,6 @@ Here's an example *Auth Hash* available in `request.env['omniauth.auth']`:
       location: { id: '123456789', name: 'Palo Alto, California' },
       gender: 'male',
       email: 'joe@bloggs.com',
-      timezone: -8,
-      locale: 'en_US',
-      verified: true,
-      updated_time: '2011-11-11T06:21:03+0000',
       # ...
     }
   }

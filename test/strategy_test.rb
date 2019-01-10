@@ -198,16 +198,6 @@ class InfoTestOptionalDataPresent < StrategyTestCase
     assert_equal 'http://www.facebook.com/fredsmith', strategy.info['urls']['Facebook']
     assert_equal 'https://my-wonderful-site.com', strategy.info['urls']['Website']
   end
-
-  test 'returns the positive verified status' do
-    @raw_info['verified'] = true
-    assert strategy.info['verified']
-  end
-
-  test 'returns the negative verified status' do
-    @raw_info['verified'] = false
-    refute strategy.info['verified']
-  end
 end
 
 class InfoTestOptionalDataNotPresent < StrategyTestCase
@@ -243,10 +233,6 @@ class InfoTestOptionalDataNotPresent < StrategyTestCase
 
   test 'has no urls' do
     refute_has_key 'urls', strategy.info
-  end
-
-  test 'has no verified key' do
-    refute_has_key 'verified', strategy.info
   end
 end
 
