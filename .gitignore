@@ -4,6 +4,6 @@
 /Gemfile.lock
 pkg/*
 .powenv
+.powder
 tmp
 bin
-example/app.log

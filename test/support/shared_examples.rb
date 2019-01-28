@@ -13,7 +13,7 @@ module OAuth2StrategyTests
     extend BlockTestHelper
     
     test 'should be initialized with symbolized client_options' do
-      @options = { :client_options => { 'authorize_url' => 'https://example.com' } }
+      @options = { client_options: { 'authorize_url' => 'https://example.com' } }
       assert_equal 'https://example.com', strategy.client.options[:authorize_url]
     end
   end
@@ -22,19 +22,19 @@ module OAuth2StrategyTests
     extend BlockTestHelper
     
     test 'should include any authorize params passed in the :authorize_params option' do
-      @options = { :authorize_params => { :foo => 'bar', :baz => 'zip' } }
+      @options = { authorize_params: { foo: 'bar', baz: 'zip' } }
       assert_equal 'bar', strategy.authorize_params['foo']
       assert_equal 'zip', strategy.authorize_params['baz']
     end
 
     test 'should include top-level options that are marked as :authorize_options' do
-      @options = { :authorize_options => [:scope, :foo], :scope => 'bar', :foo => 'baz' }
+      @options = { authorize_options: [:scope, :foo], scope: 'bar', foo: 'baz' }
       assert_equal 'bar', strategy.authorize_params['scope']
       assert_equal 'baz', strategy.authorize_params['foo']
     end
     
     test 'should exclude top-level options that are not passed' do
-      @options = { :authorize_options => [:bar] }
+      @options = { authorize_options: [:bar] }
       refute_has_key :bar, strategy.authorize_params
       refute_has_key 'bar', strategy.authorize_params
     end
@@ -51,7 +51,7 @@ module OAuth2StrategyTests
     end
 
     test 'should not store state in the session when present in authorize params vs. a random one' do
-      @options = { :authorize_params => { :state => 'bar' } }
+      @options = { authorize_params: { state: 'bar' } }
       refute_empty strategy.authorize_params['state']
       refute_equal 'bar', strategy.authorize_params[:state]
       refute_empty strategy.session['omniauth.state']
@@ -71,13 +71,13 @@ module OAuth2StrategyTests
     extend BlockTestHelper
     
     test 'should include any authorize params passed in the :token_params option' do
-      @options = { :token_params => { :foo => 'bar', :baz => 'zip' } }
+      @options = { token_params: { foo: 'bar', baz: 'zip' } }
       assert_equal 'bar', strategy.token_params['foo']
       assert_equal 'zip', strategy.token_params['baz']
     end
 
     test 'should include top-level options that are marked as :token_options' do
-      @options = { :token_options => [:scope, :foo], :scope => 'bar', :foo => 'baz' }
+      @options = { token_options: [:scope, :foo], scope: 'bar', foo: 'baz' }
       assert_equal 'bar', strategy.token_params['scope']
       assert_equal 'baz', strategy.token_params['foo']
     end

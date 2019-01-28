@@ -12,18 +12,14 @@ module OmniAuth
       DEFAULT_SCOPE = 'email'
 
       option :client_options, {
-        :site => 'https://graph.facebook.com',
-        :authorize_url => "https://www.facebook.com/dialog/oauth",
-        :token_url => 'oauth/access_token'
-      }
-
-      option :token_params, {
-        :parse => :query
+        site: 'https://graph.facebook.com/v2.10',
+        authorize_url: "https://www.facebook.com/v2.10/dialog/oauth",
+        token_url: 'oauth/access_token'
       }
 
       option :access_token_options, {
-        :header_format => 'OAuth %s',
-        :param_name => 'access_token'
+        header_format: 'OAuth %s',
+        param_name: 'access_token'
       }
 
       option :authorize_options, [:scope, :display, :auth_type]
@@ -59,11 +55,11 @@ module OmniAuth
       end
 
       def info_options
-        params = {:appsecret_proof => appsecret_proof}
-        params.merge!({:fields => options[:info_fields]}) if options[:info_fields]
-        params.merge!({:locale => options[:locale]}) if options[:locale]
+        params = {appsecret_proof: appsecret_proof}
+        params.merge!({fields: (options[:info_fields] || 'name,email')})
+        params.merge!({locale: options[:locale]}) if options[:locale]
 
-        { :params => params }
+        { params: params }
       end
 
       def callback_phase
@@ -88,7 +84,8 @@ module OmniAuth
         if @authorization_code_from_signed_request_in_cookie
           ''
         else
-          options[:callback_url] || super
+          # Fixes regression in omniauth-oauth2 v1.4.0 by https://github.com/intridea/omniauth-oauth2/commit/85fdbe117c2a4400d001a6368cc359d88f40abc7
+          options[:callback_url] || (full_host + script_name + callback_path)
         end
       end
 
@@ -188,10 +185,10 @@ module OmniAuth
       def image_url(uid, options)
         uri_class = options[:secure_image_url] ? URI::HTTPS : URI::HTTP
         site_uri = URI.parse(client.site)
-        url = uri_class.build({:host => site_uri.host, :path => "#{site_uri.path}/#{uid}/picture"})
+        url = uri_class.build({host: site_uri.host, path: "#{site_uri.path}/#{uid}/picture"})
 
         query = if options[:image_size].is_a?(String) || options[:image_size].is_a?(Symbol)
-          { :type => options[:image_size] }
+          { type: options[:image_size] }
         elsif options[:image_size].is_a?(Hash)
           options[:image_size]
         end

@@ -1,25 +1,46 @@
-## 2.1.0 (unreleased)
+## 5.0.0 (2018-03-29)
 
- - Signed request parsing extracted to `OmniAuth::Facebook::SignedRequest` class. (#183, @simi, @Vrael)
+Changes:
+
+  - bumped version of FB Graph API to v2.10 (#297, @piotrjaworski)
+  - use only CRuby 2.0+ on CI (#298, @simi)
+
+## 4.0.0 (2016-07-26)
+
+Changes:
+
+  - drop support for Ruby < 1.9.3 (@mkdynamic)
+  - switch to versioned FB APIs, currently using v2.6 (#245, @printercu, @mkdynamic)
+  - remove deprecated :nickname field from README example (#223, @abelorian)
+  - add Ruby 2.2 + 2.3.0 to CI (#225, @tricknotes, @mkdynamic, @anoraak)
+  - update example app (@mkdynamic)
+
+## 3.0.0 (2015-10-26)
+
+Changes:
+
+  - remove query string from redirect_uri on callback by default (#221, @gioblu)
+  - signed request parsing extracted to `OmniAuth::Facebook::SignedRequest` class. (#183, @simi, @Vrael)
+  - change default value of `info_fields` to `name,email` for the [graph-api-v2.4](https://developers.facebook.com/blog/post/2015/07/08/graph-api-v2.4/). ([#209](https://github.com/mkdynamic/omniauth-facebook/pull/209))
 
 ## 2.0.1 (2015-02-21)
 
 Bugfixes:
 
- - Allow versioning by not forcing absolute path for graph requests (#180, @frausto)
- - Allow the image_size option to be set as a symbol. (#182, @jgrau)
+  - allow versioning by not forcing absolute path for graph requests (#180, @frausto)
+  - allow the image_size option to be set as a symbol. (#182, @jgrau)
 
 ## 2.0.0 (2014-08-07)
 
 Changes:
 
- - remove support for canvas app flow (765ed9, @mkdynamic)
+  - remove support for canvas app flow (765ed9, @mkdynamic)
 
 Bugfixes:
 
- - bump omniauth-oauth2 dependency which addresses CVE-2012-6134 (#162, @linedotstar)
- - rescue `NoAuthorizationCodeError` in callback_phase (a0036b, @tomoya55)
- - fix CSRF exception when using FB JS SDK and parsing signed request (765ed9, @mkdynamic)
+  - bump omniauth-oauth2 dependency which addresses CVE-2012-6134 (#162, @linedotstar)
+  - rescue `NoAuthorizationCodeError` in callback_phase (a0036b, @tomoya55)
+  - fix CSRF exception when using FB JS SDK and parsing signed request (765ed9, @mkdynamic)
 
 ## 1.6.0 (2014-01-13)
 
