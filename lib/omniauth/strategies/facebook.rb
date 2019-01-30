@@ -70,6 +70,8 @@ module OmniAuth
         end
       rescue AppIdMismatchError => e
         fail!(:app_id_mismatch, e)
+      rescue MissingScopesError => e
+        fail!(:missing_scopes, e)
       rescue NoTokenOrCodeError => e
         fail!(:no_token_or_code, e)
       rescue OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError => e
