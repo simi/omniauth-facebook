@@ -68,6 +68,8 @@ module OmniAuth
         with_authorization_parameter! do
           super
         end
+      rescue AppIdMismatchError => e
+        fail!(:app_id_mismatch, e)
       rescue NoTokenOrCodeError => e
         fail!(:no_token_or_code, e)
       rescue OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError => e
