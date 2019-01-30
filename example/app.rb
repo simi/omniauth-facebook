@@ -1,5 +1,6 @@
 require 'sinatra'
 require "sinatra/reloader"
+require 'multi_json'
 require 'yaml'
 
 # configure sinatra
