@@ -391,118 +391,152 @@ class ExtraTest < StrategyTestCase
   end
 end
 
-module SignedRequestHelpers
-  def signed_request(payload, secret)
-    encoded_payload = base64_encode_url(MultiJson.encode(payload))
-    encoded_signature = base64_encode_url(signature(encoded_payload, secret))
-    [encoded_signature, encoded_payload].join('.')
-  end
-
-  def base64_encode_url(value)
-    Base64.encode64(value).tr('+/', '-_').gsub(/\n/, '')
-  end
-
-  def signature(payload, secret, algorithm = OpenSSL::Digest::SHA256.new)
-    OpenSSL::HMAC.digest(algorithm, secret, payload)
-  end
-end
-
-module SignedRequestTests
-  class TestCase < StrategyTestCase
-    include SignedRequestHelpers
-  end
-
-  class CookieAndParamNotPresentTest < TestCase
+module GettingAccessTokenTests
+  class CookieAndParamNotPresentTest < StrategyTestCase
     test 'is nil' do
       assert_nil strategy.send(:signed_request_from_cookie)
     end
 
     test 'throws an error on calling build_access_token' do
-      assert_raises(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError) { strategy.send(:with_authorization_code!) {} }
+      assert_raises(OmniAuth::Strategies::Facebook::NoTokenOrCodeError) { strategy.send(:with_authorization_parameter!) {} }
     end
   end
 
-  class CookiePresentTest < TestCase
-    def setup(algo = nil)
-      super()
-      @payload = {
-        'algorithm' => algo || 'HMAC-SHA256',
-        'code' => 'm4c0d3z',
-        'issued_at' => Time.now.to_i,
-        'user_id' => '123456'
-      }
-
-      @request.stubs(:cookies).returns({"fbsr_#{@client_id}" => signed_request(@payload, @client_secret)})
-    end
-
-    test 'parses the access code out from the cookie' do
-      assert_equal @payload, strategy.send(:signed_request_from_cookie)
-    end
-
-    test 'throws an error if the algorithm is unknown' do
-      setup('UNKNOWN-ALGO')
-      assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError) { strategy.send(:signed_request_from_cookie) }.message
+  class MissingParamsAndCookieRequestTest < StrategyTestCase
+    test 'calls fail! when a code or access_token is not included in the params' do
+      strategy.expects(:fail!).times(1).with(:no_token_or_code, kind_of(OmniAuth::Strategies::Facebook::NoTokenOrCodeError))
+      strategy.callback_phase
     end
   end
 
-  class EmptySignedRequestTest < TestCase
+  class BadTokenTest < StrategyTestCase
     def setup
       super
-      @request.stubs(:params).returns({'signed_request' => ''})
+      @access_token = stub('OAuth2::AccessToken')
+      @access_token.stubs(:token).returns('fake_token')
+      ::OAuth2::AccessToken.stubs(:from_hash).returns(@access_token)
+      @request.stubs(:params).returns({'access_token' => 'fake_token'})
+      strategy.stubs(:app_access_token).returns('other_token')
     end
 
-    test 'empty param' do
-      assert_equal nil, strategy.send(:signed_request_from_cookie)
-    end
-  end
-
-  class MissingCodeInParamsRequestTest < TestCase
-    def setup
-      super
-      @request.stubs(:params).returns({})
+    test 'throws error when access token bad' do
+      params = { params: { input_token: 'fake_token', access_token: 'other_token' } }
+      @access_token.expects(:get).with('/debug_token', params).raises(::OAuth2::Error.new(stub_everything('Faraday::Response')))
+      strategy.stubs(:access_token).returns(@access_token)
+      assert_raises(OmniAuth::Strategies::Facebook::AppIdMismatchError) { strategy.send(:build_access_token) {} }
     end
 
-    test 'calls fail! when a code is not included in the params' do
-      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError))
-      strategy.callback_phase
-    end
-  end
-
-  class MissingCodeInCookieRequestTest < TestCase
-    def setup(algo = nil)
-      super()
-      @payload = {
-        'algorithm' => algo || 'HMAC-SHA256',
-        'code' => nil,
-        'issued_at' => Time.now.to_i,
-        'user_id' => '123456'
-      }
-
-      @request.stubs(:cookies).returns({"fbsr_#{@client_id}" => signed_request(@payload, @client_secret)})
+    test 'fails when good token with missing scope' do
+      params = { params: { input_token: 'fake_token', access_token: 'other_token' } }
+      missing_scopes_response = stub_everything('Faraday::Response')
+      missing_scopes_response.stubs(:parsed).returns({ 'data' => {'scopes' => [] }})
+      @access_token.expects(:get).with('/debug_token', params).returns(missing_scopes_response)
+      assert_raises(OmniAuth::Strategies::Facebook::MissingScopesError) { strategy.send(:build_access_token) {} }
     end
 
-    test 'calls fail! when a code is not included in the cookie' do
-      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError))
-      strategy.callback_phase
+    test 'succeeds when good token and scope' do
+      params = { params: { input_token: 'fake_token', access_token: 'other_token' } }
+      good_response = stub_everything('Faraday::Response')
+      good_response.stubs(:parsed).returns({ 'data' => {'scopes' => %w(public_profile email)}})
+      @access_token.expects(:get).with('/debug_token', params).returns(good_response)
+      assert_equal 'fake_token', strategy.send(:build_access_token).token
     end
   end
+  # Fails when good token with missing scope
+  # Passes when param and good token
+  module VerifiedAccessTokenTests
+    module SignedRequestHelpers
+      def signed_request(payload, secret)
+        encoded_payload = base64_encode_url(MultiJson.encode(payload))
+        encoded_signature = base64_encode_url(signature(encoded_payload, secret))
+        [encoded_signature, encoded_payload].join('.')
+      end
 
-  class UnknownAlgorithmInCookieRequestTest < TestCase
-    def setup
-      super()
-      @payload = {
-        'algorithm' => 'UNKNOWN-ALGO',
-        'code' => nil,
-        'issued_at' => Time.now.to_i,
-        'user_id' => '123456'
-      }
+      def base64_encode_url(value)
+        Base64.encode64(value).tr('+/', '-_').gsub(/\n/, '')
+      end
 
-      @request.stubs(:cookies).returns({"fbsr_#{@client_id}" => signed_request(@payload, @client_secret)})
+      def signature(payload, secret, algorithm = OpenSSL::Digest::SHA256.new)
+        OpenSSL::HMAC.digest(algorithm, secret, payload)
+      end
     end
 
-    test 'calls fail! when an algorithm is unknown' do
-      strategy.expects(:fail!).times(1).with(:unknown_signature_algorithm, kind_of(OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError))
-      strategy.callback_phase
+    module SignedRequestTests
+      class TestCase < StrategyTestCase
+        include SignedRequestHelpers
+      end
+
+      class CookiePresentTest < TestCase
+        def setup(algo = nil)
+          super()
+          @payload = {
+            'algorithm' => algo || 'HMAC-SHA256',
+            'code' => 'm4c0d3z',
+            'issued_at' => Time.now.to_i,
+            'user_id' => '123456'
+          }
+
+          @request.stubs(:cookies).returns({"fbsr_#{@client_id}" => signed_request(@payload, @client_secret)})
+        end
+
+        test 'parses the access code out from the cookie' do
+          assert_equal @payload, strategy.send(:signed_request_from_cookie)
+        end
+
+        test 'throws an error if the algorithm is unknown' do
+          setup('UNKNOWN-ALGO')
+          assert_equal "unknown algorithm: UNKNOWN-ALGO", assert_raises(OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError) { strategy.send(:signed_request_from_cookie) }.message
+        end
+      end
+
+      class EmptySignedRequestTest < TestCase
+        def setup
+          super
+          @request.stubs(:params).returns({'signed_request' => ''})
+        end
+
+        test 'empty param' do
+          assert_nil strategy.send(:signed_request_from_cookie)
+        end
+      end
+
+      class MissingCodeInCookieRequestTest < TestCase
+        def setup(algo = nil)
+          super()
+          @payload = {
+            'algorithm' => algo || 'HMAC-SHA256',
+            'code' => nil,
+            'issued_at' => Time.now.to_i,
+            'user_id' => '123456'
+          }
+
+          @request.stubs(:cookies).returns({"fbsr_#{@client_id}" => signed_request(@payload, @client_secret)})
+        end
+
+        test 'calls fail! when a code is not included in the cookie' do
+          strategy.expects(:fail!).times(1).with(:no_token_or_code, kind_of(OmniAuth::Strategies::Facebook::NoTokenOrCodeError))
+          strategy.callback_phase
+        end
+      end
+
+      class UnknownAlgorithmInCookieRequestTest < TestCase
+        def setup
+          super()
+          @payload = {
+            'algorithm' => 'UNKNOWN-ALGO',
+            'code' => nil,
+            'issued_at' => Time.now.to_i,
+            'user_id' => '123456'
+          }
+
+          @request.stubs(:cookies).returns({"fbsr_#{@client_id}" => signed_request(@payload, @client_secret)})
+        end
+
+        test 'calls fail! when an algorithm is unknown' do
+          strategy.expects(:fail!).times(1).with(:unknown_signature_algorithm, kind_of(OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError))
+          strategy.callback_phase
+        end
+      end
     end
   end
 end

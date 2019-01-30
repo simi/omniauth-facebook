@@ -32,7 +32,7 @@ end
 
 class StrategyTestCase < TestCase
   def setup
-    @request = stub('Request')
+    @request = stub('Request', {})
     @request.stubs(:params).returns({})
     @request.stubs(:cookies).returns({})
     @request.stubs(:env).returns({})
@@ -41,6 +41,8 @@ class StrategyTestCase < TestCase
 
     @client_id = '123'
     @client_secret = '53cr3tz'
+
+    @options = nil
   end
 
   def strategy

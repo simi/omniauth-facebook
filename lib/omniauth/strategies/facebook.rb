@@ -7,7 +7,9 @@ require 'uri'
 module OmniAuth
   module Strategies
     class Facebook < OmniAuth::Strategies::OAuth2
-      class NoAuthorizationCodeError < StandardError; end
+      class NoTokenOrCodeError < StandardError; end
+      class MissingScopesError < StandardError; end
+      class AppIdMismatchError < StandardError; end
 
       DEFAULT_SCOPE = 'email'
 
@@ -63,16 +65,11 @@ module OmniAuth
       end
 
       def callback_phase
-        if access_token = request.params["access_token"]
-          options.provider_ignores_state = true
+        with_authorization_parameter! do
           super
-        else
-          with_authorization_code! do
-            super
-          end
         end
-      rescue NoAuthorizationCodeError => e
-        fail!(:no_authorization_code, e)
+      rescue NoTokenOrCodeError => e
+        fail!(:no_token_or_code, e)
       rescue OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError => e
         fail!(:unknown_signature_algorithm, e)
       end
@@ -81,7 +78,7 @@ module OmniAuth
       #      phase and it must match during the access_token phase:
       #      https://github.com/facebook/facebook-php-sdk/blob/master/src/base_facebook.php#L477
       def callback_url
-        if @authorization_code_from_signed_request_in_cookie
+        if defined?(@auth_code_from_cookie) && @auth_code_from_cookie
           ''
         else
           # Fixes regression in omniauth-oauth2 v1.4.0 by https://github.com/intridea/omniauth-oauth2/commit/85fdbe117c2a4400d001a6368cc359d88f40abc7
@@ -130,35 +127,29 @@ module OmniAuth
         return access_token
       end
 
+      def verify_access_token!(access_token)
+        opts = { params: { input_token: access_token.token, access_token: app_access_token }}
+        token_info = access_token.get('/debug_token', opts)
+        missing_scopes = authorize_params.scope.split(',').collect(&:strip) - token_info.parsed.fetch("data", {}).fetch("scopes", [])
+        raise MissingScopesError, "Missing scopes #{missing_scopes.join(', ')}" if missing_scopes.any?
+      rescue ::OAuth2::Error => e
+        raise AppIdMismatchError, "Failed to validate token: #{e.message}"
+      end
+
       def app_access_token
         "%s|%s" % [client.id, client.secret]
-      end
-
-      def verify_access_token!(access_token)
-        token_info = access_token.get('/debug_token', :params => { :input_token => access_token.token, :access_token => app_access_token })
-        # verify all needed scopes are allowed
-        missing_scopes = authorize_params.scope.split(',').collect(&:strip) - token_info.parsed.fetch("data", {}).fetch("scopes", [])
-        raise "missing scopes #{missing_scopes.join(', ')}" if missing_scopes.any?
-      end
-
-      def signed_request_from_cookie
-        @signed_request_from_cookie ||= raw_signed_request_from_cookie && OmniAuth::Facebook::SignedRequest.parse(raw_signed_request_from_cookie, client.secret)
-      end
-
-      def raw_signed_request_from_cookie
-        request.cookies["fbsr_#{client.id}"]
       end
 
       # Picks the authorization code in order, from:
       #
       # 1. The request 'code' param (manual callback from standard server-side flow)
       # 2. A signed request from cookie (passed from the client during the client-side flow)
-      def with_authorization_code!
-        if request.params.key?('code')
+      def with_authorization_parameter!
+        if request.params.key?('code') || request.params.key?('access_token')
           yield
         elsif code_from_signed_request = signed_request_from_cookie && signed_request_from_cookie['code']
           request.params['code'] = code_from_signed_request
-          @authorization_code_from_signed_request_in_cookie = true
+          @auth_code_from_cookie = true
           # NOTE The code from the signed fbsr_XXX cookie is set by the FB JS SDK will confirm that the identity of the
           #      user contained in the signed request matches the user loading the app.
           original_provider_ignores_state = options.provider_ignores_state
@@ -167,12 +158,20 @@ module OmniAuth
             yield
           ensure
             request.params.delete('code')
-            @authorization_code_from_signed_request_in_cookie = false
+            @auth_code_from_cookie = false
             options.provider_ignores_state = original_provider_ignores_state
           end
         else
-          raise NoAuthorizationCodeError, 'must pass either a `code` (via URL or by an `fbsr_XXX` signed request cookie)'
+          raise NoTokenOrCodeError, 'must pass either a `access_token` param or a `code` (via URL param or by an `fbsr_XXX` signed request cookie)'
         end
+      end
+
+      def signed_request_from_cookie
+        @signed_request_from_cookie ||= raw_signed_request_from_cookie && OmniAuth::Facebook::SignedRequest.parse(raw_signed_request_from_cookie, client.secret)
+      end
+
+      def raw_signed_request_from_cookie
+        request.cookies["fbsr_#{client.id}"]
       end
 
       def prune!(hash)
