@@ -136,6 +136,11 @@ When you call `/auth/facebook/callback` in the success callback of `FB.login` th
 2. extract the authorization code contained in it
 3. and hit Facebook and obtain an access token which will get placed in the `request.env['omniauth.auth']['credentials']` hash.
 
+## Client-side Flow with Facebook Android and ioS SDK
+
+A long lived access token is returned by the native sdks.  This flow is supported by sending an "access_token" query parameter to your callback.  This token is then verified with facebook using your client_id and client_secret before being used.
+Be sure to leave CSRF protection on for this method of authentication.
+
 ## Token Expiry
 
 The expiration time of the access token you obtain will depend on which flow you are using.
