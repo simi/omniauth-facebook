@@ -7,7 +7,7 @@ require 'uri'
 module OmniAuth
   module Strategies
     class Facebook < OmniAuth::Strategies::OAuth2
-      class NoTokenOrCodeError < StandardError; end
+      class NoAuthorizationCodeError < StandardError; end
       class MissingScopesError < StandardError; end
       class AppIdMismatchError < StandardError; end
 
@@ -72,8 +72,8 @@ module OmniAuth
         fail!(:app_id_mismatch, e)
       rescue MissingScopesError => e
         fail!(:missing_scopes, e)
-      rescue NoTokenOrCodeError => e
-        fail!(:no_token_or_code, e)
+      rescue NoAuthorizationCodeError => e
+        fail!(:no_authorization_code, e)
       rescue OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError => e
         fail!(:unknown_signature_algorithm, e)
       end
@@ -166,7 +166,7 @@ module OmniAuth
             options.provider_ignores_state = original_provider_ignores_state
           end
         else
-          raise NoTokenOrCodeError, 'must pass either a `access_token` param or a `code` (via URL param or by an `fbsr_XXX` signed request cookie)'
+          raise NoAuthorizationCodeError, 'must pass either a `access_token` param or a `code` (via URL param or by an `fbsr_XXX` signed request cookie)'
         end
       end
 

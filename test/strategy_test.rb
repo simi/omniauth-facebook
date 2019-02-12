@@ -398,13 +398,13 @@ module GettingAccessTokenTests
     end
 
     test 'throws an error on calling build_access_token' do
-      assert_raises(OmniAuth::Strategies::Facebook::NoTokenOrCodeError) { strategy.send(:with_authorization_parameter!) {} }
+      assert_raises(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError) { strategy.send(:with_authorization_parameter!) {} }
     end
   end
 
   class MissingParamsAndCookieRequestTest < StrategyTestCase
     test 'calls fail! when a code or access_token is not included in the params' do
-      strategy.expects(:fail!).times(1).with(:no_token_or_code, kind_of(OmniAuth::Strategies::Facebook::NoTokenOrCodeError))
+      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError))
       strategy.callback_phase
     end
   end
@@ -514,7 +514,7 @@ module GettingAccessTokenTests
         end
 
         test 'calls fail! when a code is not included in the cookie' do
-          strategy.expects(:fail!).times(1).with(:no_token_or_code, kind_of(OmniAuth::Strategies::Facebook::NoTokenOrCodeError))
+          strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError))
           strategy.callback_phase
         end
       end

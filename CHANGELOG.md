@@ -1,3 +1,9 @@
+## 5.1.0 (2019-02-12)
+
+Changes:
+
+  - support for an access_token param, validated by facebook's debug token api
+  
 ## 5.0.0 (2018-03-29)
 
 Changes:
