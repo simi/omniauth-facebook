@@ -119,7 +119,7 @@ module OmniAuth
       end
 
       def raw_signed_request_from_cookie
-        request.cookies["fbsr_#{client.id}"]
+        request.cookies["fbsr_#{client.id}"] || request.params['signed_request']
       end
 
       # Picks the authorization code in order, from:
