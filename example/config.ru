@@ -5,7 +5,7 @@ require './app.rb'
 use Rack::Session::Cookie, secret: 'abc123'
 
 use OmniAuth::Builder do
-  provider :facebook, ENV['APP_ID'], ENV['APP_SECRET']
+  provider :facebook, ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET']
 end
 
 run Sinatra::Application
