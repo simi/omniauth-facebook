@@ -452,7 +452,7 @@ module SignedRequestTests
     end
 
     test 'empty param' do
-      assert_equal nil, strategy.send(:signed_request_from_cookie)
+      assert_nil strategy.send(:signed_request_from_cookie)
     end
   end
 

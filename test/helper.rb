@@ -41,6 +41,7 @@ class StrategyTestCase < TestCase
 
     @client_id = '123'
     @client_secret = '53cr3tz'
+    @options = {}
   end
 
   def strategy
@@ -53,4 +54,4 @@ class StrategyTestCase < TestCase
   end
 end
 
-Dir[File.expand_path('../support/**/*', __FILE__)].each &method(:require)
+Dir[File.expand_path('../support/**/*', __FILE__)].each(&method(:require))

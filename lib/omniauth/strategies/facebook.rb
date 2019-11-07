@@ -76,7 +76,7 @@ module OmniAuth
       #      phase and it must match during the access_token phase:
       #      https://github.com/facebook/facebook-php-sdk/blob/master/src/base_facebook.php#L477
       def callback_url
-        if @authorization_code_from_signed_request_in_cookie
+        if instance_variable_defined?("@authorization_code_from_signed_request_in_cookie") && @authorization_code_from_signed_request_in_cookie
           ''
         else
           # Fixes regression in omniauth-oauth2 v1.4.0 by https://github.com/intridea/omniauth-oauth2/commit/85fdbe117c2a4400d001a6368cc359d88f40abc7
