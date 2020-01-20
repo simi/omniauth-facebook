@@ -1,6 +1,7 @@
 require 'sinatra'
 require "sinatra/reloader"
 require 'yaml'
+require 'json'
 
 # configure sinatra
 set :run, false
@@ -81,5 +82,5 @@ end
 # - ajax request made here for client-side flow
 get '/auth/:provider/callback' do
   content_type 'application/json'
-  MultiJson.encode(request.env)
+  JSON.dump(request.env)
 end
