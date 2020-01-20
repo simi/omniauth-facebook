@@ -22,6 +22,8 @@ module OmniAuth
         param_name: 'access_token'
       }
 
+      option :authorization_code_from_signed_request_in_cookie, nil
+
       option :authorize_options, [:scope, :display, :auth_type]
 
       uid { raw_info['id'] }
@@ -76,7 +78,7 @@ module OmniAuth
       #      phase and it must match during the access_token phase:
       #      https://github.com/facebook/facebook-php-sdk/blob/master/src/base_facebook.php#L477
       def callback_url
-        if @authorization_code_from_signed_request_in_cookie
+        if options.authorization_code_from_signed_request_in_cookie
           ''
         else
           # Fixes regression in omniauth-oauth2 v1.4.0 by https://github.com/intridea/omniauth-oauth2/commit/85fdbe117c2a4400d001a6368cc359d88f40abc7
@@ -131,7 +133,7 @@ module OmniAuth
           yield
         elsif code_from_signed_request = signed_request_from_cookie && signed_request_from_cookie['code']
           request.params['code'] = code_from_signed_request
-          @authorization_code_from_signed_request_in_cookie = true
+          options.authorization_code_from_signed_request_in_cookie = true
           # NOTE The code from the signed fbsr_XXX cookie is set by the FB JS SDK will confirm that the identity of the
           #      user contained in the signed request matches the user loading the app.
           original_provider_ignores_state = options.provider_ignores_state
@@ -140,7 +142,7 @@ module OmniAuth
             yield
           ensure
             request.params.delete('code')
-            @authorization_code_from_signed_request_in_cookie = false
+            options.authorization_code_from_signed_request_in_cookie = false
             options.provider_ignores_state = original_provider_ignores_state
           end
         else
