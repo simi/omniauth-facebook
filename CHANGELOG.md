@@ -1,3 +1,9 @@
+## 6.0.0 2020-01-27)
+
+Changes:
+
+  - bumped version of FB Graph API to v3.0
+
 ## 5.0.0 (2018-03-29)
 
 Changes:
