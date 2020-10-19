@@ -1,3 +1,9 @@
+## 8.0.0 (2020-10-20)
+
+Changes:
+
+  - user profile picture link includes access token (#344, @anklos)
+
 ## 7.0.0 (2020-08-03)
 
 Changes:
