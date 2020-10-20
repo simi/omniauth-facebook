@@ -26,6 +26,8 @@ module OmniAuth
 
       option :authorize_options, [:scope, :display, :auth_type]
 
+      option :secure_image_url, true
+
       uid { raw_info['id'] }
 
       info do
