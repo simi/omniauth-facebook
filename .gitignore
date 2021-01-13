@@ -7,4 +7,3 @@ pkg/*
 .powder
 tmp
 bin
-.ruby-version
