@@ -21,8 +21,19 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Install dependencies
-      run: bundle install
+
+    - uses: actions/cache@v2
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+
+    - name: bundle install
+      run: |
+        gem install bundler
+        bundle config path vendor/bundle
+        bundle install -j $(getconf _NPROCESSORS_ONLN) --retry 3
+
     - name: Run tests
       run: bundle exec rake
