@@ -44,7 +44,7 @@ Option name | Default | Explanation
 `info_fields` | `name,email` | Specify exactly which fields should be returned when getting the user's info. Value should be a comma-separated string as per https://developers.facebook.com/docs/graph-api/reference/user/ (only `/me` endpoint).
 `locale` |  | Specify locale which should be used when getting the user's info. Value should be locale string as per https://developers.facebook.com/docs/reference/api/locale/.
 `auth_type` | | Optionally specifies the requested authentication features as a comma-separated list, as per https://developers.facebook.com/docs/facebook-login/reauthentication/. Valid values are `https` (checks for the presence of the secure cookie and asks for re-authentication if it is not present), and `reauthenticate` (asks the user to re-authenticate unconditionally). Use 'rerequest' when you want to request premissions. Default is `nil`.
-`secure_image_url` | `false` | Set to `true` to use https for the avatar image url returned in the auth hash.
+`secure_image_url` | `true` | Set to `true` to use https for the avatar image url returned in the auth hash. SSL is mandatory as per https://developers.facebook.com/docs/facebook-login/security#surfacearea.
 `callback_url` / `callback_path` | | Specify a custom callback URL used during the server-side flow. Note this must be allowed by your app configuration on Facebook (see 'Valid OAuth redirect URIs' under the 'Advanced' settings section in the configuration for your Facebook app for more details).
 
 For example, to request `email`, `user_birthday` and `read_stream` permissions and display the authentication page in a popup window:
