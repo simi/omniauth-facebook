@@ -1,3 +1,8 @@
+## 8.0.1 (2021-03-xx)
+
+Changes:
+  - add dependency contrain for omniauth 1.x series. (#357)
+
 ## 8.0.0 (2020-10-20)
 
 Changes:
