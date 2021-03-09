@@ -1,3 +1,8 @@
+## 9.0.0 (2021-03-xx)
+
+Changes:
+  - allow for omniauth 2.0 series. (#357)
+
 ## 8.0.1 (2021-03-xx)
 
 Changes:
