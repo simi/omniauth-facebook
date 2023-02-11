@@ -26,10 +26,11 @@ end
 class CallbackUrlTest < StrategyTestCase
   test "returns the default callback url (omitting querystring)" do
     url_base = 'http://auth.request.com'
+    script_name = '/script_name'
     @request.stubs(:url).returns("#{url_base}/some/page")
-    strategy.stubs(:script_name).returns('') # as not to depend on Rack env
+    strategy.stubs(:script_name).returns(script_name) # as not to depend on Rack env
     strategy.stubs(:query_string).returns('?foo=bar')
-    assert_equal "#{url_base}/auth/facebook/callback", strategy.callback_url
+    assert_equal "#{url_base}#{script_name}/auth/facebook/callback", strategy.callback_url
   end
 
   test "returns path from callback_path option (omitting querystring)" do
@@ -427,7 +428,7 @@ end
 
 module SignedRequestHelpers
   def signed_request(payload, secret)
-    encoded_payload = base64_encode_url(MultiJson.encode(payload))
+    encoded_payload = base64_encode_url(JSON.dump(payload))
     encoded_signature = base64_encode_url(signature(encoded_payload, secret))
     [encoded_signature, encoded_payload].join('.')
   end

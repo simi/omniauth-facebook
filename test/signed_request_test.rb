@@ -5,7 +5,7 @@ class SignedRequestTest < Minitest::Test
   def setup
     @value = fixture('signed_request.txt').strip
     @secret = "897z956a2z7zzzzz5783z458zz3z7556"
-    @expected_payload = MultiJson.decode(fixture('payload.json'))
+    @expected_payload = JSON.parse(fixture('payload.json'))
   end
 
   def test_signed_request_payload
