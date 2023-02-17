@@ -28,7 +28,7 @@ module OmniAuth
         return if signature.nil?
 
         decoded_hex_signature = base64_decode_url(signature)
-        decoded_payload = MultiJson.decode(base64_decode_url(encoded_payload))
+        decoded_payload = JSON.parse(base64_decode_url(encoded_payload))
 
         unless decoded_payload['algorithm'] == SUPPORTED_ALGORITHM
           raise UnknownSignatureAlgorithmError, "unknown algorithm: #{decoded_payload['algorithm']}"
