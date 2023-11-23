@@ -68,6 +68,7 @@ use OmniAuth::Builder do
       authorize_url: "https://www.facebook.com/v7.0/dialog/oauth"
     }
 end
+OmniAuth.config.allowed_request_methods = %i[get]
 ```
 
 ### Per-Request Options
