@@ -10,7 +10,7 @@ module OmniAuth
       class NoAuthorizationCodeError < StandardError; end
 
       DEFAULT_SCOPE = 'email'
-      DEFAULT_FACEBOOK_API_VERSION = 'v5.0'.freeze
+      DEFAULT_FACEBOOK_API_VERSION = 'v19.0'.freeze
 
       option :client_options, {
         site: "https://graph.facebook.com/#{DEFAULT_FACEBOOK_API_VERSION}",
@@ -25,7 +25,7 @@ module OmniAuth
 
       option :authorization_code_from_signed_request_in_cookie, nil
 
-      option :authorize_options, [:scope, :display, :auth_type]
+      option :authorize_options, [:scope, :display, :auth_type, :config_id]
 
       option :secure_image_url, true
 
@@ -99,7 +99,7 @@ module OmniAuth
       # For example: /auth/facebook?display=popup
       def authorize_params
         super.tap do |params|
-          %w[display scope auth_type].each do |v|
+          %w[display scope auth_type config_id].each do |v|
             if request.params[v]
               params[v.to_sym] = request.params[v]
             end
