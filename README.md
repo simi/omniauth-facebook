@@ -39,7 +39,9 @@ You can configure several options, which you pass in to the `provider` method vi
 Option name | Default | Explanation
 --- | --- | ---
 `scope` | `email` | A comma-separated list of permissions you want to request from the user. See the Facebook docs for a full list of available permissions: https://developers.facebook.com/docs/reference/login/
-`display` | `page` | The display context to show the authentication page. Options are: `page`, `popup` and `touch`. Read the Facebook docs for more details: https://developers.facebook.com/docs/reference/dialogs/oauth/
+`display` | `page` | The display context to show the authentication page. Options are: `page`, `popup` and 
+`config_id` |  | The configuration ID to use for a System User access token with Facebook Login for Business. Read the Facebook docs for more details: https://developers.facebook.com/docs/facebook-login/facebook-login-for-business#invoke-a--login-dialog
+`touch`. Read the Facebook docs for more details: https://developers.facebook.com/docs/reference/dialogs/oauth/
 `image_size` | `square` | Set the size for the returned image url in the auth hash. Valid options include `square` (50x50), `small` (50 pixels wide, variable height), `normal` (100 pixels wide, variable height), or `large` (about 200 pixels wide, variable height). Additionally, you can request a picture of a specific size by setting this option to a hash with `:width` and `:height` as keys. This will return an available profile picture closest to the requested size and requested aspect ratio. If only `:width` or `:height` is specified, we will return a picture whose width or height is closest to the requested size, respectively.
 `info_fields` | `name,email` | Specify exactly which fields should be returned when getting the user's info. Value should be a comma-separated string as per https://developers.facebook.com/docs/graph-api/reference/user/ (only `/me` endpoint).
 `locale` |  | Specify locale which should be used when getting the user's info. Value should be locale string as per https://developers.facebook.com/docs/reference/api/locale/.
@@ -72,7 +74,7 @@ end
 
 ### Per-Request Options
 
-If you want to set the `display` format, `auth_type`, or `scope` on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup` or `/auth/facebook?scope=email`.
+If you want to set the `display` format, `auth_type`, `scope` or `config_id` on a per-request basis, you can just pass it to the OmniAuth request phase URL, for example: `/auth/facebook?display=popup`, `/auth/facebook?scope=email` or `/auth/facebook?config_id=001`.
 
 ## Auth Hash
 

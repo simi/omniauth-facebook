@@ -93,7 +93,7 @@ module OmniAuth
         options.access_token_options.inject({}) { |h,(k,v)| h[k.to_sym] = v; h }
       end
 
-      # You can pass +display+, +scope+, or +auth_type+ params to the auth request, if you need to set them dynamically.
+      # You can pass +display+, +scope+, +auth_type+ or +config_id+ params to the auth request, if you need to set them dynamically.
       # You can also set these options in the OmniAuth config :authorize_params option.
       #
       # For example: /auth/facebook?display=popup
