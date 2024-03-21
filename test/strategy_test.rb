@@ -61,6 +61,12 @@ class AuthorizeParamsTest < StrategyTestCase
     assert_equal 'touch', strategy.authorize_params[:display]
   end
 
+  test 'includes config_id parameter from request when present' do
+    @request.stubs(:params).returns({ 'config_id' => '000111222' })
+    assert strategy.authorize_params.is_a?(Hash)
+    assert_equal '000111222', strategy.authorize_params[:config_id]
+  end
+
   test 'includes auth_type parameter from request when present' do
     @request.stubs(:params).returns({ 'auth_type' => 'reauthenticate' })
     assert strategy.authorize_params.is_a?(Hash)
