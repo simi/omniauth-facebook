@@ -164,15 +164,13 @@ module OmniAuth
         uri_class = options[:secure_image_url] ? URI::HTTPS : URI::HTTP
         site_uri = URI.parse(client.site)
         url = uri_class.build({host: site_uri.host, path: "#{site_uri.path}/#{uid}/picture"})
-        query = { access_token: access_token.token }
 
-        if options[:image_size].is_a?(String) || options[:image_size].is_a?(Symbol)
-          query[:type] = options[:image_size]
+        query = if options[:image_size].is_a?(String) || options[:image_size].is_a?(Symbol)
+          { type: options[:image_size] }
         elsif options[:image_size].is_a?(Hash)
-          query.merge!(options[:image_size])
+          options[:image_size]
         end
-
-        url.query = Rack::Utils.build_query(query)
+        url.query = Rack::Utils.build_query(query) if query
 
         url.to_s
       end
