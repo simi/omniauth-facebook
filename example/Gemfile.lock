@@ -1,7 +1,8 @@
 PATH
   remote: ..
   specs:
-    omniauth-facebook (9.0.1)
+    omniauth-facebook (10.0.0)
+      bigdecimal
       omniauth-oauth2 (>= 1.2, < 3)
 
 GEM
@@ -9,17 +10,21 @@ GEM
   specs:
     base64 (0.2.0)
     bigdecimal (3.1.8)
-    faraday (2.9.2)
-      faraday-net_http (>= 2.0, < 3.2)
-    faraday-net_http (3.1.0)
+    faraday (2.12.0)
+      faraday-net_http (>= 2.0, < 3.4)
+      json
+      logger
+    faraday-net_http (3.3.0)
       net-http
     hashie (5.0.0)
-    jwt (2.8.2)
+    json (2.7.2)
+    jwt (2.9.3)
       base64
+    logger (1.6.1)
     multi_json (1.15.0)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
-    mustermann (3.0.0)
+    mustermann (3.0.3)
       ruby2_keywords (~> 0.0.1)
     net-http (0.4.1)
       uri
@@ -37,7 +42,7 @@ GEM
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
-    rack (3.1.6)
+    rack (3.1.8)
     rack-protection (4.0.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0, < 4)
@@ -62,7 +67,7 @@ GEM
       hashie
       version_gem (~> 1.1, >= 1.1.1)
     tilt (2.4.0)
-    uri (0.13.0)
+    uri (0.13.1)
     version_gem (1.1.4)
 
 PLATFORMS
