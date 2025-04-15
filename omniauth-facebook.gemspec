@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/simi/omniauth-facebook'
   s.license  = 'MIT'
 
-  s.files         = `git ls-files | grep -ve "^example/"`.split("\n")
+  s.files         = `git ls-files`.split("\n").reject { |path| path.start_with? "example/" }
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ['lib']
