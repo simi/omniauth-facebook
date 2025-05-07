@@ -102,67 +102,54 @@ class UidTest < StrategyTestCase
 end
 
 class InfoTest < StrategyTestCase
-  def setup
-    super
-    @access_token = stub('OAuth2::AccessToken')
-    @access_token.stubs(:token).returns('test_access_token')
-  end
-
   test 'returns the secure facebook avatar url when `secure_image_url` option is set to true' do
     @options = { secure_image_url: true }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    strategy.stubs(:access_token).returns(@access_token)
-    assert_equal "https://graph.facebook.com/#{@facebook_api_version}/321/picture?access_token=test_access_token", strategy.info['image']
+    assert_equal "https://graph.facebook.com/#{@facebook_api_version}/321/picture", strategy.info['image']
   end
 
   test 'returns the non-ssl facebook avatar url when `secure_image_url` option is set to false' do
     @options = { secure_image_url: false }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    strategy.stubs(:access_token).returns(@access_token)
-    assert_equal "http://graph.facebook.com/#{@facebook_api_version}/321/picture?access_token=test_access_token", strategy.info['image']
+    assert_equal "http://graph.facebook.com/#{@facebook_api_version}/321/picture", strategy.info['image']
   end
 
   test 'returns the secure facebook avatar url when `secure_image_url` option is omitted' do
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    strategy.stubs(:access_token).returns(@access_token)
-    assert_equal "https://graph.facebook.com/#{@facebook_api_version}/321/picture?access_token=test_access_token", strategy.info['image']
+    assert_equal "https://graph.facebook.com/#{@facebook_api_version}/321/picture", strategy.info['image']
   end
 
   test 'returns the image_url based of the client site' do
     @options = { secure_image_url: true, client_options: {site: "https://blah.facebook.com/v2.2"}}
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    strategy.stubs(:access_token).returns(@access_token)
-    assert_equal "https://blah.facebook.com/v2.2/321/picture?access_token=test_access_token", strategy.info['image']
+    assert_equal "https://blah.facebook.com/v2.2/321/picture", strategy.info['image']
   end
 
   test 'returns the image with size specified in the `image_size` option' do
     @options = { image_size: 'normal' }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    strategy.stubs(:access_token).returns(@access_token)
-    assert_equal "https://graph.facebook.com/#{@facebook_api_version}/321/picture?access_token=test_access_token&type=normal", strategy.info['image']
+    assert_equal "https://graph.facebook.com/#{@facebook_api_version}/321/picture?type=normal", strategy.info['image']
   end
 
   test 'returns the image with size specified as a symbol in the `image_size` option' do
     @options = { image_size: :normal }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    strategy.stubs(:access_token).returns(@access_token)
-    assert_equal "https://graph.facebook.com/#{@facebook_api_version}/321/picture?access_token=test_access_token&type=normal", strategy.info['image']
+    assert_equal "https://graph.facebook.com/#{@facebook_api_version}/321/picture?type=normal", strategy.info['image']
   end
 
   test 'returns the image with width and height specified in the `image_size` option' do
     @options = { image_size: { width: 123, height: 987 } }
     raw_info = { 'name' => 'Fred Smith', 'id' => '321' }
     strategy.stubs(:raw_info).returns(raw_info)
-    strategy.stubs(:access_token).returns(@access_token)
     assert_match 'width=123', strategy.info['image']
     assert_match 'height=987', strategy.info['image']
-    assert_match "https://graph.facebook.com/#{@facebook_api_version}/321/picture?access_token=test_access_token", strategy.info['image']
+    assert_match "https://graph.facebook.com/#{@facebook_api_version}/321/picture", strategy.info['image']
   end
 end
 
@@ -171,10 +158,6 @@ class InfoTestOptionalDataPresent < StrategyTestCase
     super
     @raw_info ||= { 'name' => 'Fred Smith' }
     strategy.stubs(:raw_info).returns(@raw_info)
-
-    access_token = stub('OAuth2::AccessToken')
-    access_token.stubs(:token).returns('test_access_token')
-    strategy.stubs(:access_token).returns(access_token)
   end
 
   test 'returns the name' do
@@ -213,7 +196,7 @@ class InfoTestOptionalDataPresent < StrategyTestCase
 
   test 'returns the facebook avatar url' do
     @raw_info['id'] = '321'
-    assert_equal "https://graph.facebook.com/#{@facebook_api_version}/321/picture?access_token=test_access_token", strategy.info['image']
+    assert_equal "https://graph.facebook.com/#{@facebook_api_version}/321/picture", strategy.info['image']
   end
 
   test 'returns the Facebook link as the Facebook url' do
@@ -252,10 +235,6 @@ class InfoTestOptionalDataNotPresent < StrategyTestCase
     super
     @raw_info ||= { 'name' => 'Fred Smith' }
     strategy.stubs(:raw_info).returns(@raw_info)
-
-    access_token = stub('OAuth2::AccessToken')
-    access_token.stubs(:token).returns('test_access_token')
-    strategy.stubs(:access_token).returns(access_token)
   end
 
   test 'has no email key' do
