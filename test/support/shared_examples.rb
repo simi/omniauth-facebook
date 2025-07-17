@@ -8,10 +8,10 @@ module OAuth2StrategyTests
       include TokenParamsTests
     end
   end
-  
+
   module ClientTests
     extend BlockTestHelper
-    
+
     test 'should be initialized with symbolized client_options' do
       @options = { client_options: { 'authorize_url' => 'https://example.com' } }
       assert_equal 'https://example.com', strategy.client.options[:authorize_url]
@@ -20,7 +20,7 @@ module OAuth2StrategyTests
 
   module AuthorizeParamsTests
     extend BlockTestHelper
-    
+
     test 'should include any authorize params passed in the :authorize_params option' do
       @options = { authorize_params: { foo: 'bar', baz: 'zip' } }
       assert_equal 'bar', strategy.authorize_params['foo']
@@ -32,7 +32,7 @@ module OAuth2StrategyTests
       assert_equal 'bar', strategy.authorize_params['scope']
       assert_equal 'baz', strategy.authorize_params['foo']
     end
-    
+
     test 'should exclude top-level options that are not passed' do
       @options = { authorize_options: [:bar] }
       refute_has_key :bar, strategy.authorize_params
@@ -69,7 +69,7 @@ module OAuth2StrategyTests
 
   module TokenParamsTests
     extend BlockTestHelper
-    
+
     test 'should include any authorize params passed in the :token_params option' do
       @options = { token_params: { foo: 'bar', baz: 'zip' } }
       assert_equal 'bar', strategy.token_params['foo']
