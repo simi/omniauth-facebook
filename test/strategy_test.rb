@@ -436,9 +436,17 @@ module SignedRequestTests
     test 'is nil' do
       assert_nil strategy.send(:signed_request_from_cookie)
     end
+  end
 
-    test 'throws an error on calling build_access_token' do
-      assert_raises(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError) { strategy.send(:with_authorization_code!) {} }
+  class RaisesOauthErrors < TestCase
+    def setup
+      super
+      @request.stubs(:params).returns({'error_reason' => 'user_denied'})
+    end
+
+    test 'raises oauth errors on error requests' do
+      strategy.expects(:fail!).times(1).with("user_denied", kind_of(OmniAuth::Strategies::OAuth2::CallbackError))
+      strategy.callback_phase
     end
   end
 
@@ -473,37 +481,6 @@ module SignedRequestTests
 
     test 'empty param' do
       assert_nil strategy.send(:signed_request_from_cookie)
-    end
-  end
-
-  class MissingCodeInParamsRequestTest < TestCase
-    def setup
-      super
-      @request.stubs(:params).returns({})
-    end
-
-    test 'calls fail! when a code is not included in the params' do
-      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError))
-      strategy.callback_phase
-    end
-  end
-
-  class MissingCodeInCookieRequestTest < TestCase
-    def setup(algo = nil)
-      super()
-      @payload = {
-        'algorithm' => algo || 'HMAC-SHA256',
-        'code' => nil,
-        'issued_at' => Time.now.to_i,
-        'user_id' => '123456'
-      }
-
-      @request.stubs(:cookies).returns({"fbsr_#{@client_id}" => signed_request(@payload, @client_secret)})
-    end
-
-    test 'calls fail! when a code is not included in the cookie' do
-      strategy.expects(:fail!).times(1).with(:no_authorization_code, kind_of(OmniAuth::Strategies::Facebook::NoAuthorizationCodeError))
-      strategy.callback_phase
     end
   end
 

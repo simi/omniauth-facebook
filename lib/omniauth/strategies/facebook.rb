@@ -7,8 +7,6 @@ require 'uri'
 module OmniAuth
   module Strategies
     class Facebook < OmniAuth::Strategies::OAuth2
-      class NoAuthorizationCodeError < StandardError; end
-
       DEFAULT_SCOPE = 'email'
       DEFAULT_FACEBOOK_API_VERSION = 'v19.0'.freeze
 
@@ -68,11 +66,9 @@ module OmniAuth
       end
 
       def callback_phase
-        with_authorization_code! do
+        with_authorization_code do
           super
         end
-      rescue NoAuthorizationCodeError => e
-        fail!(:no_authorization_code, e)
       rescue OmniAuth::Facebook::SignedRequest::UnknownSignatureAlgorithmError => e
         fail!(:unknown_signature_algorithm, e)
       end
@@ -131,7 +127,10 @@ module OmniAuth
       #
       # 1. The request 'code' param (manual callback from standard server-side flow)
       # 2. A signed request from cookie (passed from the client during the client-side flow)
-      def with_authorization_code!
+      #
+      # Does not guarantee the presence of a code. This is used for
+      # all request types, including those that don't include codes.
+      def with_authorization_code
         if request.params.key?('code')
           yield
         elsif code_from_signed_request = signed_request_from_cookie && signed_request_from_cookie['code']
@@ -149,7 +148,7 @@ module OmniAuth
             options.provider_ignores_state = original_provider_ignores_state
           end
         else
-          raise NoAuthorizationCodeError, 'must pass either a `code` (via URL or by an `fbsr_XXX` signed request cookie)'
+          yield
         end
       end
 
