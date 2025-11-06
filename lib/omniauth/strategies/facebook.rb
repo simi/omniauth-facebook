@@ -10,7 +10,7 @@ module OmniAuth
       class NoAuthorizationCodeError < StandardError; end
 
       DEFAULT_SCOPE = 'email'
-      DEFAULT_FACEBOOK_API_VERSION = 'v19.0'.freeze
+      DEFAULT_FACEBOOK_API_VERSION = 'v24.0'.freeze
 
       option :client_options, {
         site: "https://graph.facebook.com/#{DEFAULT_FACEBOOK_API_VERSION}",
