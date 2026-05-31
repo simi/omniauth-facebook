@@ -1,4 +1,4 @@
-# OmniAuth Facebook &nbsp;[![Build Status](https://secure.travis-ci.org/simi/omniauth-facebook.svg?branch=master)](https://travis-ci.org/simi/omniauth-facebook) [![Gem Version](https://img.shields.io/gem/v/omniauth-facebook.svg)](https://rubygems.org/gems/omniauth-facebook)
+# OmniAuth Facebook &nbsp;[![CI](https://github.com/simi/omniauth-facebook/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/simi/omniauth-facebook/actions/workflows/ci.yml) [![Gem Version](https://img.shields.io/gem/v/omniauth-facebook.svg)](https://rubygems.org/gems/omniauth-facebook)
 
 📣 **NOTICE** We’re looking for maintainers to help keep this project up-to-date. If you are interested in helping please open an Issue expressing your interest. Thanks! 📣
 
