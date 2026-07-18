@@ -1,8 +1,18 @@
-## 10.0.0 (2024-05-23)
+## Unreleased
 
 Changes:
 
   - bumped version of FB Graph API to v24.0
+  - remove access token from profile picture URL (#388, @Rubyist007)
+
+## 10.0.0 (2024-05-23)
+
+Changes:
+
+  - bumped version of FB Graph API to v19.0
+  - add `config_id` to per-request options and configuration (#386, @harism2)
+  - fix duplicated `script_name` in `callback_url` (#380, @tak1n)
+  - add `bigdecimal` dependency for Ruby 3.4 compatibility
 
 ## 9.0.0 (2021-10-25)
 
