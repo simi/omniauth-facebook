@@ -1,4 +1,4 @@
-## Unreleased
+## 11.0.0 (2026-07-18)
 
 Changes:
 
