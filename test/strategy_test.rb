@@ -507,6 +507,19 @@ module SignedRequestTests
     end
   end
 
+  class ErrorInParamsRequestTest < TestCase
+    def setup
+      super
+      @options = { provider_ignores_state: true }
+      @request.stubs(:params).returns({ 'error' => 'access_denied', 'error_reason' => 'user_denied' })
+    end
+
+    test 'calls fail! with the oauth error instead of masking it' do
+      strategy.expects(:fail!).times(1).with('user_denied', kind_of(OmniAuth::Strategies::OAuth2::CallbackError))
+      strategy.callback_phase
+    end
+  end
+
   class UnknownAlgorithmInCookieRequestTest < TestCase
     def setup
       super()

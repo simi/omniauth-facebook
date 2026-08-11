@@ -148,6 +148,8 @@ module OmniAuth
             options.authorization_code_from_signed_request_in_cookie = false
             options.provider_ignores_state = original_provider_ignores_state
           end
+        elsif request.params.key?('error') || request.params.key?('error_reason')
+          yield
         else
           raise NoAuthorizationCodeError, 'must pass either a `code` (via URL or by an `fbsr_XXX` signed request cookie)'
         end

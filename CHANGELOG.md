@@ -1,3 +1,9 @@
+## Unreleased
+
+Changes:
+
+  - fail with the real OAuth error (e.g. `user_denied`) when authorization is denied on the callback, instead of masking it as `:no_authorization_code` (#309, #192, @thefloweringash)
+
 ## 11.0.0 (2026-07-18)
 
 Changes:
